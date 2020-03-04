@@ -1,1 +1,1 @@
-# license-checker-php
+# CLI Licence checker for composer dependencies

@@ -1,0 +1,14 @@
+{
+    "name": "madewithlove/licence-checker-php",
+    "description": "CLI tool to verify allowed licenses for composer dependencies",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "madewithlove",
+            "email": "hello@madewithlove.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
