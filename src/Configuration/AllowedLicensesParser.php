@@ -6,24 +6,15 @@ use Symfony\Component\Yaml\Yaml;
 
 class AllowedLicensesParser
 {
-    private const ALLOWED_LICENSES_FILE = '.allowed-licenses';
+    private const DEFAULT_PATH = __DIR__ . '/.allowed-licenses';
 
     /**
-     * @var string
-     */
-    private $path;
-
-    public function __construct($path = __DIR__)
-    {
-        $this->path = $path;
-    }
-
-    /**
+     * @param string $pathToConfigurationFile
      * @return string[]
      */
-    public function getAllowedLicenses(): array
+    public function getAllowedLicenses(string $pathToConfigurationFile = self::DEFAULT_PATH): array
     {
-        $value = Yaml::parseFile($this->path . '/' . self::ALLOWED_LICENSES_FILE);
+        $value = Yaml::parseFile($pathToConfigurationFile);
         return explode(' ', $value);
     }
 }
