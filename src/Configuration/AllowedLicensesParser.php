@@ -4,7 +4,7 @@ namespace LicenseChecker\Configuration;
 
 use Symfony\Component\Yaml\Yaml;
 
-class Parser
+class AllowedLicensesParser
 {
     private const ALLOWED_LICENSES_FILE = '.allowed-licenses';
 

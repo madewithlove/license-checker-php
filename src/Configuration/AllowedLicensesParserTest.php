@@ -4,14 +4,14 @@ namespace LicenseChecker\Configuration;
 
 use PHPUnit\Framework\TestCase;
 
-class ParserTest extends TestCase
+class AllowedLicensesParserTest extends TestCase
 {
     /**
      * @test
      */
     public function canParseConfiguration(): void
     {
-        $parser = new Parser();
+        $parser = new AllowedLicensesParser();
         $allowedLicenses = $parser->getAllowedLicenses();
         $expected = [
             'MIT',
