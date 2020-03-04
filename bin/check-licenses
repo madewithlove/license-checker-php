@@ -4,11 +4,13 @@
 require __DIR__.'/../vendor/autoload.php';
 
 use LicenseChecker\Commands\CheckLicenses;
+use LicenseChecker\Composer\LicenseParser;
+use LicenseChecker\Composer\LicenseRetriever;
 use Symfony\Component\Console\Application;
 
 $application = new Application('License Checker', '0.0.1');
 
-$checkLicenses = new CheckLicenses();
+$checkLicenses = new CheckLicenses(new LicenseRetriever(), new LicenseParser());
 $application->add($checkLicenses);
 $application->setDefaultCommand($checkLicenses->getName(), true);
 $application->run();
