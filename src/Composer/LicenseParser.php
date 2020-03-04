@@ -2,8 +2,6 @@
 
 namespace LicenseChecker\Composer;
 
-use phpDocumentor\Reflection\Types\Array_;
-
 class LicenseParser
 {
     /**

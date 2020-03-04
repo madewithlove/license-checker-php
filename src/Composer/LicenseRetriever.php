@@ -12,8 +12,7 @@ class LicenseRetriever
         $process = new Process(['composer', 'license', '-f', 'json'], $composerJsonPath);
         $process->run();
 
-        if (!$process->isSuccessful())
-        {
+        if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
 
