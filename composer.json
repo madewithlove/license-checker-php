@@ -11,6 +11,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "symfony/console": "^5.0"
+        "symfony/console": "^5.0",
+        "symfony/process": "^5.0"
     }
 }
