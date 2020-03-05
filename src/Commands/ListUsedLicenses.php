@@ -9,9 +9,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class ListLicenses extends Command
+class ListUsedLicenses extends Command
 {
-    protected static $defaultName = 'licenses:list';
+    protected static $defaultName = 'licenses:used';
 
     /**
      * @var LicenseRetriever
