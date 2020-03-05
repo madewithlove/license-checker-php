@@ -74,6 +74,7 @@ class CheckLicenses extends Command
             return 1;
         }
 
+        $output->writeln('All used licenses are allowed');
         return 0;
     }
 }
