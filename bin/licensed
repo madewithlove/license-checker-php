@@ -4,6 +4,7 @@
 require __DIR__.'/../vendor/autoload.php';
 
 use LicenseChecker\Commands\CheckLicenses;
+use LicenseChecker\Commands\ListLicenses;
 use LicenseChecker\Composer\LicenseParser;
 use LicenseChecker\Composer\LicenseRetriever;
 use LicenseChecker\Configuration\AllowedLicensesParser;
@@ -17,5 +18,11 @@ $checkLicenses = new CheckLicenses(
     new AllowedLicensesParser()
 );
 $application->add($checkLicenses);
-$application->setDefaultCommand($checkLicenses->getName(), true);
+
+$listLicenses = new ListLicenses(
+    new LicenseRetriever(),
+    new LicenseParser()
+);
+$application->add($listLicenses);
+
 $application->run();
