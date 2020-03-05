@@ -59,7 +59,6 @@ class CheckLicenses extends Command
         try {
             $allowedLicenses = $this->allowedLicensesParser->getAllowedLicenses();
         } catch (ParseException $e) {
-            $output->writeln('boooh');
             $output->writeln($e->getMessage());
             return 1;
         }
