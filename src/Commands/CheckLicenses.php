@@ -8,6 +8,7 @@ use LicenseChecker\Configuration\AllowedLicensesParser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Yaml\Exception\ParseException;
 
@@ -48,6 +49,8 @@ class CheckLicenses extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $io = new SymfonyStyle($input, $output);
+
         try {
             $licenseJson = $this->licenseRetriever->getComposerLicenses(__DIR__ . '/../../');
             $usedLicenses = $this->licenseParser->parseLicenses($licenseJson);
@@ -66,9 +69,17 @@ class CheckLicenses extends Command
         $notAllowedLicenses = array_diff($usedLicenses, $allowedLicenses);
 
         if (!empty($notAllowedLicenses)) {
-            $output->writeln('The following licenses are used but not allowed:');
             foreach ($notAllowedLicenses as $notAllowedLicense) {
-                $output->writeln('- ' . $notAllowedLicense);
+                $io->error('The following licenses are using the ' . $notAllowedLicense . ' license which is not allowed.');
+                $packagesUsingThisLicense = $this->licenseParser->getPackagesWithLicense($licenseJson, $notAllowedLicense);
+
+                $io->table(
+                    ['package name'],
+                    array_map(
+                        fn ($packageName) => [$packageName],
+                        $packagesUsingThisLicense
+                    )
+                );
             }
             return 1;
         }
