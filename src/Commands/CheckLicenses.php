@@ -76,7 +76,9 @@ class CheckLicenses extends Command
                 $io->table(
                     ['package name'],
                     array_map(
-                        fn ($packageName) => [$packageName],
+                        function (string $packageName): array {
+                            return [$packageName];
+                        },
                         $packagesUsingThisLicense
                     )
                 );
