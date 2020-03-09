@@ -18,4 +18,23 @@ class LicenseParser
 
         return array_unique($licenses);
     }
+
+    /**
+     * @param string $json
+     * @param string $license
+     * @return string[]
+     */
+    public function getPackagesWithLicense(string $json, string $license): array
+    {
+        $packages = [];
+        $decodedJson = json_decode($json, true);
+
+        foreach ($decodedJson['dependencies'] as $packageName => $licenseInfo) {
+            if ($licenseInfo['license'][0] === $license) {
+                $packages[] = $packageName;
+            }
+        }
+
+        return $packages;
+    }
 }
