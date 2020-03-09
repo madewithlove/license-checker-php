@@ -70,7 +70,7 @@ class CheckLicenses extends Command
 
         if (!empty($notAllowedLicenses)) {
             foreach ($notAllowedLicenses as $notAllowedLicense) {
-                $io->error('The following licenses are using the ' . $notAllowedLicense . ' license which is not allowed.');
+                $io->error('The following packages are using the ' . $notAllowedLicense . ' license which is not allowed.');
                 $packagesUsingThisLicense = $this->licenseParser->getPackagesWithLicense($licenseJson, $notAllowedLicense);
 
                 $io->table(
