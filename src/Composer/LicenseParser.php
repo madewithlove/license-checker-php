@@ -13,7 +13,9 @@ class LicenseParser
         $licenses = [];
         $decodedJson = json_decode($json, true);
         foreach ($decodedJson['dependencies'] as $dependency) {
-            $licenses[] = $dependency['license'][0];
+            if (isset($dependency['license'][0])) {
+                $licenses[] = $dependency['license'][0];
+            }
         }
 
         return array_unique($licenses);
