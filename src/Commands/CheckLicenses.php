@@ -42,7 +42,7 @@ class CheckLicenses extends Command
         $this->allowedLicensesParser = $allowedLicensesParser;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Check licenses of composer dependencies');
     }
