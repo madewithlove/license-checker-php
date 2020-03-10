@@ -62,9 +62,9 @@ class LicenseParserTest extends TestCase
     }
 }';
         $expected = [
-            'FOO',
             'BAR',
             'BAZ',
+            'FOO',
         ];
 
         $this->assertEquals(
