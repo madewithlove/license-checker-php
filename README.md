@@ -7,7 +7,7 @@ pipeline to block merging when a non-verified license is being introduced to the
 Installing should be a breeze thanks to `composer`:
 
 ```
-composer require madewithlove/license-checker-php
+composer require madewithlove/license-checker
 ```
 
 ## Configuration
