@@ -17,6 +17,7 @@ class AllowedLicensesParserTest extends TestCase
             'MIT',
             'BSD-3-Clause',
             'Apache-2',
+            'New BSD License',
         ];
 
         $this->assertEquals($expected, $allowedLicenses);
