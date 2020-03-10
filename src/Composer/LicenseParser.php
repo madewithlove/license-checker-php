@@ -18,6 +18,8 @@ class LicenseParser
             }
         }
 
+        sort($licenses);
+
         return array_unique($licenses);
     }
 
