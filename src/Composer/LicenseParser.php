@@ -20,7 +20,7 @@ class LicenseParser
 
         sort($licenses);
 
-        return array_unique($licenses);
+        return array_values(array_unique($licenses));
     }
 
     /**
