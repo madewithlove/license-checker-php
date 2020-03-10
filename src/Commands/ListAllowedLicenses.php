@@ -24,7 +24,7 @@ class ListAllowedLicenses extends Command
     }
 
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('List used licenses of composer dependencies');
     }
