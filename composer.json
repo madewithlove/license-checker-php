@@ -1,5 +1,5 @@
 {
-    "name": "madewithlove/licence-checker",
+    "name": "madewithlove/license-checker",
     "description": "CLI tool to verify allowed licenses for composer dependencies",
     "type": "library",
     "license": "MIT",
