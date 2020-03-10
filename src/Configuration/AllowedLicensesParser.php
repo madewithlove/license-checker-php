@@ -14,6 +14,9 @@ class AllowedLicensesParser
      */
     public function getAllowedLicenses(string $pathToConfigurationFile): array
     {
-        return Yaml::parseFile($pathToConfigurationFile . '/' . self::CONFIG_FILE_NAME);
+        $allowedLicenses = Yaml::parseFile($pathToConfigurationFile . '/' . self::CONFIG_FILE_NAME);
+        sort($allowedLicenses);
+
+        return $allowedLicenses;
     }
 }
