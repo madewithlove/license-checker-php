@@ -32,7 +32,7 @@ class ListAllowedLicenses extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $allowedLicenses = $this->allowedLicensesParser->getAllowedLicenses();
+            $allowedLicenses = $this->allowedLicensesParser->getAllowedLicenses(getcwd());
         } catch (ParseException $e) {
             $output->writeln($e->getMessage());
             return 1;

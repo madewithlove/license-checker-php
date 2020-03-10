@@ -40,7 +40,7 @@ class ListUsedLicenses extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $licenseJson = $this->licenseRetriever->getComposerLicenses(__DIR__ . '/../../');
+            $licenseJson = $this->licenseRetriever->getComposerLicenses(getcwd());
             $usedLicenses = $this->licenseParser->parseLicenses($licenseJson);
             foreach ($usedLicenses as $usedLicense) {
                 $output->writeln($usedLicense);

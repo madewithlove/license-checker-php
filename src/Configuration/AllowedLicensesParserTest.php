@@ -12,7 +12,7 @@ class AllowedLicensesParserTest extends TestCase
     public function canParseConfiguration(): void
     {
         $parser = new AllowedLicensesParser();
-        $allowedLicenses = $parser->getAllowedLicenses(__DIR__ . '/.allowed-licenses');
+        $allowedLicenses = $parser->getAllowedLicenses(__DIR__ );
         $expected = [
             'MIT',
             'BSD-3-Clause',
