@@ -14,9 +14,9 @@ class AllowedLicensesParserTest extends TestCase
         $parser = new AllowedLicensesParser();
         $allowedLicenses = $parser->getAllowedLicenses(__DIR__ );
         $expected = [
-            'MIT',
-            'BSD-3-Clause',
             'Apache-2',
+            'BSD-3-Clause',
+            'MIT',
             'New BSD License',
         ];
 
