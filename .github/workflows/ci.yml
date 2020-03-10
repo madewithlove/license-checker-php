@@ -1,0 +1,18 @@
+name: Continious Integration
+on: push
+
+jobs:
+    phpunit:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                php-versions: ['7.2', '7.3', '7.4']
+        steps:
+            - uses: actions/checkout@master
+            - uses: shivammathur/setup-php@v1
+              with:
+                  php-version: ${{ matrix.php-versions }}
+            - name: Install dependencies
+              run: composer install -n --prefer-dist
+            - name: Run PHPUnit unit tests
+              run: vendor/bin/phpunit
