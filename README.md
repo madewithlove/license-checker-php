@@ -15,8 +15,9 @@ To configure a list of allowed licenses, simply create an `.allowed-licences` fi
 The file could look like this:
 ```
 # contents of .allowed-licenses
-MIT
-BSD-3-Clause
+- MIT
+- BSD-3-Clause
+- New BSD License
 ```
 
 ## Usage
