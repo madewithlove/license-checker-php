@@ -2,6 +2,7 @@
 <?php declare(strict_types=1);
 
 use LicenseChecker\Commands\CheckLicenses;
+use LicenseChecker\Commands\GenerateConfig;
 use LicenseChecker\Commands\ListAllowedLicenses;
 use LicenseChecker\Commands\ListUsedLicenses;
 use LicenseChecker\Composer\LicenseParser;
@@ -44,5 +45,12 @@ $listAllowedLicenses = new ListAllowedLicenses(
     new AllowedLicensesParser()
 );
 $application->add($listAllowedLicenses);
+
+$generateConfig = new GenerateConfig(
+    new AllowedLicensesParser(),
+    new LicenseRetriever(),
+    new LicenseParser()
+);
+$application->add($generateConfig);
 
 $application->run();
