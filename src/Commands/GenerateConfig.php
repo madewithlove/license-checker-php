@@ -59,8 +59,10 @@ class GenerateConfig extends Command
             return 1;
         }
 
+        sort($usedLicenses);
+
         try {
-            $this->allowedLicensesParser->writeConfiguration($usedLicenses);
+            $this->allowedLicensesParser->writeConfiguration(array_values($usedLicenses));
             $io->success('Configuration file successfully written');
         } catch (ConfigurationExists $e) {
             $io->error('The configuration file already exists. Please remove it before generating a new one.');
