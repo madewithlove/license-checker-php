@@ -37,3 +37,9 @@ vendor/madewithlove/license-checker-php/bin/licensed licenses:allowed
 ```
 vendor/madewithlove/license-checker-php/bin/licensed licenses:check
 ```
+
+### Automatically generate configuration
+This command will automatically generate an `.allowed-licenses` configuration based on the currently used licenses.
+```
+vendor/madewithlove/license-checker-php/bin/licensed config:generate
+```
