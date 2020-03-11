@@ -25,21 +25,21 @@ These are the different CLI commands
 
 ### List used licenses
 ```
-vendor/madewithlove/license-checker-php/bin/licensed licenses:used
+vendor/bin/licensed licenses:used
 ```
 
 ### List allowed licenses
 ```
-vendor/madewithlove/license-checker-php/bin/licensed licenses:allowed
+vendor/bin/licensed licenses:allowed
 ```
 
 ### Check licenses
 ```
-vendor/madewithlove/license-checker-php/bin/licensed licenses:check
+vendor/bin/licensed licenses:check
 ```
 
 ### Automatically generate configuration
 This command will automatically generate an `.allowed-licenses` configuration based on the currently used licenses.
 ```
-vendor/madewithlove/license-checker-php/bin/licensed config:generate
+vendor/bin/licensed config:generate
 ```
