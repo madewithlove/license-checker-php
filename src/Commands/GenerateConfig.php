@@ -55,7 +55,7 @@ class GenerateConfig extends Command
             $licenseJson = $this->licenseRetriever->getComposerLicenses(getcwd());
             $usedLicenses = $this->licenseParser->parseLicenses($licenseJson);
         } catch (ProcessFailedException $e) {
-            $output->writeln($e->getMessage());
+            $io->error($e->getMessage());
             return 1;
         }
 
