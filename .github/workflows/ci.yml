@@ -2,6 +2,15 @@ name: Continious Integration
 on: push
 
 jobs:
+    psalm:
+        name: Psalm
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@master
+            - name: Psalm
+              uses: docker://vimeo/psalm-github-actions
+
     phpunit:
         runs-on: ubuntu-latest
         strategy:

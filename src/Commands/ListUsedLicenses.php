@@ -32,7 +32,7 @@ class ListUsedLicenses extends Command
         $this->licenseParser = $licenseParser;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('List used licenses of composer dependencies');
     }
