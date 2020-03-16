@@ -44,7 +44,7 @@ class TableRendererTest extends TestCase
 
         $this->tableRenderer->renderDependencyChecks(
             $dependencyChecks,
-            $this->io,
+            $this->io
         );
     }
 
