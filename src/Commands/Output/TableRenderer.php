@@ -12,6 +12,10 @@ class TableRenderer
      */
     public function renderDependencyChecks(array $dependencyChecks, SymfonyStyle $io)
     {
+        usort($dependencyChecks, function (DependencyCheck $dependencyCheck, DependencyCheck $other) {
+            return $dependencyCheck->isAllowed() <=> $other->isAllowed();
+        });
+
         $io->table(
             $this->getHeaders($dependencyChecks),
             $this->getBody($dependencyChecks)
