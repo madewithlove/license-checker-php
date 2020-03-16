@@ -70,6 +70,4 @@ class DependencyTreeTest extends TestCase
             ]
         }';
     }
-
-
 }
