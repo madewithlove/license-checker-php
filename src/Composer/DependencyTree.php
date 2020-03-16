@@ -3,21 +3,17 @@
 namespace LicenseChecker\Composer;
 
 use LicenseChecker\Dependency;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 class DependencyTree
 {
-    private function getJson(): string
+    /**
+     * @var DependencyTreeRetriever
+     */
+    private $retriever;
+
+    public function __construct(DependencyTreeRetriever $dependencyTreeRetriever)
     {
-        $process = new Process(['composer', 'show', '-t', '-f', 'json']);
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-
-        return $process->getOutput();
+        $this->retriever = $dependencyTreeRetriever;
     }
 
     /**
@@ -26,7 +22,7 @@ class DependencyTree
     public function getDependencies(): array
     {
         $dependencies = [];
-        $decodedJson = json_decode($this->getJson(), true);
+        $decodedJson = json_decode($this->retriever->getDependencyTree(), true);
         foreach ($decodedJson['installed'] as $package) {
             $dependency = new Dependency($package['name']);
             if (isset($package['requires'])) {
