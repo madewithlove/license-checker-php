@@ -2,9 +2,12 @@
 
 namespace LicenseChecker\Commands;
 
+use LicenseChecker\Commands\Output\DependencyCheck;
+use LicenseChecker\Composer\DependencyTree;
 use LicenseChecker\Composer\LicenseParser;
 use LicenseChecker\Composer\LicenseRetriever;
 use LicenseChecker\Configuration\AllowedLicensesParser;
+use LicenseChecker\Dependency;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -31,15 +34,22 @@ class CheckLicenses extends Command
      */
     private $allowedLicensesParser;
 
+    /**
+     * @var DependencyTree
+     */
+    private $dependencyTree;
+
     public function __construct(
         LicenseRetriever $licenseRetriever,
         LicenseParser $licenseParser,
-        AllowedLicensesParser $allowedLicensesParser
+        AllowedLicensesParser $allowedLicensesParser,
+        DependencyTree $dependencyTree
     ) {
         parent::__construct();
         $this->licenseRetriever = $licenseRetriever;
         $this->licenseParser = $licenseParser;
         $this->allowedLicensesParser = $allowedLicensesParser;
+        $this->dependencyTree = $dependencyTree;
     }
 
     protected function configure(): void
