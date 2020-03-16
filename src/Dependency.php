@@ -38,7 +38,7 @@ class Dependency
 
     public function hasDependency(string $dependency): bool
     {
-        return array_search($dependency, $this->getDependencies());
+        return array_search($dependency, $this->getDependencies()) !== false;
     }
 
     public function getName(): string

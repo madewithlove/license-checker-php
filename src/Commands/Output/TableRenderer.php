@@ -61,7 +61,7 @@ class TableRenderer
 
     /**
      * @param DependencyCheck[] $dependencyChecks
-     * @return string[]
+     * @return array[]
      */
     private function getBody(array $dependencyChecks): array
     {
@@ -90,7 +90,7 @@ class TableRenderer
 
     /**
      * @param DependencyCheck[] $dependencyChecks
-     * @return string[]
+     * @return array[]
      */
     private function renderAllOkay(array $dependencyChecks): array
     {
