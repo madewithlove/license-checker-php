@@ -39,17 +39,24 @@ class CheckLicenses extends Command
      */
     private $dependencyTree;
 
+    /**
+     * @var TableRenderer
+     */
+    private $tableRenderer;
+
     public function __construct(
         LicenseRetriever $licenseRetriever,
         LicenseParser $licenseParser,
         AllowedLicensesParser $allowedLicensesParser,
-        DependencyTree $dependencyTree
+        DependencyTree $dependencyTree,
+        TableRenderer $tableRenderer
     ) {
         parent::__construct();
         $this->licenseRetriever = $licenseRetriever;
         $this->licenseParser = $licenseParser;
         $this->allowedLicensesParser = $allowedLicensesParser;
         $this->dependencyTree = $dependencyTree;
+        $this->tableRenderer = $tableRenderer;
     }
 
     protected function configure(): void

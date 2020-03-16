@@ -5,6 +5,7 @@ use LicenseChecker\Commands\CheckLicenses;
 use LicenseChecker\Commands\GenerateConfig;
 use LicenseChecker\Commands\ListAllowedLicenses;
 use LicenseChecker\Commands\ListUsedLicenses;
+use LicenseChecker\Commands\Output\TableRenderer;
 use LicenseChecker\Composer\DependencyTree;
 use LicenseChecker\Composer\LicenseParser;
 use LicenseChecker\Composer\LicenseRetriever;
@@ -33,7 +34,8 @@ $checkLicenses = new CheckLicenses(
     new LicenseRetriever(),
     new LicenseParser(),
     new AllowedLicensesParser(),
-    new DependencyTree()
+    new DependencyTree(),
+    new TableRenderer()
 );
 $application->add($checkLicenses);
 
