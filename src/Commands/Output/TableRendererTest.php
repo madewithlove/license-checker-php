@@ -47,4 +47,29 @@ class TableRendererTest extends TestCase
             $this->io,
         );
     }
+
+    /**
+     * @test
+     */
+    public function itWillListCausingPackagesOnFailure()
+    {
+        $this->io->expects($this->once())->method('table')->with(
+            ['', 'dependency', 'caused by'],
+            [
+                ['<fg=red>✗</>', 'foo', 'baz [license]'],
+                ['', '', 'baz2 [license]'],
+                ['<fg=red>✗</>', 'bar', 'baz [license]'],
+            ]
+        );
+
+        $dependencyChecks = [
+            (new DependencyCheck('foo'))->addFailedDependency('baz', 'license')->addFailedDependency('baz2', 'license'),
+            (new DependencyCheck('bar'))->addFailedDependency('baz', 'license'),
+        ];
+
+        $this->tableRenderer->renderDependencyChecks(
+            $dependencyChecks,
+            $this->io,
+            );
+    }
 }
