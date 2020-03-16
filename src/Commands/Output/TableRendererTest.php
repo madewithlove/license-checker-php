@@ -70,6 +70,30 @@ class TableRendererTest extends TestCase
         $this->tableRenderer->renderDependencyChecks(
             $dependencyChecks,
             $this->io,
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function itWillRenderFailingDependenciesFirst()
+    {
+        $this->io->expects($this->once())->method('table')->with(
+            ['', 'dependency', 'caused by'],
+            [
+                ['<fg=red>✗</>', 'foo', 'baz [license]'],
+                ['<info>✓</info>', 'bar', ''],
+            ]
+        );
+
+        $dependencyChecks = [
+            new DependencyCheck('bar'),
+            (new DependencyCheck('foo'))->addFailedDependency('baz', 'license'),
+        ];
+
+        $this->tableRenderer->renderDependencyChecks(
+            $dependencyChecks,
+            $this->io,
             );
     }
 }
