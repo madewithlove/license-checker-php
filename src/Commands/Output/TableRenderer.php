@@ -61,21 +61,82 @@ class TableRenderer
      */
     private function getBody(array $dependencyChecks): array
     {
-        if ($this->hasFailures($dependencyChecks)) {
-            return array_map(function (DependencyCheck $dependencyCheck) {
-                return [
-                    $this->renderBoolean($dependencyCheck->isAllowed()),
-                    $dependencyCheck->getName(),
-                    implode(', ', $dependencyCheck->getCausedBy()),
-                ];
-            }, $dependencyChecks);
+        if (!$this->hasFailures($dependencyChecks)) {
+            return $this->renderAllOkay($dependencyChecks);
         }
 
+        $body = [];
+        foreach ($dependencyChecks as $dependencyCheck) {
+            if ($dependencyCheck->isAllowed()) {
+                $body[] = $this->renderAllowedLineWithEmptyFailureCause($dependencyCheck);
+            } else {
+                $firstLine = true;
+                foreach ($dependencyCheck->getCausedBy() as $causeOfFailure) {
+                    if ($firstLine) {
+                        $body[] = $this->renderFailedLineWithCauseOfFailure($dependencyCheck, $causeOfFailure);
+                        $firstLine = false;
+                    } else {
+                        $body[] = $this->renderAdditionalCauseOfFailure($causeOfFailure);
+                    }
+                }
+            }
+        }
+        return $body;
+    }
+
+    /**
+     * @param DependencyCheck[] $dependencyChecks
+     * @return string[]
+     */
+    private function renderAllOkay(array $dependencyChecks): array
+    {
         return array_map(function (DependencyCheck $dependencyCheck) {
             return [
                 $this->renderBoolean($dependencyCheck->isAllowed()),
                 $dependencyCheck->getName(),
             ];
         }, $dependencyChecks);
+    }
+
+    /**
+     * @param DependencyCheck $dependencyCheck
+     * @return string[]
+     */
+    private function renderAllowedLineWithEmptyFailureCause(DependencyCheck $dependencyCheck): array
+    {
+        return [
+            $this->renderBoolean($dependencyCheck->isAllowed()),
+            $dependencyCheck->getName(),
+            '',
+        ];
+    }
+
+    /**
+     * @param DependencyCheck $dependencyCheck
+     * @param CauseOfFailure $causeOfFailure
+     * @return string[]
+     */
+    private function renderFailedLineWithCauseOfFailure(
+        DependencyCheck $dependencyCheck,
+        CauseOfFailure $causeOfFailure
+    ): array {
+        return [
+            $this->renderBoolean($dependencyCheck->isAllowed()),
+            $dependencyCheck->getName(),
+            $causeOfFailure->getName() . ' [' . $causeOfFailure->getLicense() . ']',
+        ];
+    }
+
+    /**
+     * @param CauseOfFailure $causeOfFailure
+     * @return string[]
+     */
+    private function renderAdditionalCauseOfFailure(CauseOfFailure $causeOfFailure): array
+    {
+        return [
+            '',
+            '',
+            $causeOfFailure->getName() . ' [' . $causeOfFailure->getLicense() . ']',
+        ];
     }
 }
