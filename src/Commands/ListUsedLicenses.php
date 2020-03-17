@@ -2,8 +2,8 @@
 
 namespace LicenseChecker\Commands;
 
-use LicenseChecker\Composer\LicenseParser;
-use LicenseChecker\Composer\LicenseRetriever;
+use LicenseChecker\Composer\UsedLicensesParser;
+use LicenseChecker\Composer\UsedLicensesRetriever;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,22 +14,15 @@ class ListUsedLicenses extends Command
     protected static $defaultName = 'licenses:used';
 
     /**
-     * @var LicenseRetriever
+     * @var UsedLicensesParser
      */
-    private $licenseRetriever;
-
-    /**
-     * @var LicenseParser
-     */
-    private $licenseParser;
+    private $usedLicensesParser;
 
     public function __construct(
-        LicenseRetriever $licenseRetriever,
-        LicenseParser $licenseParser
+        UsedLicensesParser $usedLicensesParser
     ) {
         parent::__construct();
-        $this->licenseRetriever = $licenseRetriever;
-        $this->licenseParser = $licenseParser;
+        $this->usedLicensesParser = $usedLicensesParser;
     }
 
     protected function configure(): void
@@ -40,8 +33,7 @@ class ListUsedLicenses extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $licenseJson = $this->licenseRetriever->getComposerLicenses(getcwd());
-            $usedLicenses = $this->licenseParser->parseLicenses($licenseJson);
+            $usedLicenses = $this->usedLicensesParser->parseLicenses();
             foreach ($usedLicenses as $usedLicense) {
                 $output->writeln($usedLicense);
             }

@@ -8,8 +8,8 @@ use LicenseChecker\Commands\ListUsedLicenses;
 use LicenseChecker\Commands\Output\TableRenderer;
 use LicenseChecker\Composer\DependencyTree;
 use LicenseChecker\Composer\DependencyTreeRetriever;
-use LicenseChecker\Composer\LicenseParser;
-use LicenseChecker\Composer\LicenseRetriever;
+use LicenseChecker\Composer\UsedLicensesParser;
+use LicenseChecker\Composer\UsedLicensesRetriever;
 use LicenseChecker\Configuration\AllowedLicensesParser;
 use Symfony\Component\Console\Application;
 
@@ -32,8 +32,7 @@ if (!$autoLoader) {
 $application = new Application('License Checker', '0.0.1');
 
 $checkLicenses = new CheckLicenses(
-    new LicenseRetriever(),
-    new LicenseParser(),
+    new UsedLicensesParser(new UsedLicensesRetriever()),
     new AllowedLicensesParser(),
     new DependencyTree(new DependencyTreeRetriever()),
     new TableRenderer()
@@ -41,8 +40,7 @@ $checkLicenses = new CheckLicenses(
 $application->add($checkLicenses);
 
 $listUsedLicenses = new ListUsedLicenses(
-    new LicenseRetriever(),
-    new LicenseParser()
+    new UsedLicensesParser(new UsedLicensesRetriever())
 );
 $application->add($listUsedLicenses);
 
@@ -53,8 +51,7 @@ $application->add($listAllowedLicenses);
 
 $generateConfig = new GenerateConfig(
     new AllowedLicensesParser(),
-    new LicenseRetriever(),
-    new LicenseParser()
+    new UsedLicensesParser(new UsedLicensesRetriever())
 );
 $application->add($generateConfig);
 

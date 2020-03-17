@@ -5,10 +5,8 @@ namespace LicenseChecker\Commands;
 use LicenseChecker\Commands\Output\DependencyCheck;
 use LicenseChecker\Commands\Output\TableRenderer;
 use LicenseChecker\Composer\DependencyTree;
-use LicenseChecker\Composer\LicenseParser;
-use LicenseChecker\Composer\LicenseRetriever;
+use LicenseChecker\Composer\UsedLicensesParser;
 use LicenseChecker\Configuration\AllowedLicensesParser;
-use LicenseChecker\Dependency;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,14 +19,9 @@ class CheckLicenses extends Command
     protected static $defaultName = 'licenses:check';
 
     /**
-     * @var LicenseRetriever
+     * @var UsedLicensesParser
      */
-    private $licenseRetriever;
-
-    /**
-     * @var LicenseParser
-     */
-    private $licenseParser;
+    private $usedLicenseParser;
 
     /**
      * @var AllowedLicensesParser
@@ -46,15 +39,13 @@ class CheckLicenses extends Command
     private $tableRenderer;
 
     public function __construct(
-        LicenseRetriever $licenseRetriever,
-        LicenseParser $licenseParser,
+        UsedLicensesParser $usedLicensesParser,
         AllowedLicensesParser $allowedLicensesParser,
         DependencyTree $dependencyTree,
         TableRenderer $tableRenderer
     ) {
         parent::__construct();
-        $this->licenseRetriever = $licenseRetriever;
-        $this->licenseParser = $licenseParser;
+        $this->usedLicenseParser = $usedLicensesParser;
         $this->allowedLicensesParser = $allowedLicensesParser;
         $this->dependencyTree = $dependencyTree;
         $this->tableRenderer = $tableRenderer;
@@ -70,8 +61,7 @@ class CheckLicenses extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $licenseJson = $this->licenseRetriever->getComposerLicenses(getcwd());
-            $usedLicenses = $this->licenseParser->parseLicenses($licenseJson);
+            $usedLicenses = $this->usedLicenseParser->parseLicenses();
         } catch (ProcessFailedException $e) {
             $output->writeln($e->getMessage());
             return 1;
@@ -91,7 +81,7 @@ class CheckLicenses extends Command
         foreach ($dependencies as $dependency) {
             $dependencyCheck = new DependencyCheck($dependency->getName());
             foreach ($notAllowedLicenses as $notAllowedLicense) {
-                $packagesUsingThisLicense = $this->licenseParser->getPackagesWithLicense($licenseJson, $notAllowedLicense);
+                $packagesUsingThisLicense = $this->usedLicenseParser->getPackagesWithLicense($notAllowedLicense);
                 foreach ($packagesUsingThisLicense as $packageUsingThisLicense) {
                     if ($dependency->hasDependency($packageUsingThisLicense) || $dependency->getName() === $packageUsingThisLicense) {
                         $dependencyCheck = $dependencyCheck->addFailedDependency($packageUsingThisLicense, $notAllowedLicense);
