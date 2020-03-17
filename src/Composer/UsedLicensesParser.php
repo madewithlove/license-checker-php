@@ -2,7 +2,7 @@
 
 namespace LicenseChecker\Composer;
 
-class LicenseParser
+class UsedLicensesParser
 {
     /**
      * @var LicenseRetriever

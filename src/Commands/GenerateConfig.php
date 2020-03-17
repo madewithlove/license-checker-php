@@ -2,7 +2,7 @@
 
 namespace LicenseChecker\Commands;
 
-use LicenseChecker\Composer\LicenseParser;
+use LicenseChecker\Composer\UsedLicensesParser;
 use LicenseChecker\Configuration\AllowedLicensesParser;
 use LicenseChecker\Configuration\ConfigurationExists;
 use Symfony\Component\Console\Command\Command;
@@ -21,17 +21,17 @@ class GenerateConfig extends Command
     private $allowedLicensesParser;
 
     /**
-     * @var LicenseParser
+     * @var UsedLicensesParser
      */
-    private $licenseParser;
+    private $usedLicensesParser;
 
     public function __construct(
         AllowedLicensesParser $allowedLicensesParser,
-        LicenseParser $licenseParser
+        UsedLicensesParser $usedLicensesParser
     ) {
         parent::__construct();
         $this->allowedLicensesParser = $allowedLicensesParser;
-        $this->licenseParser = $licenseParser;
+        $this->usedLicensesParser = $usedLicensesParser;
     }
 
     protected function configure(): void
@@ -44,7 +44,7 @@ class GenerateConfig extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $usedLicenses = $this->licenseParser->parseLicenses();
+            $usedLicenses = $this->usedLicensesParser->parseLicenses();
         } catch (ProcessFailedException $e) {
             $io->error($e->getMessage());
             return 1;
