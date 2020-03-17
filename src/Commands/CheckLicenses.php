@@ -2,9 +2,13 @@
 
 namespace LicenseChecker\Commands;
 
+use LicenseChecker\Commands\Output\DependencyCheck;
+use LicenseChecker\Commands\Output\TableRenderer;
+use LicenseChecker\Composer\DependencyTree;
 use LicenseChecker\Composer\LicenseParser;
 use LicenseChecker\Composer\LicenseRetriever;
 use LicenseChecker\Configuration\AllowedLicensesParser;
+use LicenseChecker\Dependency;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -31,15 +35,29 @@ class CheckLicenses extends Command
      */
     private $allowedLicensesParser;
 
+    /**
+     * @var DependencyTree
+     */
+    private $dependencyTree;
+
+    /**
+     * @var TableRenderer
+     */
+    private $tableRenderer;
+
     public function __construct(
         LicenseRetriever $licenseRetriever,
         LicenseParser $licenseParser,
-        AllowedLicensesParser $allowedLicensesParser
+        AllowedLicensesParser $allowedLicensesParser,
+        DependencyTree $dependencyTree,
+        TableRenderer $tableRenderer
     ) {
         parent::__construct();
         $this->licenseRetriever = $licenseRetriever;
         $this->licenseParser = $licenseParser;
         $this->allowedLicensesParser = $allowedLicensesParser;
+        $this->dependencyTree = $dependencyTree;
+        $this->tableRenderer = $tableRenderer;
     }
 
     protected function configure(): void
@@ -67,26 +85,24 @@ class CheckLicenses extends Command
         }
 
         $notAllowedLicenses = array_diff($usedLicenses, $allowedLicenses);
+        $dependencies = $this->dependencyTree->getDependencies();
 
-        if (!empty($notAllowedLicenses)) {
+        $dependencyChecks = [];
+        foreach ($dependencies as $dependency) {
+            $dependencyCheck = new DependencyCheck($dependency->getName());
             foreach ($notAllowedLicenses as $notAllowedLicense) {
-                $io->error('The following packages are using the ' . $notAllowedLicense . ' license which is not allowed.');
                 $packagesUsingThisLicense = $this->licenseParser->getPackagesWithLicense($licenseJson, $notAllowedLicense);
-
-                $io->table(
-                    ['package name'],
-                    array_map(
-                        function (string $packageName): array {
-                            return [$packageName];
-                        },
-                        $packagesUsingThisLicense
-                    )
-                );
+                foreach ($packagesUsingThisLicense as $packageUsingThisLicense) {
+                    if ($dependency->hasDependency($packageUsingThisLicense) || $dependency->getName() === $packageUsingThisLicense) {
+                        $dependencyCheck = $dependencyCheck->addFailedDependency($packageUsingThisLicense, $notAllowedLicense);
+                    }
+                }
             }
-            return 1;
+            $dependencyChecks[] = $dependencyCheck;
         }
 
-        $output->writeln('All used licenses are allowed');
-        return 0;
+        $this->tableRenderer->renderDependencyChecks($dependencyChecks, $io);
+
+        return empty($notAllowedLicenses) ? 0 : 1;
     }
 }
