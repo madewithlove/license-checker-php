@@ -25,21 +25,21 @@ These are the different CLI commands
 
 ### List used licenses
 ```
-vendor/bin/license-checker licenses:used
+vendor/bin/license-checker used
 ```
 
 ### List allowed licenses
 ```
-vendor/bin/license-checker licenses:allowed
+vendor/bin/license-checker allowed
 ```
 
 ### Check licenses
 ```
-vendor/bin/license-checker licenses:check
+vendor/bin/license-checker check
 ```
 
 ### Automatically generate configuration
 This command will automatically generate an `.allowed-licenses` configuration based on the currently used licenses.
 ```
-vendor/bin/license-checker config:generate
+vendor/bin/license-checker config
 ```
