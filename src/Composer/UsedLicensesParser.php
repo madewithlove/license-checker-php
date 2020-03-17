@@ -5,11 +5,11 @@ namespace LicenseChecker\Composer;
 class UsedLicensesParser
 {
     /**
-     * @var LicenseRetriever
+     * @var UsedLicensesRetriever
      */
     private $retriever;
 
-    public function __construct(LicenseRetriever $retriever)
+    public function __construct(UsedLicensesRetriever $retriever)
     {
         $this->retriever = $retriever;
     }

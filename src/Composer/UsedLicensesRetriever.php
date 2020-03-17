@@ -5,7 +5,7 @@ namespace LicenseChecker\Composer;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-class LicenseRetriever
+class UsedLicensesRetriever
 {
     public function getComposerLicenses(): string
     {

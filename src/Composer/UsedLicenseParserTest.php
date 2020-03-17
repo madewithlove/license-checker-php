@@ -13,13 +13,13 @@ class UsedLicenseParserTest extends TestCase
     private $usedLicensesParser;
 
     /**
-     * @var LicenseRetriever | MockObject
+     * @var UsedLicensesRetriever | MockObject
      */
     private $licenseRetriever;
 
     protected function setUp(): void
     {
-        $this->licenseRetriever = $this->createMock(LicenseRetriever::class);
+        $this->licenseRetriever = $this->createMock(UsedLicensesRetriever::class);
         $this->usedLicensesParser = new UsedLicensesParser($this->licenseRetriever);
     }
 
