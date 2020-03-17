@@ -6,9 +6,7 @@ use LicenseChecker\Commands\Output\DependencyCheck;
 use LicenseChecker\Commands\Output\TableRenderer;
 use LicenseChecker\Composer\DependencyTree;
 use LicenseChecker\Composer\LicenseParser;
-use LicenseChecker\Composer\LicenseRetriever;
 use LicenseChecker\Configuration\AllowedLicensesParser;
-use LicenseChecker\Dependency;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,11 +17,6 @@ use Symfony\Component\Yaml\Exception\ParseException;
 class CheckLicenses extends Command
 {
     protected static $defaultName = 'licenses:check';
-
-    /**
-     * @var LicenseRetriever
-     */
-    private $licenseRetriever;
 
     /**
      * @var LicenseParser
@@ -46,14 +39,12 @@ class CheckLicenses extends Command
     private $tableRenderer;
 
     public function __construct(
-        LicenseRetriever $licenseRetriever,
         LicenseParser $licenseParser,
         AllowedLicensesParser $allowedLicensesParser,
         DependencyTree $dependencyTree,
         TableRenderer $tableRenderer
     ) {
         parent::__construct();
-        $this->licenseRetriever = $licenseRetriever;
         $this->licenseParser = $licenseParser;
         $this->allowedLicensesParser = $allowedLicensesParser;
         $this->dependencyTree = $dependencyTree;
@@ -70,8 +61,7 @@ class CheckLicenses extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $licenseJson = $this->licenseRetriever->getComposerLicenses();
-            $usedLicenses = $this->licenseParser->parseLicenses($licenseJson);
+            $usedLicenses = $this->licenseParser->parseLicenses();
         } catch (ProcessFailedException $e) {
             $output->writeln($e->getMessage());
             return 1;
@@ -91,7 +81,7 @@ class CheckLicenses extends Command
         foreach ($dependencies as $dependency) {
             $dependencyCheck = new DependencyCheck($dependency->getName());
             foreach ($notAllowedLicenses as $notAllowedLicense) {
-                $packagesUsingThisLicense = $this->licenseParser->getPackagesWithLicense($licenseJson, $notAllowedLicense);
+                $packagesUsingThisLicense = $this->licenseParser->getPackagesWithLicense($notAllowedLicense);
                 foreach ($packagesUsingThisLicense as $packageUsingThisLicense) {
                     if ($dependency->hasDependency($packageUsingThisLicense) || $dependency->getName() === $packageUsingThisLicense) {
                         $dependencyCheck = $dependencyCheck->addFailedDependency($packageUsingThisLicense, $notAllowedLicense);

@@ -14,21 +14,14 @@ class ListUsedLicenses extends Command
     protected static $defaultName = 'licenses:used';
 
     /**
-     * @var LicenseRetriever
-     */
-    private $licenseRetriever;
-
-    /**
      * @var LicenseParser
      */
     private $licenseParser;
 
     public function __construct(
-        LicenseRetriever $licenseRetriever,
         LicenseParser $licenseParser
     ) {
         parent::__construct();
-        $this->licenseRetriever = $licenseRetriever;
         $this->licenseParser = $licenseParser;
     }
 
@@ -40,8 +33,7 @@ class ListUsedLicenses extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $licenseJson = $this->licenseRetriever->getComposerLicenses();
-            $usedLicenses = $this->licenseParser->parseLicenses($licenseJson);
+            $usedLicenses = $this->licenseParser->parseLicenses();
             foreach ($usedLicenses as $usedLicense) {
                 $output->writeln($usedLicense);
             }

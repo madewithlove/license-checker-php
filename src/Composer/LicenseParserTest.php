@@ -2,6 +2,7 @@
 
 namespace LicenseChecker\Composer;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class LicenseParserTest extends TestCase
@@ -11,9 +12,15 @@ class LicenseParserTest extends TestCase
      */
     private $licenseParser;
 
+    /**
+     * @var LicenseRetriever | MockObject
+     */
+    private $licenseRetriever;
+
     protected function setUp(): void
     {
-        $this->licenseParser = new LicenseParser();
+        $this->licenseRetriever = $this->createMock(LicenseRetriever::class);
+        $this->licenseParser = new LicenseParser($this->licenseRetriever);
     }
 
     /**
@@ -67,9 +74,11 @@ class LicenseParserTest extends TestCase
             'FOO',
         ];
 
+        $this->licenseRetriever->method('getComposerLicenses')->willReturn($input);
+
         $this->assertEquals(
             $expected,
-            $this->licenseParser->parseLicenses($input)
+            $this->licenseParser->parseLicenses()
         );
 
     }

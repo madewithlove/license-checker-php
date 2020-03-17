@@ -32,8 +32,7 @@ if (!$autoLoader) {
 $application = new Application('License Checker', '0.0.1');
 
 $checkLicenses = new CheckLicenses(
-    new LicenseRetriever(),
-    new LicenseParser(),
+    new LicenseParser(new LicenseRetriever()),
     new AllowedLicensesParser(),
     new DependencyTree(new DependencyTreeRetriever()),
     new TableRenderer()
@@ -41,8 +40,7 @@ $checkLicenses = new CheckLicenses(
 $application->add($checkLicenses);
 
 $listUsedLicenses = new ListUsedLicenses(
-    new LicenseRetriever(),
-    new LicenseParser()
+    new LicenseParser(new LicenseRetriever())
 );
 $application->add($listUsedLicenses);
 
@@ -53,8 +51,7 @@ $application->add($listAllowedLicenses);
 
 $generateConfig = new GenerateConfig(
     new AllowedLicensesParser(),
-    new LicenseRetriever(),
-    new LicenseParser()
+    new LicenseParser(new LicenseRetriever())
 );
 $application->add($generateConfig);
 

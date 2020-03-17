@@ -5,13 +5,22 @@ namespace LicenseChecker\Composer;
 class LicenseParser
 {
     /**
-     * @param string $json
+     * @var LicenseRetriever
+     */
+    private $retriever;
+
+    public function __construct(LicenseRetriever $retriever)
+    {
+        $this->retriever = $retriever;
+    }
+
+    /**
      * @return string[]
      */
-    public function parseLicenses(string $json): array
+    public function parseLicenses(): array
     {
         $licenses = [];
-        $decodedJson = json_decode($json, true);
+        $decodedJson = json_decode($this->retriever->getComposerLicenses(), true);
         foreach ($decodedJson['dependencies'] as $dependency) {
             if (isset($dependency['license'][0])) {
                 $licenses[] = $dependency['license'][0];
@@ -24,14 +33,13 @@ class LicenseParser
     }
 
     /**
-     * @param string $json
      * @param string $license
      * @return string[]
      */
-    public function getPackagesWithLicense(string $json, string $license): array
+    public function getPackagesWithLicense(string $license): array
     {
         $packages = [];
-        $decodedJson = json_decode($json, true);
+        $decodedJson = json_decode($this->retriever->getComposerLicenses(), true);
 
         foreach ($decodedJson['dependencies'] as $packageName => $licenseInfo) {
             if ($licenseInfo['license'][0] === $license) {
