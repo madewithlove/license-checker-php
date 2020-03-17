@@ -41,5 +41,5 @@ vendor/bin/license-checker check
 ### Automatically generate configuration
 This command will automatically generate an `.allowed-licenses` configuration based on the currently used licenses.
 ```
-vendor/bin/license-checker config
+vendor/bin/license-checker generate-config
 ```

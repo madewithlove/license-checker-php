@@ -13,7 +13,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class GenerateConfig extends Command
 {
-    protected static $defaultName = 'config';
+    protected static $defaultName = 'generate-config';
 
     /**
      * @var AllowedLicensesParser
