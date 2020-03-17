@@ -7,9 +7,9 @@ use Symfony\Component\Process\Process;
 
 class LicenseRetriever
 {
-    public function getComposerLicenses(string $composerJsonPath): string
+    public function getComposerLicenses(): string
     {
-        $process = new Process(['composer', 'license', '-f', 'json'], $composerJsonPath);
+        $process = new Process(['composer', 'license', '-f', 'json']);
         $process->run();
 
         if (!$process->isSuccessful()) {

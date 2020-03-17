@@ -70,7 +70,7 @@ class CheckLicenses extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $licenseJson = $this->licenseRetriever->getComposerLicenses(getcwd());
+            $licenseJson = $this->licenseRetriever->getComposerLicenses();
             $usedLicenses = $this->licenseParser->parseLicenses($licenseJson);
         } catch (ProcessFailedException $e) {
             $output->writeln($e->getMessage());
