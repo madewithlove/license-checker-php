@@ -1,0 +1,31 @@
+name: Publish new tags to Docker Hub
+
+on:
+    push:
+        tags:
+            - 'v*'
+
+jobs:
+    docker-publish:
+        name: Publish new tag to Docker
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@master
+            - name: Do a docker login
+              env:
+                  DOCKER_HUB_LOGIN: ${{ secrets.DOCKER_HUB_LOGIN }}
+                  DOCKER_HUB_PASS: ${{ secrets.DOCKER_HUB_PASS }}
+              run: docker login -u ${DOCKER_HUB_LOGIN} -p ${DOCKER_HUB_PASS}
+            - name: Get version name
+              id: get_version
+              run: echo ::set-output name=version::$(echo ${GITHUB_REF##*/} | cut -c2-)
+            - name: Wait for package to become available on packagist
+              run: sleep 300
+            - name: Build docker container
+              run: docker build --build-arg VERSION=${{ steps.get_version.outputs.version }} -f Dockerfile --tag madewithlove/license-checker-php:${{ steps.get_version.outputs.version }} .
+            - name: Publish docker container to Docker Hub
+              run: docker push madewithlove/license-checker-php:${{ steps.get_version.outputs.version }}
+            - name: Build docker container as latest
+              run: docker build --build-arg VERSION=${{ steps.get_version.outputs.version }} -f Dockerfile --tag madewithlove/license-checker-php:latest .
+            - name: Publish docker container to Docker Hub
+              run: docker push madewithlove/license-checker-php:latest
