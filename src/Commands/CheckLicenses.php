@@ -16,7 +16,7 @@ use Symfony\Component\Yaml\Exception\ParseException;
 
 class CheckLicenses extends Command
 {
-    protected static $defaultName = 'licenses:check';
+    protected static $defaultName = 'check';
 
     /**
      * @var UsedLicensesParser

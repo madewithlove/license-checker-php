@@ -11,7 +11,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ListUsedLicenses extends Command
 {
-    protected static $defaultName = 'licenses:used';
+    protected static $defaultName = 'used';
 
     /**
      * @var UsedLicensesParser
