@@ -25,3 +25,15 @@ jobs:
               run: composer install -n --prefer-dist
             - name: Run PHPUnit unit tests
               run: vendor/bin/phpunit
+
+    check-licenses:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@master
+            -   uses: shivammathur/setup-php@v1
+                with:
+                    php-version: '7.4'
+            -   name: Install dependencies
+                run: composer install -n --prefer-dist
+            -   name: Run License Checker
+                run: bin/license-checker check
