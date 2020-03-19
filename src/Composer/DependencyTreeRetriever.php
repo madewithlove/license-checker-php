@@ -7,8 +7,14 @@ use Symfony\Component\Process\Process;
 
 class DependencyTreeRetriever
 {
+    private static $output;
+
     public function getDependencyTree(): string
     {
+        if (!is_null(self::$output)) {
+            return self::$output;
+        }
+
         $process = new Process(['composer', 'show', '-t', '-f', 'json']);
         $process->run();
 
@@ -16,6 +22,8 @@ class DependencyTreeRetriever
             throw new ProcessFailedException($process);
         }
 
-        return $process->getOutput();
+        self::$output = $process->getOutput();
+
+        return self::$output;
     }
 }
