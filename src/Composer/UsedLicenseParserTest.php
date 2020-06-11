@@ -28,7 +28,43 @@ class UsedLicenseParserTest extends TestCase
      */
     public function canParseLicensesFromJson(): void
     {
-        $input = '
+        $expected = [
+            'BAR',
+            'BAZ',
+            'FOO',
+        ];
+
+        $this->licenseRetriever->method('getComposerLicenses')->willReturn($this->getJsonData());
+
+        $this->assertEquals(
+            $expected,
+            $this->usedLicensesParser->parseLicenses()
+        );
+
+    }
+
+    /**
+     * @test
+     */
+    public function canCountDependenciesByLicense(): void
+    {
+        $expected = [
+            'FOO' => 2,
+            'BAR' => 2,
+            'BAZ' => 1,
+        ];
+
+        $this->licenseRetriever->method('getComposerLicenses')->willReturn($this->getJsonData());
+
+        $this->assertEquals(
+            $expected,
+            $this->usedLicensesParser->countPackagesByLicense()
+        );
+    }
+
+    private function getJsonData(): string
+    {
+        return '
 {
     "name": "madewithlove/licence-checker-php",
     "version": "dev-master",
@@ -68,18 +104,5 @@ class UsedLicenseParserTest extends TestCase
         }
     }
 }';
-        $expected = [
-            'BAR',
-            'BAZ',
-            'FOO',
-        ];
-
-        $this->licenseRetriever->method('getComposerLicenses')->willReturn($input);
-
-        $this->assertEquals(
-            $expected,
-            $this->usedLicensesParser->parseLicenses()
-        );
-
     }
 }
