@@ -67,8 +67,8 @@ class UsedLicensesParser
             }
         }
 
-        asort($licenses, SORT_NUMERIC);
+        arsort($licenses, SORT_NUMERIC);
 
-        return array_reverse($licenses);
+        return $licenses;
     }
 }
