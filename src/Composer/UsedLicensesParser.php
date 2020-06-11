@@ -51,7 +51,7 @@ class UsedLicensesParser
     }
 
     /**
-     * @return string[]
+     * @return array<array-key, int>
      */
     public function countPackagesByLicense(): array
     {
