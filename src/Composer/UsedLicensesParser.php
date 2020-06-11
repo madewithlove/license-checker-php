@@ -49,4 +49,26 @@ class UsedLicensesParser
 
         return $packages;
     }
+
+    /**
+     * @return string[]
+     */
+    public function countPackagesByLicense(): array
+    {
+        $licenses = [];
+        $decodedJson = json_decode($this->retriever->getComposerLicenses(), true);
+        foreach ($decodedJson['dependencies'] as $dependency) {
+            if (isset($dependency['license'][0])) {
+                $licenseName = $dependency['license'][0];
+                if (!isset($licenses[$licenseName])) {
+                    $licenses[$licenseName] = 0;
+                }
+                $licenses[$licenseName]++;
+            }
+        }
+
+        asort($licenses, SORT_NUMERIC);
+
+        return array_reverse($licenses);
+    }
 }
