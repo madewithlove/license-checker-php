@@ -50,7 +50,6 @@ class CountUsedLicenses extends Command
             $rows
         );
 
-
         return 0;
     }
 }
