@@ -19,7 +19,7 @@ jobs:
               with:
                   php-version: '8.0'
             - name: Install dependencies
-              run: composer install -n --prefer-dist
+              run: composer update
             - name: Run PHPUnit unit tests
               run: vendor/bin/phpunit
 
@@ -31,6 +31,6 @@ jobs:
                 with:
                     php-version: '8.0'
             -   name: Install dependencies
-                run: composer install -n --prefer-dist
+                run: composer update
             -   name: Run License Checker
                 run: bin/license-checker check
