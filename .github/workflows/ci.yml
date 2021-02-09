@@ -6,16 +6,20 @@ jobs:
         name: Psalm
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout code
-              uses: actions/checkout@master
-            - name: Psalm
-              uses: docker://vimeo/psalm-github-actions
+            - uses: actions/checkout@master
+            - uses: shivammathur/setup-php@master
+              with:
+                  php-version: '8.0'
+            - name: Install dependencies
+              run: composer update
+            - name: Run Psalm
+              run: vendor/bin/psalm
 
     phpunit:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@master
-            - uses: shivammathur/setup-php@v1
+            - uses: shivammathur/setup-php@master
               with:
                   php-version: '8.0'
             - name: Install dependencies
@@ -27,7 +31,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@master
-            -   uses: shivammathur/setup-php@v1
+            -   uses: shivammathur/setup-php@master
                 with:
                     php-version: '8.0'
             -   name: Install dependencies
