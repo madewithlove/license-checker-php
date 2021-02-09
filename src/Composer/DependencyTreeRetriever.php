@@ -7,11 +7,11 @@ use Symfony\Component\Process\Process;
 
 class DependencyTreeRetriever
 {
-    private static $output;
+    private static string $output = '';
 
     public function getDependencyTree(): string
     {
-        if (!is_null(self::$output)) {
+        if (!empty(self::$output)) {
             return self::$output;
         }
 

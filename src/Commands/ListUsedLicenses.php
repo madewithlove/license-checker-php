@@ -13,16 +13,10 @@ class ListUsedLicenses extends Command
 {
     protected static $defaultName = 'used';
 
-    /**
-     * @var UsedLicensesParser
-     */
-    private $usedLicensesParser;
-
     public function __construct(
-        UsedLicensesParser $usedLicensesParser
+        private UsedLicensesParser $usedLicensesParser
     ) {
         parent::__construct();
-        $this->usedLicensesParser = $usedLicensesParser;
     }
 
     protected function configure(): void
@@ -30,7 +24,7 @@ class ListUsedLicenses extends Command
         $this->setDescription('List used licenses of composer dependencies');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $usedLicenses = $this->usedLicensesParser->parseLicenses();

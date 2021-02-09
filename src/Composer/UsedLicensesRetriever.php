@@ -7,11 +7,11 @@ use Symfony\Component\Process\Process;
 
 class UsedLicensesRetriever
 {
-    private static $output;
+    private static string $output = '';
 
     public function getComposerLicenses(): string
     {
-        if (!is_null(self::$output)) {
+        if (!empty(self::$output)) {
             return self::$output;
         }
 

@@ -8,15 +8,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class TableRendererTest extends TestCase
 {
-    /**
-     * @var SymfonyStyle | MockObject
-     */
-    private $io;
-
-    /**
-     * @var TableRenderer
-     */
-    private $tableRenderer;
+    private SymfonyStyle|MockObject $io;
+    private TableRenderer $tableRenderer;
 
     protected function setUp(): void
     {
@@ -27,7 +20,7 @@ class TableRendererTest extends TestCase
     /**
      * @test
      */
-    public function itWillRenderTwoColumnsOnSuccess()
+    public function itWillRenderTwoColumnsOnSuccess(): void
     {
         $this->io->expects($this->once())->method('table')->with(
             ['','dependency'],
@@ -51,7 +44,7 @@ class TableRendererTest extends TestCase
     /**
      * @test
      */
-    public function itWillListCausingPackagesOnFailure()
+    public function itWillListCausingPackagesOnFailure(): void
     {
         $this->io->expects($this->once())->method('table')->with(
             ['', 'dependency', 'caused by'],
@@ -76,7 +69,7 @@ class TableRendererTest extends TestCase
     /**
      * @test
      */
-    public function itWillRenderFailingDependenciesFirst()
+    public function itWillRenderFailingDependenciesFirst(): void
     {
         $this->io->expects($this->once())->method('table')->with(
             ['', 'dependency', 'caused by'],

@@ -7,15 +7,8 @@ use PHPUnit\Framework\TestCase;
 
 class UsedLicenseParserTest extends TestCase
 {
-    /**
-     * @var UsedLicensesParser
-     */
-    private $usedLicensesParser;
-
-    /**
-     * @var UsedLicensesRetriever | MockObject
-     */
-    private $licenseRetriever;
+    private UsedLicensesParser $usedLicensesParser;
+    private UsedLicensesRetriever|MockObject $licenseRetriever;
 
     protected function setUp(): void
     {

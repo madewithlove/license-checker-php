@@ -4,21 +4,10 @@ namespace LicenseChecker\Commands\Output;
 
 final class CauseOfFailure
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $license;
-
-    public function __construct(string $name, string $license)
-    {
-        $this->name = $name;
-        $this->license = $license;
-    }
+    public function __construct(
+        private string $name,
+        private string $license
+    ) {}
 
     public function getName(): string
     {

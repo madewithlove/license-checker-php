@@ -9,7 +9,6 @@ class AllowedLicensesParser
     private const CONFIG_FILE_NAME = '.allowed-licenses';
 
     /**
-     * @param string $pathToConfigurationFile
      * @return string[]
      */
     public function getAllowedLicenses(string $pathToConfigurationFile): array
@@ -23,7 +22,7 @@ class AllowedLicensesParser
     /**
      * @param string[] $allowedLicenses
      */
-    public function writeConfiguration(array $allowedLicenses)
+    public function writeConfiguration(array $allowedLicenses): void
     {
         if ($this->configurationExists(getcwd())) {
             throw new ConfigurationExists();

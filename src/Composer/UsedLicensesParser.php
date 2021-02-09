@@ -4,15 +4,9 @@ namespace LicenseChecker\Composer;
 
 class UsedLicensesParser
 {
-    /**
-     * @var UsedLicensesRetriever
-     */
-    private $retriever;
-
-    public function __construct(UsedLicensesRetriever $retriever)
-    {
-        $this->retriever = $retriever;
-    }
+    public function __construct(
+        private UsedLicensesRetriever $retriever
+    ) {}
 
     /**
      * @return string[]
@@ -33,7 +27,6 @@ class UsedLicensesParser
     }
 
     /**
-     * @param string $license
      * @return string[]
      */
     public function getPackagesWithLicense(string $license): array
