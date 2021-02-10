@@ -12,24 +12,18 @@ class ListAllowedLicenses extends Command
 {
     protected static $defaultName = 'allowed';
 
-    /**
-     * @var AllowedLicensesParser
-     */
-    private $allowedLicensesParser;
-
-    public function __construct(AllowedLicensesParser $allowedLicensesParser)
-    {
+    public function __construct(
+        private AllowedLicensesParser $allowedLicensesParser
+    ) {
         parent::__construct();
-        $this->allowedLicensesParser = $allowedLicensesParser;
     }
-
 
     protected function configure(): void
     {
         $this->setDescription('List used licenses of composer dependencies');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $allowedLicenses = $this->allowedLicensesParser->getAllowedLicenses(getcwd());

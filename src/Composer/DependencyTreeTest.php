@@ -8,15 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 class DependencyTreeTest extends TestCase
 {
-    /**
-     * @var DependencyTreeRetriever | MockObject
-     */
-    private $retriever;
-
-    /**
-     * @var DependencyTree
-     */
-    private $dependencyTree;
+    private DependencyTreeRetriever|MockObject $retriever;
+    private DependencyTree $dependencyTree;
 
     protected function setUp(): void
     {

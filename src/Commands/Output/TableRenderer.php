@@ -8,11 +8,10 @@ class TableRenderer
 {
     /**
      * @param DependencyCheck[] $dependencyChecks
-     * @param SymfonyStyle $io
      */
-    public function renderDependencyChecks(array $dependencyChecks, SymfonyStyle $io)
+    public function renderDependencyChecks(array $dependencyChecks, SymfonyStyle $io): void
     {
-        usort($dependencyChecks, function (DependencyCheck $dependencyCheck, DependencyCheck $other) {
+        usort($dependencyChecks, function (DependencyCheck $dependencyCheck, DependencyCheck $other): int {
             return $dependencyCheck->isAllowed() <=> $other->isAllowed();
         });
 
@@ -24,7 +23,6 @@ class TableRenderer
 
     /**
      * @param DependencyCheck[] $dependencyChecks
-     * @return bool
      */
     private function hasFailures(array $dependencyChecks): bool
     {
@@ -103,7 +101,6 @@ class TableRenderer
     }
 
     /**
-     * @param DependencyCheck $dependencyCheck
      * @return string[]
      */
     private function renderAllowedLineWithEmptyFailureCause(DependencyCheck $dependencyCheck): array
@@ -116,8 +113,6 @@ class TableRenderer
     }
 
     /**
-     * @param DependencyCheck $dependencyCheck
-     * @param CauseOfFailure $causeOfFailure
      * @return string[]
      */
     private function renderFailedLineWithCauseOfFailure(
@@ -132,7 +127,6 @@ class TableRenderer
     }
 
     /**
-     * @param CauseOfFailure $causeOfFailure
      * @return string[]
      */
     private function renderAdditionalCauseOfFailure(CauseOfFailure $causeOfFailure): array

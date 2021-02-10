@@ -4,30 +4,18 @@ namespace LicenseChecker\Commands\Output;
 
 final class DependencyCheck
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var bool
-     */
-    private $isAllowed = true;
+    private bool $isAllowed = true;
 
     /**
      * @var CauseOfFailure[]
      */
-    private $causedBy = [];
+    private array $causedBy = [];
 
-    /**
-     * @param string $name
-     */
-    public function __construct(string $name)
-    {
-        $this->name = $name;
-    }
+    public function __construct(
+        private string $name
+    ) {}
 
-    public function addFailedDependency($dependency, $license): self
+    public function addFailedDependency(string $dependency, string $license): self
     {
         $dependencyCheck = clone $this;
         $dependencyCheck->isAllowed = false;

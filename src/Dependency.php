@@ -5,19 +5,13 @@ namespace LicenseChecker;
 class Dependency
 {
     /**
-     * @var string
-     */
-    private $name;
-
-    /**
      * @var string[]
      */
-    private $subDependencies = [];
+    private array $subDependencies = [];
 
-    public function __construct(string $name)
-    {
-        $this->name = $name;
-    }
+    public function __construct(
+        private string $name
+    ) {}
 
     public function addDependency(string $dependency): self
     {

@@ -5,6 +5,8 @@ pipeline to block merging when a non-verified license is being introduced to the
 
 ## Installation
 Installing should be a breeze thanks to `composer`:
+Note that you need PHP 8 to install the latest version (1.x). 
+If you are using an older version of PHP (7.x), older versions can be installed (0.x).
 
 ```
 composer require madewithlove/license-checker

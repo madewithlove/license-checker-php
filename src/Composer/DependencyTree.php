@@ -6,15 +6,9 @@ use LicenseChecker\Dependency;
 
 class DependencyTree
 {
-    /**
-     * @var DependencyTreeRetriever
-     */
-    private $retriever;
-
-    public function __construct(DependencyTreeRetriever $dependencyTreeRetriever)
-    {
-        $this->retriever = $dependencyTreeRetriever;
-    }
+    public function __construct(
+        private DependencyTreeRetriever $retriever)
+    {}
 
     /**
      * @return Dependency[]
@@ -37,7 +31,6 @@ class DependencyTree
     }
 
     /**
-     * @param array $subTree
      * @return string[]
      */
     private function getSubDependencies(array $subTree): array

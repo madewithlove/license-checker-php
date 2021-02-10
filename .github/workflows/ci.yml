@@ -6,23 +6,24 @@ jobs:
         name: Psalm
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout code
-              uses: actions/checkout@master
-            - name: Psalm
-              uses: docker://vimeo/psalm-github-actions
+            - uses: actions/checkout@master
+            - uses: shivammathur/setup-php@master
+              with:
+                  php-version: '8.0'
+            - name: Install dependencies
+              run: composer update
+            - name: Run Psalm
+              run: vendor/bin/psalm
 
     phpunit:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                php-versions: ['7.2', '7.3', '7.4']
         steps:
             - uses: actions/checkout@master
-            - uses: shivammathur/setup-php@v1
+            - uses: shivammathur/setup-php@master
               with:
-                  php-version: ${{ matrix.php-versions }}
+                  php-version: '8.0'
             - name: Install dependencies
-              run: composer install -n --prefer-dist
+              run: composer update
             - name: Run PHPUnit unit tests
               run: vendor/bin/phpunit
 
@@ -30,10 +31,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@master
-            -   uses: shivammathur/setup-php@v1
+            -   uses: shivammathur/setup-php@master
                 with:
-                    php-version: '7.4'
+                    php-version: '8.0'
             -   name: Install dependencies
-                run: composer install -n --prefer-dist
+                run: composer update
             -   name: Run License Checker
                 run: bin/license-checker check

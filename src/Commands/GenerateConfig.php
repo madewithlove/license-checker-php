@@ -15,23 +15,11 @@ class GenerateConfig extends Command
 {
     protected static $defaultName = 'generate-config';
 
-    /**
-     * @var AllowedLicensesParser
-     */
-    private $allowedLicensesParser;
-
-    /**
-     * @var UsedLicensesParser
-     */
-    private $usedLicensesParser;
-
     public function __construct(
-        AllowedLicensesParser $allowedLicensesParser,
-        UsedLicensesParser $usedLicensesParser
+        private AllowedLicensesParser $allowedLicensesParser,
+        private UsedLicensesParser $usedLicensesParser
     ) {
         parent::__construct();
-        $this->allowedLicensesParser = $allowedLicensesParser;
-        $this->usedLicensesParser = $usedLicensesParser;
     }
 
     protected function configure(): void
@@ -39,7 +27,7 @@ class GenerateConfig extends Command
         $this->setDescription('Generates allowed licenses config based on used licenses');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
