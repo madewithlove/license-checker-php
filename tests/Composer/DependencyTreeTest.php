@@ -10,7 +10,10 @@ use PHPUnit\Framework\TestCase;
 
 class DependencyTreeTest extends TestCase
 {
-    private DependencyTreeRetriever|MockObject $retriever;
+    /**
+     * @var MockObject & DependencyTreeRetriever
+     */
+    private MockObject $retriever;
     private DependencyTree $dependencyTree;
 
     protected function setUp(): void

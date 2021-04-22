@@ -10,7 +10,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class TableRendererTest extends TestCase
 {
-    private SymfonyStyle|MockObject $io;
+    /**
+     * @var MockObject & SymfonyStyle
+     */
+    private MockObject $io;
     private TableRenderer $tableRenderer;
 
     protected function setUp(): void

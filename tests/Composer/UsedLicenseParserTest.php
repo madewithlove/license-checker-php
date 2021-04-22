@@ -9,8 +9,11 @@ use PHPUnit\Framework\TestCase;
 
 class UsedLicenseParserTest extends TestCase
 {
+    /**
+     * @var MockObject & UsedLicensesRetriever
+     */
+    private MockObject $licenseRetriever;
     private UsedLicensesParser $usedLicensesParser;
-    private UsedLicensesRetriever|MockObject $licenseRetriever;
 
     protected function setUp(): void
     {
