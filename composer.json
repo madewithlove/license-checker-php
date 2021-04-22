@@ -25,5 +25,10 @@
         "psr-4": {
             "LicenseChecker\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LicenseChecker\\Tests\\": "tests/"
+        }
     }
 }

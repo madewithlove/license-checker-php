@@ -1,7 +1,9 @@
 <?php
 
-namespace LicenseChecker\Composer;
+namespace LicenseChecker\Tests\Composer;
 
+use LicenseChecker\Composer\DependencyTree;
+use LicenseChecker\Composer\DependencyTreeRetriever;
 use LicenseChecker\Dependency;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
