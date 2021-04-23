@@ -1,14 +1,19 @@
 <?php
 
-namespace LicenseChecker\Composer;
+namespace LicenseChecker\Tests\Composer;
 
+use LicenseChecker\Composer\DependencyTree;
+use LicenseChecker\Composer\DependencyTreeRetriever;
 use LicenseChecker\Dependency;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DependencyTreeTest extends TestCase
 {
-    private DependencyTreeRetriever|MockObject $retriever;
+    /**
+     * @var MockObject & DependencyTreeRetriever
+     */
+    private MockObject $retriever;
     private DependencyTree $dependencyTree;
 
     protected function setUp(): void

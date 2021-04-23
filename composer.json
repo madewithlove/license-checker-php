@@ -19,11 +19,17 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
-        "vimeo/psalm": "^4.4"
+        "vimeo/psalm": "^4.4",
+        "psalm/plugin-phpunit": "^0.15.1"
     },
     "autoload": {
         "psr-4": {
             "LicenseChecker\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LicenseChecker\\Tests\\": "tests/"
         }
     }
 }

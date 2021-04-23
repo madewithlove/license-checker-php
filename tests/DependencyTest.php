@@ -1,7 +1,8 @@
 <?php
 
-namespace LicenseChecker;
+namespace LicenseChecker\Tests;
 
+use LicenseChecker\Dependency;
 use PHPUnit\Framework\TestCase;
 
 class DependencyTest extends TestCase

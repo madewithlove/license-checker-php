@@ -1,7 +1,8 @@
 <?php
 
-namespace LicenseChecker\Configuration;
+namespace LicenseChecker\Tests\Configuration;
 
+use LicenseChecker\Configuration\AllowedLicensesParser;
 use PHPUnit\Framework\TestCase;
 
 class AllowedLicensesParserTest extends TestCase
@@ -12,7 +13,7 @@ class AllowedLicensesParserTest extends TestCase
     public function canParseConfiguration(): void
     {
         $parser = new AllowedLicensesParser();
-        $allowedLicenses = $parser->getAllowedLicenses(__DIR__ );
+        $allowedLicenses = $parser->getAllowedLicenses(__DIR__.'/data');
         $expected = [
             'Apache-2',
             'BSD-3-Clause',

@@ -1,14 +1,19 @@
 <?php
 
-namespace LicenseChecker\Composer;
+namespace LicenseChecker\Tests\Composer;
 
+use LicenseChecker\Composer\UsedLicensesParser;
+use LicenseChecker\Composer\UsedLicensesRetriever;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class UsedLicenseParserTest extends TestCase
 {
+    /**
+     * @var MockObject & UsedLicensesRetriever
+     */
+    private MockObject $licenseRetriever;
     private UsedLicensesParser $usedLicensesParser;
-    private UsedLicensesRetriever|MockObject $licenseRetriever;
 
     protected function setUp(): void
     {
