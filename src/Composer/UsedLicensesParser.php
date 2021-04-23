@@ -14,6 +14,7 @@ class UsedLicensesParser
     public function parseLicenses(): array
     {
         $licenses = [];
+        /** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $decodedJson */
         $decodedJson = json_decode($this->retriever->getComposerLicenses(), true);
         foreach ($decodedJson['dependencies'] as $dependency) {
             if (isset($dependency['license'][0])) {
@@ -32,6 +33,7 @@ class UsedLicensesParser
     public function getPackagesWithLicense(string $license): array
     {
         $packages = [];
+        /** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $decodedJson */
         $decodedJson = json_decode($this->retriever->getComposerLicenses(), true);
 
         foreach ($decodedJson['dependencies'] as $packageName => $licenseInfo) {
@@ -49,6 +51,7 @@ class UsedLicensesParser
     public function countPackagesByLicense(): array
     {
         $licenses = [];
+        /** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $decodedJson */
         $decodedJson = json_decode($this->retriever->getComposerLicenses(), true);
         foreach ($decodedJson['dependencies'] as $dependency) {
             if (isset($dependency['license'][0])) {
