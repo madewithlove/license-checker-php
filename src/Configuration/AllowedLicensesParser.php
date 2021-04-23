@@ -9,10 +9,11 @@ class AllowedLicensesParser
     private const CONFIG_FILE_NAME = '.allowed-licenses';
 
     /**
-     * @return string[]
+     * @return list<string>
      */
     public function getAllowedLicenses(string $pathToConfigurationFile): array
     {
+        /** @var list<string> $allowedLicenses */
         $allowedLicenses = Yaml::parseFile($pathToConfigurationFile . '/' . self::CONFIG_FILE_NAME);
         sort($allowedLicenses);
 

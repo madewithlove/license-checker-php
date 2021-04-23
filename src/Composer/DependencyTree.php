@@ -16,10 +16,12 @@ class DependencyTree
     public function getDependencies(): array
     {
         $dependencies = [];
+        /** @var array{installed:list<array{name:string,requires?:array}>} $decodedJson */
         $decodedJson = json_decode($this->retriever->getDependencyTree(), true);
         foreach ($decodedJson['installed'] as $package) {
             $dependency = new Dependency($package['name']);
             if (isset($package['requires'])) {
+                /** @psalm-suppress MixedArgumentTypeCoercion */
                 foreach ($this->getSubDependencies($package['requires']) as $subDependency) {
                     $dependency->addDependency($subDependency);
                 }
@@ -31,6 +33,7 @@ class DependencyTree
     }
 
     /**
+     * @param list<array{name:string,requires?:array}> $subTree
      * @return string[]
      */
     private function getSubDependencies(array $subTree): array
@@ -44,6 +47,7 @@ class DependencyTree
         foreach ($subTree as $subTreeItem) {
             $subDependencies[] = $subTreeItem['name'];
             if (isset($subTreeItem['requires'])) {
+                /** @psalm-suppress MixedArgumentTypeCoercion */
                 $subDependencies = array_merge($subDependencies, $this->getSubDependencies($subTreeItem['requires']));
             }
         }
