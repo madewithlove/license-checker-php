@@ -27,6 +27,18 @@ jobs:
             - name: Run PHPUnit unit tests
               run: vendor/bin/phpunit
 
+    coding_standards:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@master
+            - uses: shivammathur/setup-php@master
+              with:
+                  php-version: '8.0'
+            - name: Install dependencies
+              run: composer update
+            - name: Run PHP-CS-Fixer
+              run: vendor/bin/php-cs-fixer fix --dry-run -v
+
     check-licenses:
         runs-on: ubuntu-latest
         steps:
