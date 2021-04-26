@@ -10,6 +10,11 @@ class AllowedLicensesParser
 {
     private const DEFAULT_CONFIG_FILE_NAME = '.allowed-licenses';
 
+    public function __construct(
+        private string $workingDirectory
+    ) {
+    }
+
     /**
      * @return list<string>
      */
@@ -18,7 +23,7 @@ class AllowedLicensesParser
         string $fileName = self::DEFAULT_CONFIG_FILE_NAME
     ): array {
         /** @var list<string> $allowedLicenses */
-        $allowedLicenses = Yaml::parseFile($pathToConfigurationFile . '/' . $fileName);
+        $allowedLicenses = Yaml::parseFile($this->getConfigurationFilePath($fileName));
         sort($allowedLicenses);
 
         return $allowedLicenses;
@@ -41,8 +46,8 @@ class AllowedLicensesParser
         return file_exists($this->getConfigurationFilePath());
     }
 
-    private function getConfigurationFilePath(): string
+    private function getConfigurationFilePath(string $fileName = self::DEFAULT_CONFIG_FILE_NAME): string
     {
-        return getcwd() . '/' . self::DEFAULT_CONFIG_FILE_NAME;
+        return $this->workingDirectory . '/' . $fileName;
     }
 }
