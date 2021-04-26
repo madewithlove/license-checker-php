@@ -32,7 +32,7 @@ class UsedLicenseParserTest extends TestCase
             'FOO',
         ];
 
-        $this->licenseRetriever->method('getComposerLicenses')->willReturn($this->getJsonData());
+        $this->licenseRetriever->method('getJsonDecodedComposerLicenses')->willReturn($this->getJsonData());
 
         $this->assertEquals(
             $expected,
@@ -52,7 +52,7 @@ class UsedLicenseParserTest extends TestCase
             'BAZ' => 1,
         ];
 
-        $this->licenseRetriever->method('getComposerLicenses')->willReturn($this->getJsonData());
+        $this->licenseRetriever->method('getJsonDecodedComposerLicenses')->willReturn($this->getJsonData());
 
         $this->assertEquals(
             $expected,
@@ -60,9 +60,13 @@ class UsedLicenseParserTest extends TestCase
         );
     }
 
-    private function getJsonData(): string
+	/**
+	 * @return array{dependencies:array<string,array{version:string,license:list<string>}>}
+	 */
+    private function getJsonData(): array
     {
-        return '
+		/** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $jsonDecoded */
+		$jsonDecoded = json_decode('
 {
     "name": "madewithlove/licence-checker-php",
     "version": "dev-master",
@@ -101,6 +105,7 @@ class UsedLicenseParserTest extends TestCase
             ]
         }
     }
-}';
+}', true);
+		return $jsonDecoded;
     }
 }

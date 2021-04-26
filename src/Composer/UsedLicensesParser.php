@@ -14,8 +14,8 @@ class UsedLicensesParser
     public function parseLicenses(): array
     {
         $licenses = [];
-        /** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $decodedJson */
-        $decodedJson = json_decode($this->retriever->getComposerLicenses(), true);
+
+        $decodedJson = $this->retriever->getJsonDecodedComposerLicenses();
         foreach ($decodedJson['dependencies'] as $dependency) {
             if (isset($dependency['license'][0])) {
                 $licenses[] = $dependency['license'][0];
@@ -33,9 +33,8 @@ class UsedLicensesParser
     public function getPackagesWithLicense(string $license): array
     {
         $packages = [];
-        /** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $decodedJson */
-        $decodedJson = json_decode($this->retriever->getComposerLicenses(), true);
 
+		$decodedJson = $this->retriever->getJsonDecodedComposerLicenses();
         foreach ($decodedJson['dependencies'] as $packageName => $licenseInfo) {
             if ($licenseInfo['license'][0] === $license) {
                 $packages[] = $packageName;
@@ -51,9 +50,9 @@ class UsedLicensesParser
     public function countPackagesByLicense(): array
     {
         $licenses = [];
-        /** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $decodedJson */
-        $decodedJson = json_decode($this->retriever->getComposerLicenses(), true);
-        foreach ($decodedJson['dependencies'] as $dependency) {
+
+		$decodedJson = $this->retriever->getJsonDecodedComposerLicenses();
+		foreach ($decodedJson['dependencies'] as $dependency) {
             if (isset($dependency['license'][0])) {
                 $licenseName = $dependency['license'][0];
                 if (!isset($licenses[$licenseName])) {
