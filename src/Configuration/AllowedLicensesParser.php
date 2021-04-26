@@ -19,10 +19,10 @@ class AllowedLicensesParser
      * @return list<string>
      */
     public function getAllowedLicenses(
-        string $fileName = self::DEFAULT_CONFIG_FILE_NAME
+        ?string $fileName
     ): array {
         /** @var list<string> $allowedLicenses */
-        $allowedLicenses = Yaml::parseFile($this->getConfigurationFilePath($fileName));
+        $allowedLicenses = Yaml::parseFile($this->getConfigurationFilePath($fileName ?? self::DEFAULT_CONFIG_FILE_NAME));
         sort($allowedLicenses);
 
         return $allowedLicenses;
