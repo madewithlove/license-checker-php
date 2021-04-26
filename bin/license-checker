@@ -41,18 +41,11 @@ $checkLicenses = new CheckLicenses(
     new DependencyTree(new DependencyTreeRetriever()),
     new TableRenderer()
 );
+
 $application->add($checkLicenses);
-
-$listUsedLicenses = new ListUsedLicenses($usedLicensesParser);
-$application->add($listUsedLicenses);
-
-$listAllowedLicenses = new ListAllowedLicenses($allowedLicensesParser);
-$application->add($listAllowedLicenses);
-
-$generateConfig = new GenerateConfig($allowedLicensesParser, $usedLicensesParser);
-$application->add($generateConfig);
-
-$countUsedLicenses = new CountUsedLicenses($usedLicensesParser);
-$application->add($countUsedLicenses);
+$application->add(new ListUsedLicenses($usedLicensesParser));
+$application->add(new ListAllowedLicenses($allowedLicensesParser));
+$application->add(new GenerateConfig($allowedLicensesParser, $usedLicensesParser));
+$application->add(new CountUsedLicenses($usedLicensesParser));
 
 $application->run();
