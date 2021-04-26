@@ -5,6 +5,7 @@ namespace LicenseChecker\Commands;
 use LicenseChecker\Composer\UsedLicensesParser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -21,7 +22,8 @@ class CountUsedLicenses extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Count number of dependencies for each license');
+        $this->setDescription('Count number of dependencies for each license')
+			->addOption('no-dev', null, InputOption::VALUE_NONE, 'Do not include dev dependencies');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -29,7 +31,7 @@ class CountUsedLicenses extends Command
         $io = new SymfonyStyle($input, $output);
         $rows = [];
         try {
-            $usedLicenses = $this->usedLicensesParser->countPackagesByLicense(false);
+            $usedLicenses = $this->usedLicensesParser->countPackagesByLicense((bool)$input->getOption('no-dev'));
             foreach ($usedLicenses as $usedLicense => $numberOfPackages) {
                 $rows[] = [$usedLicense, $numberOfPackages];
             }

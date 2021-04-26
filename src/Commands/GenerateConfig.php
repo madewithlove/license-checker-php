@@ -7,6 +7,7 @@ use LicenseChecker\Configuration\AllowedLicensesParser;
 use LicenseChecker\Configuration\ConfigurationExists;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -24,7 +25,8 @@ class GenerateConfig extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Generates allowed licenses config based on used licenses');
+        $this->setDescription('Generates allowed licenses config based on used licenses')
+			->addOption('no-dev', null, InputOption::VALUE_NONE, 'Do not include dev dependencies');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -32,7 +34,7 @@ class GenerateConfig extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $usedLicenses = $this->usedLicensesParser->parseLicenses(false);
+            $usedLicenses = $this->usedLicensesParser->parseLicenses((bool)$input->getOption('no-dev'));
         } catch (ProcessFailedException $e) {
             $io->error($e->getMessage());
             return 1;

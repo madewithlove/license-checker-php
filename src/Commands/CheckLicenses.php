@@ -9,6 +9,7 @@ use LicenseChecker\Composer\UsedLicensesParser;
 use LicenseChecker\Configuration\AllowedLicensesParser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -29,7 +30,8 @@ class CheckLicenses extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Check licenses of composer dependencies');
+        $this->setDescription('Check licenses of composer dependencies')
+			->addOption('no-dev', null, InputOption::VALUE_NONE, 'Do not include dev dependencies');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -37,7 +39,7 @@ class CheckLicenses extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $usedLicenses = $this->usedLicensesParser->parseLicenses(false);
+            $usedLicenses = $this->usedLicensesParser->parseLicenses((bool)$input->getOption('no-dev'));
         } catch (ProcessFailedException $e) {
             $output->writeln($e->getMessage());
             return 1;
@@ -51,13 +53,13 @@ class CheckLicenses extends Command
         }
 
         $notAllowedLicenses = array_diff($usedLicenses, $allowedLicenses);
-        $dependencies = $this->dependencyTree->getDependencies(false);
+        $dependencies = $this->dependencyTree->getDependencies((bool)$input->getOption('no-dev'));
 
         $dependencyChecks = [];
         foreach ($dependencies as $dependency) {
             $dependencyCheck = new DependencyCheck($dependency->getName());
             foreach ($notAllowedLicenses as $notAllowedLicense) {
-                $packagesUsingThisLicense = $this->usedLicensesParser->getPackagesWithLicense($notAllowedLicense, false);
+                $packagesUsingThisLicense = $this->usedLicensesParser->getPackagesWithLicense($notAllowedLicense, (bool)$input->getOption('no-dev'));
                 foreach ($packagesUsingThisLicense as $packageUsingThisLicense) {
                     if ($dependency->hasDependency($packageUsingThisLicense) || $dependency->getName() === $packageUsingThisLicense) {
                         $dependencyCheck = $dependencyCheck->addFailedDependency($packageUsingThisLicense, $notAllowedLicense);
