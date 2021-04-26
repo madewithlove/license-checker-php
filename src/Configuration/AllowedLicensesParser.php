@@ -29,24 +29,20 @@ class AllowedLicensesParser
      */
     public function writeConfiguration(array $allowedLicenses): void
     {
-        if ($this->configurationExists(getcwd())) {
+        if ($this->configurationExists()) {
             throw new ConfigurationExists();
         }
         $yaml = Yaml::dump($allowedLicenses);
         file_put_contents($this->getConfigurationFilePath(), $yaml);
     }
 
-    private function configurationExists(string $pathToConfigurationFile): bool
+    private function configurationExists(): bool
     {
-        return file_exists($this->getConfigurationFilePath($pathToConfigurationFile));
+        return file_exists($this->getConfigurationFilePath());
     }
 
-    private function getConfigurationFilePath(?string $path = null): string
+    private function getConfigurationFilePath(): string
     {
-        if (!$path) {
-            $path = getcwd();
-        }
-
-        return $path . '/' . self::DEFAULT_CONFIG_FILE_NAME;
+        return getcwd() . '/' . self::DEFAULT_CONFIG_FILE_NAME;
     }
 }
