@@ -14,8 +14,8 @@ class AllowedLicensesParserTest extends TestCase
      */
     public function canParseConfiguration(): void
     {
-        $parser = new AllowedLicensesParser();
-        $allowedLicenses = $parser->getAllowedLicenses(__DIR__.'/data');
+        $parser = new AllowedLicensesParser(__DIR__.'/data');
+        $allowedLicenses = $parser->getAllowedLicenses('.allowed-licenses');
         $expected = [
             'Apache-2',
             'BSD-3-Clause',

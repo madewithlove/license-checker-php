@@ -32,33 +32,20 @@ if (!$autoLoader) {
 
 $application = new Application('License Checker', '0.0.1');
 
+$allowedLicensesParser = new AllowedLicensesParser(getcwd());
+$usedLicensesParser = new UsedLicensesParser(new UsedLicensesRetriever());
+
 $checkLicenses = new CheckLicenses(
-    new UsedLicensesParser(new UsedLicensesRetriever()),
-    new AllowedLicensesParser(),
+    $usedLicensesParser,
+    $allowedLicensesParser,
     new DependencyTree(new DependencyTreeRetriever()),
     new TableRenderer()
 );
+
 $application->add($checkLicenses);
-
-$listUsedLicenses = new ListUsedLicenses(
-    new UsedLicensesParser(new UsedLicensesRetriever())
-);
-$application->add($listUsedLicenses);
-
-$listAllowedLicenses = new ListAllowedLicenses(
-    new AllowedLicensesParser()
-);
-$application->add($listAllowedLicenses);
-
-$generateConfig = new GenerateConfig(
-    new AllowedLicensesParser(),
-    new UsedLicensesParser(new UsedLicensesRetriever())
-);
-$application->add($generateConfig);
-
-$countUsedLicenses = new CountUsedLicenses(
-    new UsedLicensesParser(new UsedLicensesRetriever())
-);
-$application->add($countUsedLicenses);
+$application->add(new ListUsedLicenses($usedLicensesParser));
+$application->add(new ListAllowedLicenses($allowedLicensesParser));
+$application->add(new GenerateConfig($allowedLicensesParser, $usedLicensesParser));
+$application->add(new CountUsedLicenses($usedLicensesParser));
 
 $application->run();

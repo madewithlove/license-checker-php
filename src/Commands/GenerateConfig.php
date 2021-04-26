@@ -27,8 +27,14 @@ class GenerateConfig extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Generates allowed licenses config based on used licenses')
-            ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Do not include dev dependencies');
+        $this->setDescription('Generates allowed licenses config based on used licenses');
+        $this->addOption('no-dev', null, InputOption::VALUE_NONE, 'Do not include dev dependencies');
+        $this->addOption(
+            'filename',
+            'f',
+            InputOption::VALUE_OPTIONAL,
+            'Optional filename to be used instead of the default'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -45,7 +51,9 @@ class GenerateConfig extends Command
         sort($usedLicenses);
 
         try {
-            $this->allowedLicensesParser->writeConfiguration(array_values($usedLicenses));
+            /** @var string|null $fileName */
+            $fileName = is_string($input->getOption('filename')) ? $input->getOption('filename') : null;
+            $this->allowedLicensesParser->writeConfiguration(array_values($usedLicenses), $fileName);
             $io->success('Configuration file successfully written');
         } catch (ConfigurationExists $e) {
             $io->error('The configuration file already exists. Please remove it before generating a new one.');

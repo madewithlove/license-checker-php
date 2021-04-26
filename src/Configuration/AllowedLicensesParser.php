@@ -8,15 +8,21 @@ use Symfony\Component\Yaml\Yaml;
 
 class AllowedLicensesParser
 {
-    private const CONFIG_FILE_NAME = '.allowed-licenses';
+    private const DEFAULT_CONFIG_FILE_NAME = '.allowed-licenses';
+
+    public function __construct(
+        private string $workingDirectory
+    ) {
+    }
 
     /**
      * @return list<string>
      */
-    public function getAllowedLicenses(string $pathToConfigurationFile): array
-    {
+    public function getAllowedLicenses(
+        ?string $fileName
+    ): array {
         /** @var list<string> $allowedLicenses */
-        $allowedLicenses = Yaml::parseFile($pathToConfigurationFile . '/' . self::CONFIG_FILE_NAME);
+        $allowedLicenses = Yaml::parseFile($this->getConfigurationFilePath($fileName ?? self::DEFAULT_CONFIG_FILE_NAME));
         sort($allowedLicenses);
 
         return $allowedLicenses;
@@ -25,26 +31,23 @@ class AllowedLicensesParser
     /**
      * @param string[] $allowedLicenses
      */
-    public function writeConfiguration(array $allowedLicenses): void
+    public function writeConfiguration(array $allowedLicenses, ?string $fileName): void
     {
-        if ($this->configurationExists(getcwd())) {
+        $fileName = $fileName ?? self::DEFAULT_CONFIG_FILE_NAME;
+        if ($this->configurationExists($fileName)) {
             throw new ConfigurationExists();
         }
         $yaml = Yaml::dump($allowedLicenses);
-        file_put_contents($this->getConfigurationFilePath(), $yaml);
+        file_put_contents($this->getConfigurationFilePath($fileName), $yaml);
     }
 
-    private function configurationExists(string $pathToConfigurationFile): bool
+    private function configurationExists(string $fileName): bool
     {
-        return file_exists($this->getConfigurationFilePath($pathToConfigurationFile));
+        return file_exists($this->getConfigurationFilePath($fileName));
     }
 
-    private function getConfigurationFilePath(?string $path = null): string
+    private function getConfigurationFilePath(string $fileName): string
     {
-        if (!$path) {
-            $path = getcwd();
-        }
-
-        return $path . '/' . self::CONFIG_FILE_NAME;
+        return $this->workingDirectory . '/' . $fileName;
     }
 }
