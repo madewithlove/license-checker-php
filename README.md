@@ -22,6 +22,8 @@ The file could look like this:
 - New BSD License
 ```
 
+It's possible to use a custom configuration file by passing the `--filename` (or `-f`) option to the CLI commands.
+
 ## Usage
 These are the different CLI commands
 
@@ -44,4 +46,12 @@ vendor/bin/license-checker check
 This command will automatically generate an `.allowed-licenses` configuration based on the currently used licenses.
 ```
 vendor/bin/license-checker generate-config
+```
+
+### Excluding development dependencies
+Passing the `--no-dev` option to the CLI commands will scope all checks to production dependencies only.
+Checking production and development dependencies against separate configuration files is possible by passing options:
+```
+vendor/bin/license-checker check --no-dev --filename .allowed-licenses-production
+vendor/bin/license-checker check --filename .allowed-licenses-including-dev
 ```
