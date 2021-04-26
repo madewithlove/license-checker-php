@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LicenseChecker\Commands\Output;
 
 use Symfony\Component\Console\Style\SymfonyStyle;

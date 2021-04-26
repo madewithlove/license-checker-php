@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LicenseChecker\Commands;
 
 use LicenseChecker\Composer\UsedLicensesParser;
@@ -23,7 +25,7 @@ class ListUsedLicenses extends Command
     protected function configure(): void
     {
         $this->setDescription('List used licenses of composer dependencies')
-			->addOption('no-dev', null, InputOption::VALUE_NONE, 'Do not include dev dependencies');
+            ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Do not include dev dependencies');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
