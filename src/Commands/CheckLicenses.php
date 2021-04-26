@@ -51,7 +51,7 @@ class CheckLicenses extends Command
         }
 
         $notAllowedLicenses = array_diff($usedLicenses, $allowedLicenses);
-        $dependencies = $this->dependencyTree->getDependencies();
+        $dependencies = $this->dependencyTree->getDependencies(false);
 
         $dependencyChecks = [];
         foreach ($dependencies as $dependency) {

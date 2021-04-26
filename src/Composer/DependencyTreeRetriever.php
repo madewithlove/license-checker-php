@@ -9,13 +9,15 @@ class DependencyTreeRetriever
 {
     private static string $output = '';
 
-    public function getDependencyTree(): string
+    public function getDependencyTree(bool $noDev): string
     {
         if (!empty(self::$output)) {
             return self::$output;
         }
 
-        $process = new Process(['composer', 'show', '-t', '-f', 'json']);
+		$noDevArguments = $noDev ? ['--no-dev'] : [];
+
+        $process = new Process(array_merge(['composer', 'show', '-t', '-f', 'json'], $noDevArguments));
         $process->run();
 
         if (!$process->isSuccessful()) {

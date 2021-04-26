@@ -29,7 +29,7 @@ class DependencyTreeTest extends TestCase
     {
         $this->retriever->method('getDependencyTree')->willReturn($this->getDependencyTree());
 
-        $dependencies = $this->dependencyTree->getDependencies();
+        $dependencies = $this->dependencyTree->getDependencies(false);
         $expected = [
             (new Dependency('direct/dependency'))
                 ->addDependency('subdependency/one')
