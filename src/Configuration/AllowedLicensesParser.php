@@ -31,21 +31,21 @@ class AllowedLicensesParser
     /**
      * @param string[] $allowedLicenses
      */
-    public function writeConfiguration(array $allowedLicenses): void
+    public function writeConfiguration(array $allowedLicenses, string $fileName = self::DEFAULT_CONFIG_FILE_NAME): void
     {
-        if ($this->configurationExists()) {
+        if ($this->configurationExists($fileName)) {
             throw new ConfigurationExists();
         }
         $yaml = Yaml::dump($allowedLicenses);
-        file_put_contents($this->getConfigurationFilePath(), $yaml);
+        file_put_contents($this->getConfigurationFilePath($fileName), $yaml);
     }
 
-    private function configurationExists(): bool
+    private function configurationExists(string $fileName): bool
     {
-        return file_exists($this->getConfigurationFilePath());
+        return file_exists($this->getConfigurationFilePath($fileName));
     }
 
-    private function getConfigurationFilePath(string $fileName = self::DEFAULT_CONFIG_FILE_NAME): string
+    private function getConfigurationFilePath(string $fileName): string
     {
         return $this->workingDirectory . '/' . $fileName;
     }
