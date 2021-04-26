@@ -8,7 +8,7 @@ use Symfony\Component\Process\Process;
 class UsedLicensesRetriever
 {
 	/** @var ?array{dependencies:array<string,array{version:string,license:list<string>}>} */
-    private static ?array $output;
+    private static ?array $output = null;
 
 	/**
 	 * @return array{dependencies:array<string,array{version:string,license:list<string>}>}
