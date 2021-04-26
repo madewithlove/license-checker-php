@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LicenseChecker\Tests\Composer;
 
 use LicenseChecker\Composer\DependencyTree;

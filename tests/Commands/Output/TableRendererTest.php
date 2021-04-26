@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LicenseChecker\Tests\Commands\Output;
 
 use LicenseChecker\Commands\Output\DependencyCheck;
@@ -92,6 +94,6 @@ class TableRendererTest extends TestCase
         $this->tableRenderer->renderDependencyChecks(
             $dependencyChecks,
             $this->io
-            );
+        );
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LicenseChecker\Composer;
 
 use LicenseChecker\Dependency;
@@ -7,8 +9,9 @@ use LicenseChecker\Dependency;
 class DependencyTree
 {
     public function __construct(
-        private DependencyTreeRetriever $retriever)
-    {}
+        private DependencyTreeRetriever $retriever
+    ) {
+    }
 
     /**
      * @return Dependency[]

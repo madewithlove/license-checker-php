@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LicenseChecker\Composer;
 
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -15,7 +17,7 @@ class DependencyTreeRetriever
             return self::$output;
         }
 
-		$noDevArguments = $noDev ? ['--no-dev'] : [];
+        $noDevArguments = $noDev ? ['--no-dev'] : [];
 
         $process = new Process(array_merge(['composer', 'show', '-t', '-f', 'json'], $noDevArguments));
         $process->run();

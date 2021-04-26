@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LicenseChecker\Composer;
 
 class UsedLicensesParser
 {
     public function __construct(
         private UsedLicensesRetriever $retriever
-    ) {}
+    ) {
+    }
 
     /**
      * @return string[]
@@ -34,7 +37,7 @@ class UsedLicensesParser
     {
         $packages = [];
 
-		$decodedJson = $this->retriever->getComposerLicenses($noDev);
+        $decodedJson = $this->retriever->getComposerLicenses($noDev);
         foreach ($decodedJson['dependencies'] as $packageName => $licenseInfo) {
             if ($licenseInfo['license'][0] === $license) {
                 $packages[] = $packageName;
@@ -51,8 +54,8 @@ class UsedLicensesParser
     {
         $licenses = [];
 
-		$decodedJson = $this->retriever->getComposerLicenses($noDev);
-		foreach ($decodedJson['dependencies'] as $dependency) {
+        $decodedJson = $this->retriever->getComposerLicenses($noDev);
+        foreach ($decodedJson['dependencies'] as $dependency) {
             if (isset($dependency['license'][0])) {
                 $licenseName = $dependency['license'][0];
                 if (!isset($licenses[$licenseName])) {

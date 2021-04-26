@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LicenseChecker;
 
 class Dependency
@@ -11,7 +13,8 @@ class Dependency
 
     public function __construct(
         private string $name
-    ) {}
+    ) {
+    }
 
     public function addDependency(string $dependency): self
     {
@@ -32,7 +35,7 @@ class Dependency
 
     public function hasDependency(string $dependency): bool
     {
-        return array_search($dependency, $this->getDependencies()) !== false;
+        return array_search($dependency, $this->getDependencies(), true) !== false;
     }
 
     public function getName(): string

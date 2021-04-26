@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LicenseChecker\Commands;
 
 use LicenseChecker\Configuration\AllowedLicensesParser;

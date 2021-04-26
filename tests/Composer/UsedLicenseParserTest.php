@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LicenseChecker\Tests\Composer;
 
 use LicenseChecker\Composer\UsedLicensesParser;
@@ -38,7 +40,6 @@ class UsedLicenseParserTest extends TestCase
             $expected,
             $this->usedLicensesParser->parseLicenses(false)
         );
-
     }
 
     /**
@@ -60,13 +61,13 @@ class UsedLicenseParserTest extends TestCase
         );
     }
 
-	/**
-	 * @return array{dependencies:array<string,array{version:string,license:list<string>}>}
-	 */
+    /**
+     * @return array{dependencies:array<string,array{version:string,license:list<string>}>}
+     */
     private function getJsonData(): array
     {
-		/** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $jsonDecoded */
-		$jsonDecoded = json_decode('
+        /** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $jsonDecoded */
+        $jsonDecoded = json_decode('
 {
     "name": "madewithlove/licence-checker-php",
     "version": "dev-master",
@@ -106,6 +107,6 @@ class UsedLicenseParserTest extends TestCase
         }
     }
 }', true);
-		return $jsonDecoded;
+        return $jsonDecoded;
     }
 }

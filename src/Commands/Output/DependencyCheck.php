@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LicenseChecker\Commands\Output;
 
 final class DependencyCheck
@@ -13,7 +15,8 @@ final class DependencyCheck
 
     public function __construct(
         private string $name
-    ) {}
+    ) {
+    }
 
     public function addFailedDependency(string $dependency, string $license): self
     {
