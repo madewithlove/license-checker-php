@@ -31,8 +31,9 @@ class AllowedLicensesParser
     /**
      * @param string[] $allowedLicenses
      */
-    public function writeConfiguration(array $allowedLicenses, string $fileName = self::DEFAULT_CONFIG_FILE_NAME): void
+    public function writeConfiguration(array $allowedLicenses, ?string $fileName): void
     {
+        $fileName = $fileName ?? self::DEFAULT_CONFIG_FILE_NAME;
         if ($this->configurationExists($fileName)) {
             throw new ConfigurationExists();
         }

@@ -32,8 +32,14 @@ class CheckLicenses extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Check licenses of composer dependencies')
-            ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Do not include dev dependencies');
+        $this->setDescription('Check licenses of composer dependencies');
+        $this->addOption('no-dev', null, InputOption::VALUE_NONE, 'Do not include dev dependencies');
+        $this->addOption(
+            'filename',
+            'f',
+            InputOption::VALUE_OPTIONAL,
+            'Optional filename to be used instead of the default'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -48,7 +54,9 @@ class CheckLicenses extends Command
         }
 
         try {
-            $allowedLicenses = $this->allowedLicensesParser->getAllowedLicenses();
+            /** @var string|null $fileName */
+            $fileName = is_string($input->getOption('filename')) ? $input->getOption('filename') : null;
+            $allowedLicenses = $this->allowedLicensesParser->getAllowedLicenses($fileName);
         } catch (ParseException $e) {
             $output->writeln($e->getMessage());
             return 1;
