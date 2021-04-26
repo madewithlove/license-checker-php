@@ -19,7 +19,6 @@ class AllowedLicensesParser
      * @return list<string>
      */
     public function getAllowedLicenses(
-        string $pathToConfigurationFile,
         string $fileName = self::DEFAULT_CONFIG_FILE_NAME
     ): array {
         /** @var list<string> $allowedLicenses */

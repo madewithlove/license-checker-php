@@ -28,7 +28,7 @@ class ListAllowedLicenses extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $allowedLicenses = $this->allowedLicensesParser->getAllowedLicenses(getcwd());
+            $allowedLicenses = $this->allowedLicensesParser->getAllowedLicenses();
         } catch (ParseException $e) {
             $output->writeln($e->getMessage());
             return 1;
