@@ -9,13 +9,15 @@ class UsedLicensesRetriever
 {
     private static string $output = '';
 
-	public function getComposerLicenses(): string
+	public function getComposerLicenses(bool $noDev = false): string
     {
         if (!empty(self::$output)) {
             return self::$output;
         }
 
-        $process = new Process(['composer', 'license', '-f', 'json']);
+        $noDevArguments = $noDev ? ['--no-dev'] : [];
+
+        $process = new Process(array_merge(['composer', 'license', '-f', 'json'], $noDevArguments));
         $process->run();
 
         if (!$process->isSuccessful()) {
@@ -30,10 +32,10 @@ class UsedLicensesRetriever
 	/**
 	 * @return array{dependencies:array<string,array{version:string,license:list<string>}>}
 	 */
-    public function getJsonDecodedComposerLicenses(): array
+    public function getJsonDecodedComposerLicenses(bool $noDev = false): array
 	{
 		/** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $jsonDecoded */
-		$jsonDecoded = json_decode($this->getComposerLicenses(), true);
+		$jsonDecoded = json_decode($this->getComposerLicenses($noDev), true);
 		return $jsonDecoded;
 	}
 }
