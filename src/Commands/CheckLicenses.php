@@ -37,7 +37,7 @@ class CheckLicenses extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $usedLicenses = $this->usedLicensesParser->parseLicenses();
+            $usedLicenses = $this->usedLicensesParser->parseLicenses(false);
         } catch (ProcessFailedException $e) {
             $output->writeln($e->getMessage());
             return 1;
@@ -57,7 +57,7 @@ class CheckLicenses extends Command
         foreach ($dependencies as $dependency) {
             $dependencyCheck = new DependencyCheck($dependency->getName());
             foreach ($notAllowedLicenses as $notAllowedLicense) {
-                $packagesUsingThisLicense = $this->usedLicensesParser->getPackagesWithLicense($notAllowedLicense);
+                $packagesUsingThisLicense = $this->usedLicensesParser->getPackagesWithLicense($notAllowedLicense, false);
                 foreach ($packagesUsingThisLicense as $packageUsingThisLicense) {
                     if ($dependency->hasDependency($packageUsingThisLicense) || $dependency->getName() === $packageUsingThisLicense) {
                         $dependencyCheck = $dependencyCheck->addFailedDependency($packageUsingThisLicense, $notAllowedLicense);

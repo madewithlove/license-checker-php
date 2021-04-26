@@ -27,7 +27,7 @@ class ListUsedLicenses extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $usedLicenses = $this->usedLicensesParser->parseLicenses();
+            $usedLicenses = $this->usedLicensesParser->parseLicenses(false);
             foreach ($usedLicenses as $usedLicense) {
                 $output->writeln($usedLicense);
             }

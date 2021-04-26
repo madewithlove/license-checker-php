@@ -29,7 +29,7 @@ class CountUsedLicenses extends Command
         $io = new SymfonyStyle($input, $output);
         $rows = [];
         try {
-            $usedLicenses = $this->usedLicensesParser->countPackagesByLicense();
+            $usedLicenses = $this->usedLicensesParser->countPackagesByLicense(false);
             foreach ($usedLicenses as $usedLicense => $numberOfPackages) {
                 $rows[] = [$usedLicense, $numberOfPackages];
             }

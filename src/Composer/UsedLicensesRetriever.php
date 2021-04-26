@@ -13,7 +13,7 @@ class UsedLicensesRetriever
 	/**
 	 * @return array{dependencies:array<string,array{version:string,license:list<string>}>}
 	 */
-	public function getComposerLicenses(bool $noDev = false): array
+	public function getComposerLicenses(bool $noDev): array
     {
         if (self::$output) {
             return self::$output;

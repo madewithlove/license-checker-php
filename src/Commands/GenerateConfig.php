@@ -32,7 +32,7 @@ class GenerateConfig extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $usedLicenses = $this->usedLicensesParser->parseLicenses();
+            $usedLicenses = $this->usedLicensesParser->parseLicenses(false);
         } catch (ProcessFailedException $e) {
             $io->error($e->getMessage());
             return 1;

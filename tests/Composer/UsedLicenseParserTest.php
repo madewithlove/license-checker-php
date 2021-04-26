@@ -36,7 +36,7 @@ class UsedLicenseParserTest extends TestCase
 
         $this->assertEquals(
             $expected,
-            $this->usedLicensesParser->parseLicenses()
+            $this->usedLicensesParser->parseLicenses(false)
         );
 
     }
@@ -56,7 +56,7 @@ class UsedLicenseParserTest extends TestCase
 
         $this->assertEquals(
             $expected,
-            $this->usedLicensesParser->countPackagesByLicense()
+            $this->usedLicensesParser->countPackagesByLicense(false)
         );
     }
 
