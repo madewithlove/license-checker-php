@@ -15,7 +15,7 @@ class UsedLicensesParser
     {
         $licenses = [];
 
-        $decodedJson = $this->retriever->getJsonDecodedComposerLicenses();
+        $decodedJson = $this->retriever->getComposerLicenses();
         foreach ($decodedJson['dependencies'] as $dependency) {
             if (isset($dependency['license'][0])) {
                 $licenses[] = $dependency['license'][0];
@@ -34,7 +34,7 @@ class UsedLicensesParser
     {
         $packages = [];
 
-		$decodedJson = $this->retriever->getJsonDecodedComposerLicenses();
+		$decodedJson = $this->retriever->getComposerLicenses();
         foreach ($decodedJson['dependencies'] as $packageName => $licenseInfo) {
             if ($licenseInfo['license'][0] === $license) {
                 $packages[] = $packageName;
@@ -51,7 +51,7 @@ class UsedLicensesParser
     {
         $licenses = [];
 
-		$decodedJson = $this->retriever->getJsonDecodedComposerLicenses();
+		$decodedJson = $this->retriever->getComposerLicenses();
 		foreach ($decodedJson['dependencies'] as $dependency) {
             if (isset($dependency['license'][0])) {
                 $licenseName = $dependency['license'][0];

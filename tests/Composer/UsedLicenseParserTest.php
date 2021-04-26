@@ -32,7 +32,7 @@ class UsedLicenseParserTest extends TestCase
             'FOO',
         ];
 
-        $this->licenseRetriever->method('getJsonDecodedComposerLicenses')->willReturn($this->getJsonData());
+        $this->licenseRetriever->method('getComposerLicenses')->willReturn($this->getJsonData());
 
         $this->assertEquals(
             $expected,
@@ -52,7 +52,7 @@ class UsedLicenseParserTest extends TestCase
             'BAZ' => 1,
         ];
 
-        $this->licenseRetriever->method('getJsonDecodedComposerLicenses')->willReturn($this->getJsonData());
+        $this->licenseRetriever->method('getComposerLicenses')->willReturn($this->getJsonData());
 
         $this->assertEquals(
             $expected,
