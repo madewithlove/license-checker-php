@@ -10,8 +10,7 @@ class DependencyTree
 {
     public function __construct(
         private DependencyTreeRetriever $retriever
-    )
-    {
+    ) {
     }
 
     /**
