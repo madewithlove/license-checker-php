@@ -8,7 +8,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class AllowedLicensesParser
 {
-    private const CONFIG_FILE_NAME = '.allowed-licenses';
+    private const DEFAULT_CONFIG_FILE_NAME = '.allowed-licenses';
 
     /**
      * @return list<string>
@@ -16,7 +16,7 @@ class AllowedLicensesParser
     public function getAllowedLicenses(string $pathToConfigurationFile): array
     {
         /** @var list<string> $allowedLicenses */
-        $allowedLicenses = Yaml::parseFile($pathToConfigurationFile . '/' . self::CONFIG_FILE_NAME);
+        $allowedLicenses = Yaml::parseFile($pathToConfigurationFile . '/' . self::DEFAULT_CONFIG_FILE_NAME);
         sort($allowedLicenses);
 
         return $allowedLicenses;
@@ -45,6 +45,6 @@ class AllowedLicensesParser
             $path = getcwd();
         }
 
-        return $path . '/' . self::CONFIG_FILE_NAME;
+        return $path . '/' . self::DEFAULT_CONFIG_FILE_NAME;
     }
 }
