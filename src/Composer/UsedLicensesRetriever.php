@@ -7,23 +7,29 @@ use Symfony\Component\Process\Process;
 
 class UsedLicensesRetriever
 {
-    private static string $output = '';
+	/** @var ?array{dependencies:array<string,array{version:string,license:list<string>}>} */
+    private static ?array $output = null;
 
-    public function getComposerLicenses(): string
+	/**
+	 * @return array{dependencies:array<string,array{version:string,license:list<string>}>}
+	 */
+	public function getComposerLicenses(bool $noDev): array
     {
-        if (!empty(self::$output)) {
+        if (self::$output) {
             return self::$output;
         }
 
-        $process = new Process(['composer', 'license', '-f', 'json']);
+        $noDevArguments = $noDev ? ['--no-dev'] : [];
+
+        $process = new Process(array_merge(['composer', 'license', '-f', 'json'], $noDevArguments));
         $process->run();
 
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
 
-        self::$output = $process->getOutput();
-
-        return self::$output;
+		/** @var array{dependencies:array<string,array{version:string,license:list<string>}>} */
+        self::$output = json_decode($process->getOutput(), true);
+		return self::$output;
     }
 }

@@ -36,7 +36,7 @@ class UsedLicenseParserTest extends TestCase
 
         $this->assertEquals(
             $expected,
-            $this->usedLicensesParser->parseLicenses()
+            $this->usedLicensesParser->parseLicenses(false)
         );
 
     }
@@ -56,13 +56,17 @@ class UsedLicenseParserTest extends TestCase
 
         $this->assertEquals(
             $expected,
-            $this->usedLicensesParser->countPackagesByLicense()
+            $this->usedLicensesParser->countPackagesByLicense(false)
         );
     }
 
-    private function getJsonData(): string
+	/**
+	 * @return array{dependencies:array<string,array{version:string,license:list<string>}>}
+	 */
+    private function getJsonData(): array
     {
-        return '
+		/** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $jsonDecoded */
+		$jsonDecoded = json_decode('
 {
     "name": "madewithlove/licence-checker-php",
     "version": "dev-master",
@@ -101,6 +105,7 @@ class UsedLicenseParserTest extends TestCase
             ]
         }
     }
-}';
+}', true);
+		return $jsonDecoded;
     }
 }

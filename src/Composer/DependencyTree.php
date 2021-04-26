@@ -13,11 +13,11 @@ class DependencyTree
     /**
      * @return Dependency[]
      */
-    public function getDependencies(): array
+    public function getDependencies(bool $noDev): array
     {
         $dependencies = [];
         /** @var array{installed:list<array{name:string,requires?:array}>} $decodedJson */
-        $decodedJson = json_decode($this->retriever->getDependencyTree(), true);
+        $decodedJson = json_decode($this->retriever->getDependencyTree($noDev), true);
         foreach ($decodedJson['installed'] as $package) {
             $dependency = new Dependency($package['name']);
             if (isset($package['requires'])) {

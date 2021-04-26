@@ -11,11 +11,11 @@ class UsedLicensesParser
     /**
      * @return string[]
      */
-    public function parseLicenses(): array
+    public function parseLicenses(bool $noDev): array
     {
         $licenses = [];
-        /** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $decodedJson */
-        $decodedJson = json_decode($this->retriever->getComposerLicenses(), true);
+
+        $decodedJson = $this->retriever->getComposerLicenses($noDev);
         foreach ($decodedJson['dependencies'] as $dependency) {
             if (isset($dependency['license'][0])) {
                 $licenses[] = $dependency['license'][0];
@@ -30,12 +30,11 @@ class UsedLicensesParser
     /**
      * @return string[]
      */
-    public function getPackagesWithLicense(string $license): array
+    public function getPackagesWithLicense(string $license, bool $noDev): array
     {
         $packages = [];
-        /** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $decodedJson */
-        $decodedJson = json_decode($this->retriever->getComposerLicenses(), true);
 
+		$decodedJson = $this->retriever->getComposerLicenses($noDev);
         foreach ($decodedJson['dependencies'] as $packageName => $licenseInfo) {
             if ($licenseInfo['license'][0] === $license) {
                 $packages[] = $packageName;
@@ -48,12 +47,12 @@ class UsedLicensesParser
     /**
      * @return array<array-key, int>
      */
-    public function countPackagesByLicense(): array
+    public function countPackagesByLicense(bool $noDev): array
     {
         $licenses = [];
-        /** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $decodedJson */
-        $decodedJson = json_decode($this->retriever->getComposerLicenses(), true);
-        foreach ($decodedJson['dependencies'] as $dependency) {
+
+		$decodedJson = $this->retriever->getComposerLicenses($noDev);
+		foreach ($decodedJson['dependencies'] as $dependency) {
             if (isset($dependency['license'][0])) {
                 $licenseName = $dependency['license'][0];
                 if (!isset($licenses[$licenseName])) {
