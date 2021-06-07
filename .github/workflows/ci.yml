@@ -17,13 +17,16 @@ jobs:
 
     phpunit:
         runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                prefer-lowest: [ '', '--prefer-lowest' ]
         steps:
             - uses: actions/checkout@master
             - uses: shivammathur/setup-php@master
               with:
                   php-version: '8.0'
             - name: Install dependencies
-              run: composer update
+              run: composer update -n --prefer-dist  ${{ matrix.prefer-lowest }}
             - name: Run PHPUnit unit tests
               run: vendor/bin/phpunit
 
