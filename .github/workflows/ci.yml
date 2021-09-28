@@ -19,12 +19,13 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
+                php-versions: ['8.0', '8.1']
                 prefer-lowest: [ '', '--prefer-lowest' ]
         steps:
             - uses: actions/checkout@master
             - uses: shivammathur/setup-php@master
               with:
-                  php-version: '8.0'
+                  php-version: ${{ matrix.php-versions }}
             - name: Install dependencies
               run: composer update -n --prefer-dist  ${{ matrix.prefer-lowest }}
             - name: Run PHPUnit unit tests
