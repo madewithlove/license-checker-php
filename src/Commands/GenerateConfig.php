@@ -53,7 +53,7 @@ class GenerateConfig extends Command
         try {
             /** @var string|null $fileName */
             $fileName = is_string($input->getOption('filename')) ? $input->getOption('filename') : null;
-            $this->allowedLicensesParser->writeConfiguration(array_values($usedLicenses), $fileName);
+            $this->allowedLicensesParser->writeConfiguration($usedLicenses, $fileName);
             $io->success('Configuration file successfully written');
         } catch (ConfigurationExists $e) {
             $io->error('The configuration file already exists. Please remove it before generating a new one.');
