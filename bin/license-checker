@@ -26,11 +26,11 @@ foreach ($potentialAutoLoaderFiles as $potentialAutoLoaderFile) {
     }
 }
 
-if (!$autoLoader) {
+if (!isset($autoLoader)) {
     throw new RuntimeException('vendor/autoload.php could not be found. Did you run `composer install`?');
 }
 
-$application = new Application('License Checker', '0.0.1');
+$application = new Application('License Checker', '1.2.0');
 
 $allowedLicensesParser = new AllowedLicensesParser(getcwd());
 $usedLicensesParser = new UsedLicensesParser(new UsedLicensesRetriever());
