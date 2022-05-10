@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LicenseChecker;
 
-class Dependency
+final class Dependency
 {
     /**
      * @var string[]
