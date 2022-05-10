@@ -6,6 +6,6 @@ namespace LicenseChecker\Configuration;
 
 use RuntimeException;
 
-class ConfigurationExists extends RuntimeException
+final class ConfigurationExists extends RuntimeException
 {
 }

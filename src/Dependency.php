@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LicenseChecker;
 
-class Dependency
+final class Dependency
 {
     /**
      * @var string[]
@@ -12,9 +12,23 @@ class Dependency
     private array $subDependencies = [];
 
     public function __construct(
-        private string $name,
-        private string $license,
+        private readonly string $name,
+        private readonly string $license,
     ) {
+    }
+
+    public function is(string $name): bool
+    {
+        return $this->name === $name;
+    }
+
+    public function renderNameWithLicense(): string
+    {
+        if (empty($this->license)) {
+            return $this->name;
+        }
+
+        return $this->name . ' [' . $this->license . ']';
     }
 
     public function addDependency(string $dependency): self
@@ -37,15 +51,5 @@ class Dependency
     public function hasDependency(string $dependency): bool
     {
         return array_search($dependency, $this->getDependencies(), true) !== false;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getLicense(): string
-    {
-        return $this->license;
     }
 }

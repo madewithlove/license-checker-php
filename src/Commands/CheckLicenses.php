@@ -67,11 +67,11 @@ class CheckLicenses extends Command
 
         $dependencyChecks = [];
         foreach ($dependencies as $dependency) {
-            $dependencyCheck = new DependencyCheck($dependency->getName(), $dependency->getLicense());
+            $dependencyCheck = new DependencyCheck($dependency);
             foreach ($notAllowedLicenses as $notAllowedLicense) {
                 $packagesUsingThisLicense = $this->usedLicensesParser->getPackagesWithLicense($notAllowedLicense, (bool)$input->getOption('no-dev'));
                 foreach ($packagesUsingThisLicense as $packageUsingThisLicense) {
-                    if ($dependency->hasDependency($packageUsingThisLicense) || $dependency->getName() === $packageUsingThisLicense) {
+                    if ($dependency->hasDependency($packageUsingThisLicense) || $dependency->is($packageUsingThisLicense)) {
                         $dependencyCheck = $dependencyCheck->addFailedDependency($packageUsingThisLicense, $notAllowedLicense);
                     }
                 }
