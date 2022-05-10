@@ -17,17 +17,13 @@ jobs:
 
     phpunit:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                php-versions: ['8.0', '8.1']
-                prefer-lowest: [ '', '--prefer-lowest' ]
         steps:
             - uses: actions/checkout@master
             - uses: shivammathur/setup-php@master
               with:
-                  php-version: ${{ matrix.php-versions }}
+                  php-version: '8.1'
             - name: Install dependencies
-              run: composer update -n --prefer-dist  ${{ matrix.prefer-lowest }}
+              run: composer update -n --prefer-dist
             - name: Run PHPUnit unit tests
               run: vendor/bin/phpunit
 
@@ -37,7 +33,7 @@ jobs:
             - uses: actions/checkout@master
             - uses: shivammathur/setup-php@master
               with:
-                  php-version: '8.0'
+                  php-version: '8.1'
             - name: Install dependencies
               run: composer update
             - name: Run PHP-CS-Fixer
