@@ -12,7 +12,8 @@ class Dependency
     private array $subDependencies = [];
 
     public function __construct(
-        private string $name
+        private string $name,
+        private string $license,
     ) {
     }
 
@@ -41,5 +42,10 @@ class Dependency
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getLicense(): string
+    {
+        return $this->license;
     }
 }

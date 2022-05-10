@@ -9,7 +9,8 @@ use LicenseChecker\Dependency;
 class DependencyTree
 {
     public function __construct(
-        private DependencyTreeRetriever $retriever
+        private DependencyTreeRetriever $retriever,
+        private UsedLicensesParser $parser,
     ) {
     }
 
@@ -22,7 +23,8 @@ class DependencyTree
         /** @var array{installed:list<array{name:string,requires?:array}>} $decodedJson */
         $decodedJson = json_decode($this->retriever->getDependencyTree($noDev), true);
         foreach ($decodedJson['installed'] as $package) {
-            $dependency = new Dependency($package['name']);
+            $license = $this->parser->getLicenseForPackage($package['name'], $noDev) ?? '';
+            $dependency = new Dependency($package['name'], $license);
             if (isset($package['requires'])) {
                 /** @psalm-suppress MixedArgumentTypeCoercion */
                 foreach ($this->getSubDependencies($package['requires']) as $subDependency) {

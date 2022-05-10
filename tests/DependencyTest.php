@@ -14,8 +14,17 @@ class DependencyTest extends TestCase
      */
     public function itKnowsItsName(): void
     {
-        $dependency = new Dependency('foo');
+        $dependency = new Dependency('foo', 'license');
         $this->assertEquals('foo', $dependency->getName());
+    }
+
+    /**
+     * @test
+     */
+    public function itKnowsItsLicense(): void
+    {
+        $dependency = new Dependency('foo', 'license');
+        $this->assertEquals('license', $dependency->getLicense());
     }
 
     /**
@@ -28,7 +37,7 @@ class DependencyTest extends TestCase
             'baz',
         ];
 
-        $dependency = new Dependency('foo');
+        $dependency = new Dependency('foo', 'license');
         $dependency->addDependency('bar');
         $dependency->addDependency('baz');
 
@@ -47,7 +56,7 @@ class DependencyTest extends TestCase
             'bar',
         ];
 
-        $dependency = new Dependency('foo');
+        $dependency = new Dependency('foo', 'license');
         $dependency->addDependency('bar');
         $dependency->addDependency('bar');
         $dependency->addDependency('bar');
