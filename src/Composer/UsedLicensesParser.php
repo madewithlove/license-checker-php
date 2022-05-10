@@ -43,8 +43,18 @@ class UsedLicensesParser
                 $packages[] = $packageName;
             }
         }
-
         return $packages;
+    }
+
+    public function getLicenseForPackage(string $package, bool $noDev): ?string
+    {
+        $decodedJson = $this->retriever->getComposerLicenses($noDev);
+        foreach ($decodedJson['dependencies'] as $packageName => $licenseInfo) {
+            if ($packageName === $package) {
+                return $licenseInfo['license'][0] ?? null;
+            }
+        }
+        return null;
     }
 
     /**

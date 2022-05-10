@@ -6,6 +6,7 @@ namespace LicenseChecker\Tests\Composer;
 
 use LicenseChecker\Composer\DependencyTree;
 use LicenseChecker\Composer\DependencyTreeRetriever;
+use LicenseChecker\Composer\UsedLicensesParser;
 use LicenseChecker\Dependency;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -16,12 +17,18 @@ class DependencyTreeTest extends TestCase
      * @var MockObject & DependencyTreeRetriever
      */
     private MockObject $retriever;
+
+    /**
+     * @var MockObject & UsedLicensesParser
+     */
+    private MockObject $parser;
     private DependencyTree $dependencyTree;
 
     protected function setUp(): void
     {
         $this->retriever = $this->createMock(DependencyTreeRetriever::class);
-        $this->dependencyTree = new DependencyTree($this->retriever);
+        $this->parser = $this->createMock(UsedLicensesParser::class);
+        $this->dependencyTree = new DependencyTree($this->retriever, $this->parser);
     }
 
     /**
@@ -33,7 +40,7 @@ class DependencyTreeTest extends TestCase
 
         $dependencies = $this->dependencyTree->getDependencies(false);
         $expected = [
-            (new Dependency('direct/dependency'))
+            (new Dependency('direct/dependency', ''))
                 ->addDependency('subdependency/one')
                 ->addDependency('subdependency/two')
                 ->addDependency('subdependency/three'),

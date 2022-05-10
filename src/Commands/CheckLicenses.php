@@ -67,7 +67,7 @@ class CheckLicenses extends Command
 
         $dependencyChecks = [];
         foreach ($dependencies as $dependency) {
-            $dependencyCheck = new DependencyCheck($dependency->getName());
+            $dependencyCheck = new DependencyCheck($dependency->getName(), $dependency->getLicense());
             foreach ($notAllowedLicenses as $notAllowedLicense) {
                 $packagesUsingThisLicense = $this->usedLicensesParser->getPackagesWithLicense($notAllowedLicense, (bool)$input->getOption('no-dev'));
                 foreach ($packagesUsingThisLicense as $packageUsingThisLicense) {

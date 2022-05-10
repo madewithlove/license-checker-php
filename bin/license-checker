@@ -38,7 +38,10 @@ $usedLicensesParser = new UsedLicensesParser(new UsedLicensesRetriever());
 $checkLicenses = new CheckLicenses(
     $usedLicensesParser,
     $allowedLicensesParser,
-    new DependencyTree(new DependencyTreeRetriever()),
+    new DependencyTree(
+        new DependencyTreeRetriever(),
+        $usedLicensesParser
+    ),
     new TableRenderer()
 );
 

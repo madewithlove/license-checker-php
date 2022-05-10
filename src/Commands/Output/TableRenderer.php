@@ -97,7 +97,7 @@ class TableRenderer
         return array_map(function (DependencyCheck $dependencyCheck) {
             return [
                 $this->renderBoolean($dependencyCheck->isAllowed()),
-                $dependencyCheck->getName(),
+                $dependencyCheck->renderNameWithLicense() ,
             ];
         }, $dependencyChecks);
     }
@@ -109,7 +109,7 @@ class TableRenderer
     {
         return [
             $this->renderBoolean($dependencyCheck->isAllowed()),
-            $dependencyCheck->getName(),
+            $dependencyCheck->renderNameWithLicense(),
             '',
         ];
     }
@@ -123,7 +123,7 @@ class TableRenderer
     ): array {
         return [
             $this->renderBoolean($dependencyCheck->isAllowed()),
-            $dependencyCheck->getName(),
+            $dependencyCheck->renderNameWithLicense(),
             $causeOfFailure->getName() . ' [' . $causeOfFailure->getLicense() . ']',
         ];
     }

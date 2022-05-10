@@ -32,14 +32,14 @@ class TableRendererTest extends TestCase
         $this->io->expects($this->once())->method('table')->with(
             ['','dependency'],
             [
-                ['<info>✓</info>', 'foo'],
-                ['<info>✓</info>', 'bar'],
+                ['<info>✓</info>', 'foo [license]'],
+                ['<info>✓</info>', 'bar [license]'],
             ]
         );
 
         $dependencyChecks = [
-            new DependencyCheck('foo'),
-            new DependencyCheck('bar'),
+            new DependencyCheck('foo', 'license'),
+            new DependencyCheck('bar', 'license'),
         ];
 
         $this->tableRenderer->renderDependencyChecks(
@@ -56,15 +56,15 @@ class TableRendererTest extends TestCase
         $this->io->expects($this->once())->method('table')->with(
             ['', 'dependency', 'caused by'],
             [
-                ['<fg=red>✗</>', 'foo', 'baz [license]'],
+                ['<fg=red>✗</>', 'foo [license]', 'baz [license]'],
                 ['', '', 'baz2 [license]'],
-                ['<fg=red>✗</>', 'bar', 'baz [license]'],
+                ['<fg=red>✗</>', 'bar [license]', 'baz [license]'],
             ]
         );
 
         $dependencyChecks = [
-            (new DependencyCheck('foo'))->addFailedDependency('baz', 'license')->addFailedDependency('baz2', 'license'),
-            (new DependencyCheck('bar'))->addFailedDependency('baz', 'license'),
+            (new DependencyCheck('foo', 'license'))->addFailedDependency('baz', 'license')->addFailedDependency('baz2', 'license'),
+            (new DependencyCheck('bar', 'license'))->addFailedDependency('baz', 'license'),
         ];
 
         $this->tableRenderer->renderDependencyChecks(
@@ -81,14 +81,14 @@ class TableRendererTest extends TestCase
         $this->io->expects($this->once())->method('table')->with(
             ['', 'dependency', 'caused by'],
             [
-                ['<fg=red>✗</>', 'foo', 'baz [license]'],
-                ['<info>✓</info>', 'bar', ''],
+                ['<fg=red>✗</>', 'foo [license]', 'baz [license]'],
+                ['<info>✓</info>', 'bar [license]', ''],
             ]
         );
 
         $dependencyChecks = [
-            new DependencyCheck('bar'),
-            (new DependencyCheck('foo'))->addFailedDependency('baz', 'license'),
+            new DependencyCheck('bar', 'license'),
+            (new DependencyCheck('foo', 'license'))->addFailedDependency('baz', 'license'),
         ];
 
         $this->tableRenderer->renderDependencyChecks(

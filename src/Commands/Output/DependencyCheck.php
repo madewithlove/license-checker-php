@@ -14,7 +14,8 @@ final class DependencyCheck
     private array $causedBy = [];
 
     public function __construct(
-        private string $name
+        private string $name,
+        private string $license,
     ) {
     }
 
@@ -27,9 +28,13 @@ final class DependencyCheck
         return $dependencyCheck;
     }
 
-    public function getName(): string
+    public function renderNameWithLicense(): string
     {
-        return $this->name;
+        if (empty($this->license)) {
+            return $this->name;
+        }
+
+        return $this->name . ' [' . $this->license . ']';
     }
 
     public function isAllowed(): bool
