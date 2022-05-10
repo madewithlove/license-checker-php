@@ -14,8 +14,8 @@ final class DependencyCheck
     private array $causedBy = [];
 
     public function __construct(
-        private string $name,
-        private string $license,
+        public readonly string $name,
+        public readonly string $license,
     ) {
     }
 
