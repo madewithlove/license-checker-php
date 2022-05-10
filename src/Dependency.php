@@ -12,9 +12,23 @@ final class Dependency
     private array $subDependencies = [];
 
     public function __construct(
-        public readonly string $name,
-        public readonly string $license,
+        private readonly string $name,
+        private readonly string $license,
     ) {
+    }
+
+    public function is(string $name): bool
+    {
+        return $this->name === $name;
+    }
+
+    public function renderNameWithLicense(): string
+    {
+        if (empty($this->license)) {
+            return $this->name;
+        }
+
+        return $this->name . ' [' . $this->license . ']';
     }
 
     public function addDependency(string $dependency): self

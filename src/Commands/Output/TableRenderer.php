@@ -125,7 +125,7 @@ class TableRenderer
         return [
             $this->renderBoolean($dependencyCheck->isAllowed()),
             $dependencyCheck->renderNameWithLicense(),
-            $causeOfFailure->name . ' [' . $causeOfFailure->license . ']',
+            $causeOfFailure->renderNameWithLicense(),
         ];
     }
 
@@ -137,7 +137,7 @@ class TableRenderer
         return [
             '',
             '',
-            $causeOfFailure->name . ' [' . $causeOfFailure->license . ']',
+            $causeOfFailure->renderNameWithLicense(),
         ];
     }
 }

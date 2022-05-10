@@ -31,11 +31,7 @@ final class DependencyCheck
 
     public function renderNameWithLicense(): string
     {
-        if (empty($this->dependency->license)) {
-            return $this->dependency->name;
-        }
-
-        return $this->dependency->name . ' [' . $this->dependency->license . ']';
+        return $this->dependency->renderNameWithLicense();
     }
 
     public function isAllowed(): bool

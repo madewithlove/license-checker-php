@@ -12,19 +12,10 @@ class DependencyTest extends TestCase
     /**
      * @test
      */
-    public function itKnowsItsName(): void
+    public function itCanRenderNameWithLicense(): void
     {
         $dependency = new Dependency('foo', 'license');
-        $this->assertEquals('foo', $dependency->name);
-    }
-
-    /**
-     * @test
-     */
-    public function itKnowsItsLicense(): void
-    {
-        $dependency = new Dependency('foo', 'license');
-        $this->assertEquals('license', $dependency->license);
+        $this->assertEquals('foo [license]', $dependency->renderNameWithLicense());
     }
 
     /**

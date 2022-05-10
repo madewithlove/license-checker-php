@@ -71,7 +71,7 @@ class CheckLicenses extends Command
             foreach ($notAllowedLicenses as $notAllowedLicense) {
                 $packagesUsingThisLicense = $this->usedLicensesParser->getPackagesWithLicense($notAllowedLicense, (bool)$input->getOption('no-dev'));
                 foreach ($packagesUsingThisLicense as $packageUsingThisLicense) {
-                    if ($dependency->hasDependency($packageUsingThisLicense) || $dependency->name === $packageUsingThisLicense) {
+                    if ($dependency->hasDependency($packageUsingThisLicense) || $dependency->is($packageUsingThisLicense)) {
                         $dependencyCheck = $dependencyCheck->addFailedDependency($packageUsingThisLicense, $notAllowedLicense);
                     }
                 }
