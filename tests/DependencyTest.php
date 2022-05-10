@@ -15,7 +15,7 @@ class DependencyTest extends TestCase
     public function itKnowsItsName(): void
     {
         $dependency = new Dependency('foo', 'license');
-        $this->assertEquals('foo', $dependency->getName());
+        $this->assertEquals('foo', $dependency->name);
     }
 
     /**
@@ -24,7 +24,7 @@ class DependencyTest extends TestCase
     public function itKnowsItsLicense(): void
     {
         $dependency = new Dependency('foo', 'license');
-        $this->assertEquals('license', $dependency->getLicense());
+        $this->assertEquals('license', $dependency->license);
     }
 
     /**
