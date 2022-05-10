@@ -6,6 +6,7 @@ namespace LicenseChecker\Tests\Commands\Output;
 
 use LicenseChecker\Commands\Output\DependencyCheck;
 use LicenseChecker\Commands\Output\TableRenderer;
+use LicenseChecker\Dependency;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -38,8 +39,8 @@ class TableRendererTest extends TestCase
         );
 
         $dependencyChecks = [
-            new DependencyCheck('foo', 'license'),
-            new DependencyCheck('bar', 'license'),
+            new DependencyCheck(new Dependency('foo', 'license')),
+            new DependencyCheck(new Dependency('bar', 'license')),
         ];
 
         $this->tableRenderer->renderDependencyChecks(
@@ -63,8 +64,8 @@ class TableRendererTest extends TestCase
         );
 
         $dependencyChecks = [
-            (new DependencyCheck('foo', 'license'))->addFailedDependency('baz', 'license')->addFailedDependency('baz2', 'license'),
-            (new DependencyCheck('bar', 'license'))->addFailedDependency('baz', 'license'),
+            (new DependencyCheck(new Dependency('foo', 'license')))->addFailedDependency('baz', 'license')->addFailedDependency('baz2', 'license'),
+            (new DependencyCheck(new Dependency('bar', 'license')))->addFailedDependency('baz', 'license'),
         ];
 
         $this->tableRenderer->renderDependencyChecks(
@@ -87,8 +88,8 @@ class TableRendererTest extends TestCase
         );
 
         $dependencyChecks = [
-            new DependencyCheck('bar', 'license'),
-            (new DependencyCheck('foo', 'license'))->addFailedDependency('baz', 'license'),
+            new DependencyCheck(new Dependency('bar', 'license')),
+            (new DependencyCheck(new Dependency('foo', 'license')))->addFailedDependency('baz', 'license'),
         ];
 
         $this->tableRenderer->renderDependencyChecks(

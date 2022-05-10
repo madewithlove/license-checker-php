@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LicenseChecker\Commands\Output;
 
+use LicenseChecker\Dependency;
+
 final class DependencyCheck
 {
     private bool $isAllowed = true;
@@ -14,8 +16,7 @@ final class DependencyCheck
     private array $causedBy = [];
 
     public function __construct(
-        public readonly string $name,
-        public readonly string $license,
+        public readonly Dependency $dependency,
     ) {
     }
 
@@ -30,11 +31,11 @@ final class DependencyCheck
 
     public function renderNameWithLicense(): string
     {
-        if (empty($this->license)) {
-            return $this->name;
+        if (empty($this->dependency->getLicense())) {
+            return $this->dependency->getName();
         }
 
-        return $this->name . ' [' . $this->license . ']';
+        return $this->dependency->getName() . ' [' . $this->dependency->getLicense() . ']';
     }
 
     public function isAllowed(): bool
