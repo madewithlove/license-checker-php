@@ -48,6 +48,10 @@ class AllowedLicensesParser
 
     private function getConfigurationFilePath(string $fileName): string
     {
+        if (str_starts_with($fileName, '/')) {
+            return $fileName;
+        }
+
         return $this->workingDirectory . '/' . $fileName;
     }
 }
