@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LicenseChecker\Commands\Output;
 
+use LicenseChecker\Dependency;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class TableRenderer
@@ -119,24 +120,24 @@ class TableRenderer
      */
     private function renderFailedLineWithCauseOfFailure(
         DependencyCheck $dependencyCheck,
-        CauseOfFailure $causeOfFailure
+        Dependency $causeOfFailure
     ): array {
         return [
             $this->renderBoolean($dependencyCheck->isAllowed()),
             $dependencyCheck->renderNameWithLicense(),
-            $causeOfFailure->getName() . ' [' . $causeOfFailure->getLicense() . ']',
+            $causeOfFailure->name . ' [' . $causeOfFailure->license . ']',
         ];
     }
 
     /**
      * @return string[]
      */
-    private function renderAdditionalCauseOfFailure(CauseOfFailure $causeOfFailure): array
+    private function renderAdditionalCauseOfFailure(Dependency $causeOfFailure): array
     {
         return [
             '',
             '',
-            $causeOfFailure->getName() . ' [' . $causeOfFailure->getLicense() . ']',
+            $causeOfFailure->name . ' [' . $causeOfFailure->license . ']',
         ];
     }
 }

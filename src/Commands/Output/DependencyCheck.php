@@ -11,7 +11,7 @@ final class DependencyCheck
     private bool $isAllowed = true;
 
     /**
-     * @var CauseOfFailure[]
+     * @var Dependency[]
      */
     private array $causedBy = [];
 
@@ -24,7 +24,7 @@ final class DependencyCheck
     {
         $dependencyCheck = clone $this;
         $dependencyCheck->isAllowed = false;
-        $dependencyCheck->causedBy[] = new CauseOfFailure($dependency, $license);
+        $dependencyCheck->causedBy[] = new Dependency($dependency, $license);
 
         return $dependencyCheck;
     }
@@ -44,7 +44,7 @@ final class DependencyCheck
     }
 
     /**
-     * @return CauseOfFailure[]
+     * @return Dependency[]
      */
     public function getCausedBy(): array
     {
