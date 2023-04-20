@@ -23,7 +23,7 @@ class UsedLicensesRetriever
 
         $noDevArguments = $noDev ? ['--no-dev'] : [];
 
-        $process = new Process(array_merge(['composer', 'license', '-f', 'json'], $noDevArguments));
+        $process = new Process(array_merge(['composer', 'license', '-f', 'json', '-v'], $noDevArguments));
         $process->run();
 
         if (!$process->isSuccessful()) {
