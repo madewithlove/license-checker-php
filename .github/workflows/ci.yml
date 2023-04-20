@@ -53,4 +53,4 @@ jobs:
             -   name: Install dependencies
                 run: composer update
             -   name: Run License Checker
-                run: bin/license-checker check
+                run: bin/license-checker check --quiet
