@@ -19,8 +19,8 @@ class GenerateConfig extends Command
     protected static $defaultName = 'generate-config';
 
     public function __construct(
-        private AllowedLicensesParser $allowedLicensesParser,
-        private UsedLicensesParser $usedLicensesParser
+        private readonly AllowedLicensesParser $allowedLicensesParser,
+        private readonly UsedLicensesParser $usedLicensesParser
     ) {
         parent::__construct();
     }
