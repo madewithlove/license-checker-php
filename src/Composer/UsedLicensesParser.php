@@ -39,7 +39,7 @@ class UsedLicensesParser
 
         $decodedJson = $this->retriever->getComposerLicenses($noDev);
         foreach ($decodedJson['dependencies'] as $packageName => $licenseInfo) {
-            if ($licenseInfo['license'][0] === $license) {
+            if (($licenseInfo['license'][0] ?? null) === $license) {
                 $packages[] = $packageName;
             }
         }

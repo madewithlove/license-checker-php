@@ -109,4 +109,74 @@ class UsedLicenseParserTest extends TestCase
 }', true);
         return $jsonDecoded;
     }
+
+
+    /**
+     * @test
+     */
+    public function canParseDependenciesWithoutLicense(): void
+    {
+        $expected = [];
+
+        $this->licenseRetriever->method('getComposerLicenses')->willReturn($this->getJsonDataWithoutLicenses());
+
+        $this->assertEquals(
+            $expected,
+            $this->usedLicensesParser->parseLicenses(false)
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function canGetPackagesWithLicenseWhenThereAreDependenciesWithoutLicenses(): void
+    {
+        $expected = [];
+
+        $this->licenseRetriever->method('getComposerLicenses')->willReturn($this->getJsonDataWithoutLicenses());
+
+        $this->assertEquals(
+            $expected,
+            $this->usedLicensesParser->getPackagesWithLicense('FOO', false)
+        );
+    }
+
+    /**
+     * @return array{dependencies:array<string,array{version:string,license:list<string>}>}
+     */
+    private function getJsonDataWithoutLicenses(): array
+    {
+        /** @var array{dependencies:array<string,array{version:string,license:list<string>}>} $jsonDecoded */
+        $jsonDecoded = json_decode('
+{
+    "name": "madewithlove/licence-checker-php",
+    "version": "dev-master",
+    "license": [
+        "MIT"
+    ],
+    "dependencies": {
+        "some/dependency": {
+            "version": "1.0.0",
+            "license": []
+        },
+        "other/dependency": {
+            "version": "v5.0.5",
+            "license": []
+        },
+        "yet/another-dependency": {
+            "version": "v1.14.0",
+            "license": []
+        },
+        "repeated/license-for-dependency": {
+            "version": "v1.14.0",
+            "license": []
+        },
+        "another/repeated-license": {
+            "version": "v5.0.5",
+            "license": []
+        }
+    }
+}', true);
+        return $jsonDecoded;
+    }
 }
