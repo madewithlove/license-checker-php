@@ -26,7 +26,7 @@ class DependencyTree
             $license = $this->parser->getLicenseForPackage($package['name'], $noDev) ?? '';
             $dependency = new Dependency($package['name'], $license);
             if (isset($package['requires'])) {
-                /** @psalm-suppress MixedArgumentTypeCoercion */
+                /** @psalm-suppress ArgumentTypeCoercion */
                 foreach ($this->getSubDependencies($package['requires']) as $subDependency) {
                     $dependency->addDependency($subDependency);
                 }
@@ -52,7 +52,7 @@ class DependencyTree
         foreach ($subTree as $subTreeItem) {
             $subDependencies[] = $subTreeItem['name'];
             if (isset($subTreeItem['requires'])) {
-                /** @psalm-suppress MixedArgumentTypeCoercion */
+                /** @psalm-suppress ArgumentTypeCoercion */
                 $subDependencies = array_merge($subDependencies, $this->getSubDependencies($subTreeItem['requires']));
             }
         }
