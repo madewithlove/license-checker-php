@@ -19,7 +19,7 @@ class DependencyTreeRetriever
 
         $noDevArguments = $noDev ? ['--no-dev'] : [];
 
-        $process = new Process(array_merge(['composer', 'show', '-t', '-f', 'json'], $noDevArguments));
+        $process = new Process(array_merge(['composer', 'show', '-t', '-f', 'json', '-v'], $noDevArguments));
         $process->run();
 
         if (!$process->isSuccessful()) {
