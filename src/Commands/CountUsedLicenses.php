@@ -17,7 +17,7 @@ class CountUsedLicenses extends Command
     protected static $defaultName = 'count';
 
     public function __construct(
-        private UsedLicensesParser $usedLicensesParser
+        private readonly UsedLicensesParser $usedLicensesParser
     ) {
         parent::__construct();
     }

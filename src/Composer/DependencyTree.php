@@ -9,8 +9,8 @@ use LicenseChecker\Dependency;
 class DependencyTree
 {
     public function __construct(
-        private DependencyTreeRetriever $retriever,
-        private UsedLicensesParser $parser,
+        private readonly DependencyTreeRetriever $retriever,
+        private readonly UsedLicensesParser $parser,
     ) {
     }
 

@@ -16,7 +16,7 @@ class ListAllowedLicenses extends Command
     protected static $defaultName = 'allowed';
 
     public function __construct(
-        private AllowedLicensesParser $allowedLicensesParser
+        private readonly AllowedLicensesParser $allowedLicensesParser
     ) {
         parent::__construct();
     }

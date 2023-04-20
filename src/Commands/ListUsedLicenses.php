@@ -17,7 +17,7 @@ class ListUsedLicenses extends Command
     protected static $defaultName = 'used';
 
     public function __construct(
-        private UsedLicensesParser $usedLicensesParser
+        private readonly UsedLicensesParser $usedLicensesParser
     ) {
         parent::__construct();
     }

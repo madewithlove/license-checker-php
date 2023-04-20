@@ -11,7 +11,7 @@ class AllowedLicensesParser
     private const DEFAULT_CONFIG_FILE_NAME = '.allowed-licenses';
 
     public function __construct(
-        private string $workingDirectory
+        private readonly string $workingDirectory
     ) {
     }
 

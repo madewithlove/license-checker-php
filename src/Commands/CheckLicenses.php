@@ -22,10 +22,10 @@ class CheckLicenses extends Command
     protected static $defaultName = 'check';
 
     public function __construct(
-        private UsedLicensesParser $usedLicensesParser,
-        private AllowedLicensesParser $allowedLicensesParser,
-        private DependencyTree $dependencyTree,
-        private TableRenderer $tableRenderer
+        private readonly UsedLicensesParser $usedLicensesParser,
+        private readonly AllowedLicensesParser $allowedLicensesParser,
+        private readonly DependencyTree $dependencyTree,
+        private readonly TableRenderer $tableRenderer
     ) {
         parent::__construct();
     }
