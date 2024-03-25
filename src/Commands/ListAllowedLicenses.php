@@ -18,7 +18,7 @@ class ListAllowedLicenses extends Command
     public function __construct(
         private readonly AllowedLicensesParser $allowedLicensesParser
     ) {
-        parent::__construct();
+        parent::__construct(self::$defaultName);
     }
 
     protected function configure(): void
