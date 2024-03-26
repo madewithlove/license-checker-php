@@ -16,14 +16,13 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class GenerateConfig extends Command
 {
-    /** @var string */
     protected static $defaultName = 'generate-config';
 
     public function __construct(
         private readonly AllowedLicensesParser $allowedLicensesParser,
         private readonly UsedLicensesParser $usedLicensesParser
     ) {
-        parent::__construct(self::$defaultName);
+        parent::__construct((string) self::$defaultName);
     }
 
     protected function configure(): void

@@ -13,13 +13,12 @@ use Symfony\Component\Yaml\Exception\ParseException;
 
 class ListAllowedLicenses extends Command
 {
-    /** @var string */
     protected static $defaultName = 'allowed';
 
     public function __construct(
         private readonly AllowedLicensesParser $allowedLicensesParser
     ) {
-        parent::__construct(self::$defaultName);
+        parent::__construct((string) self::$defaultName);
     }
 
     protected function configure(): void
