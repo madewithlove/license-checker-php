@@ -19,6 +19,7 @@ use Symfony\Component\Yaml\Exception\ParseException;
 
 class CheckLicenses extends Command
 {
+    /** @var string */
     protected static $defaultName = 'check';
 
     public function __construct(

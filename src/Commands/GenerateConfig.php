@@ -16,6 +16,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class GenerateConfig extends Command
 {
+    /** @var string */
     protected static $defaultName = 'generate-config';
 
     public function __construct(

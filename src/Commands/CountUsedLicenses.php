@@ -14,6 +14,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class CountUsedLicenses extends Command
 {
+    /** @var string */
     protected static $defaultName = 'count';
 
     public function __construct(
