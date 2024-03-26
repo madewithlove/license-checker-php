@@ -19,7 +19,7 @@ class CountUsedLicenses extends Command
     public function __construct(
         private readonly UsedLicensesParser $usedLicensesParser
     ) {
-        parent::__construct(self::$defaultName);
+        parent::__construct((string) self::$defaultName);
     }
 
     protected function configure(): void
