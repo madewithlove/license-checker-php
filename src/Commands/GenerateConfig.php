@@ -22,7 +22,7 @@ class GenerateConfig extends Command
         private readonly AllowedLicensesParser $allowedLicensesParser,
         private readonly UsedLicensesParser $usedLicensesParser
     ) {
-        parent::__construct();
+        parent::__construct(self::$defaultName);
     }
 
     protected function configure(): void

@@ -27,7 +27,7 @@ class CheckLicenses extends Command
         private readonly DependencyTree $dependencyTree,
         private readonly TableRenderer $tableRenderer
     ) {
-        parent::__construct();
+        parent::__construct(self::$defaultName);
     }
 
     protected function configure(): void
