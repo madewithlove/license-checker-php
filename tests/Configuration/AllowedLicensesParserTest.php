@@ -7,7 +7,7 @@ namespace LicenseChecker\Tests\Configuration;
 use LicenseChecker\Configuration\AllowedLicensesParser;
 use PHPUnit\Framework\TestCase;
 
-class AllowedLicensesParserTest extends TestCase
+final class AllowedLicensesParserTest extends TestCase
 {
     /**
      * @test

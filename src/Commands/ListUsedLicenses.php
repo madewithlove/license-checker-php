@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class ListUsedLicenses extends Command
+final class ListUsedLicenses extends Command
 {
     protected static $defaultName = 'used';
 

@@ -11,7 +11,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class TableRendererTest extends TestCase
+final class TableRendererTest extends TestCase
 {
     /**
      * @var MockObject & SymfonyStyle

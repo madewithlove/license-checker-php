@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class GenerateConfig extends Command
+final class GenerateConfig extends Command
 {
     protected static $defaultName = 'generate-config';
 

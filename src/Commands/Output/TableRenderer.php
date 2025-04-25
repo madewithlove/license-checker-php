@@ -7,7 +7,7 @@ namespace LicenseChecker\Commands\Output;
 use LicenseChecker\Dependency;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class TableRenderer
+final class TableRenderer
 {
     /**
      * @param DependencyCheck[] $dependencyChecks

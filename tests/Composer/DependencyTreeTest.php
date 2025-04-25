@@ -11,7 +11,7 @@ use LicenseChecker\Dependency;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class DependencyTreeTest extends TestCase
+final class DependencyTreeTest extends TestCase
 {
     /**
      * @var MockObject & DependencyTreeRetriever

@@ -6,7 +6,7 @@ namespace LicenseChecker\Composer;
 
 use LicenseChecker\Dependency;
 
-class DependencyTree
+final class DependencyTree
 {
     public function __construct(
         private readonly DependencyTreeRetriever $retriever,

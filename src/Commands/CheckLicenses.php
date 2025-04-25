@@ -17,7 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Yaml\Exception\ParseException;
 
-class CheckLicenses extends Command
+final class CheckLicenses extends Command
 {
     protected static $defaultName = 'check';
 

@@ -7,7 +7,7 @@ namespace LicenseChecker\Tests;
 use LicenseChecker\Dependency;
 use PHPUnit\Framework\TestCase;
 
-class DependencyTest extends TestCase
+final class DependencyTest extends TestCase
 {
     /**
      * @test

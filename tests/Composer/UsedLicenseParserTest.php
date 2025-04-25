@@ -9,7 +9,7 @@ use LicenseChecker\Composer\UsedLicensesRetriever;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class UsedLicenseParserTest extends TestCase
+final class UsedLicenseParserTest extends TestCase
 {
     /**
      * @var MockObject & UsedLicensesRetriever

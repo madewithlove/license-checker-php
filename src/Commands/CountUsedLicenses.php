@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class CountUsedLicenses extends Command
+final class CountUsedLicenses extends Command
 {
     protected static $defaultName = 'count';
 
