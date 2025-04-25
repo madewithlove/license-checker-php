@@ -50,6 +50,6 @@ final class Dependency
 
     public function hasDependency(string $dependency): bool
     {
-        return array_search($dependency, $this->getDependencies(), true) !== false;
+        return in_array($dependency, $this->getDependencies(), true);
     }
 }
