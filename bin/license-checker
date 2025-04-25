@@ -16,7 +16,7 @@ use Symfony\Component\Console\Application;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$application = new Application('License Checker', '1.2.0');
+$application = new Application('License Checker', '2.0');
 
 $allowedLicensesParser = new AllowedLicensesParser((string) getcwd());
 $usedLicensesParser = new UsedLicensesParser(new UsedLicensesRetriever());
