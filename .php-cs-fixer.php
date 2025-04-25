@@ -10,6 +10,7 @@ return $config->setRules([
         'array_syntax' => ['syntax' => 'short'],
         'declare_strict_types' => true,
     ])
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
     ->setFinder($finder)
     ->setRiskyAllowed(true)
 ;
