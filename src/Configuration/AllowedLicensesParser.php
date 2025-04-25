@@ -8,7 +8,7 @@ use Symfony\Component\Yaml\Yaml;
 
 final class AllowedLicensesParser
 {
-    private const DEFAULT_CONFIG_FILE_NAME = '.allowed-licenses';
+    private const string DEFAULT_CONFIG_FILE_NAME = '.allowed-licenses';
 
     public function __construct(
         private readonly string $workingDirectory
