@@ -19,7 +19,7 @@ use Symfony\Component\Yaml\Exception\ParseException;
 
 final class CheckLicenses extends Command
 {
-    protected static $defaultName = 'check';
+    protected static string $defaultName = 'check';
 
     public function __construct(
         private readonly UsedLicensesParser $usedLicensesParser,
@@ -27,7 +27,7 @@ final class CheckLicenses extends Command
         private readonly DependencyTree $dependencyTree,
         private readonly TableRenderer $tableRenderer
     ) {
-        parent::__construct((string) self::$defaultName);
+        parent::__construct(self::$defaultName);
     }
 
     protected function configure(): void

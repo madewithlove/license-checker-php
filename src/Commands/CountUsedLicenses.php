@@ -14,12 +14,12 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 final class CountUsedLicenses extends Command
 {
-    protected static $defaultName = 'count';
+    private const string NAME = 'count';
 
     public function __construct(
         private readonly UsedLicensesParser $usedLicensesParser
     ) {
-        parent::__construct((string) self::$defaultName);
+        parent::__construct(self::NAME);
     }
 
     protected function configure(): void
