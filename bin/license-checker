@@ -14,25 +14,11 @@ use LicenseChecker\Composer\UsedLicensesRetriever;
 use LicenseChecker\Configuration\AllowedLicensesParser;
 use Symfony\Component\Console\Application;
 
-$potentialAutoLoaderFiles = [
-    __DIR__ . '/../vendor/autoload.php',
-    __DIR__ . '/../../../autoload.php'
-];
-
-foreach ($potentialAutoLoaderFiles as $potentialAutoLoaderFile) {
-    if (file_exists($potentialAutoLoaderFile)) {
-        $autoLoader = require $potentialAutoLoaderFile;
-        break;
-    }
-}
-
-if (!isset($autoLoader)) {
-    throw new RuntimeException('vendor/autoload.php could not be found. Did you run `composer install`?');
-}
+require __DIR__ . '/../vendor/autoload.php';
 
 $application = new Application('License Checker', '1.2.0');
 
-$allowedLicensesParser = new AllowedLicensesParser(getcwd());
+$allowedLicensesParser = new AllowedLicensesParser((string) getcwd());
 $usedLicensesParser = new UsedLicensesParser(new UsedLicensesRetriever());
 
 $checkLicenses = new CheckLicenses(

@@ -11,6 +11,7 @@
         <directory name="bin"/>
         <directory name="src"/>
         <directory name="tests"/>
+        <file name="bin/license-checker" />
         <ignoreFiles>
             <directory name="vendor"/>
         </ignoreFiles>
@@ -18,4 +19,7 @@
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
     </plugins>
+    <issueHandlers>
+        <ClassMustBeFinal errorLevel="suppress"/>
+    </issueHandlers>
 </psalm>
