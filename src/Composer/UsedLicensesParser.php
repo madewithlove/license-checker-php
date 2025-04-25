@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LicenseChecker\Composer;
 
-final class UsedLicensesParser
+class UsedLicensesParser
 {
     public function __construct(
         private readonly UsedLicensesRetriever $retriever
