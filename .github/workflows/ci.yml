@@ -9,7 +9,7 @@ jobs:
             - uses: actions/checkout@master
             - uses: shivammathur/setup-php@master
               with:
-                  php-version: '8.1'
+                  php-version: '8.4'
             - name: Install dependencies
               run: composer update
             - name: Run Psalm
@@ -19,7 +19,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php: [ '8.1', '8.2', '8.3' ]
+                php: [ '8.3', '8.4' ]
                 prefer-lowest: [ '', '--prefer-lowest' ]
         steps:
             - uses: actions/checkout@master
@@ -37,11 +37,11 @@ jobs:
             - uses: actions/checkout@master
             - uses: shivammathur/setup-php@master
               with:
-                  php-version: '8.1'
+                  php-version: '8.4'
             - name: Install dependencies
               run: composer update
             - name: Run PHP-CS-Fixer
-              run: vendor/bin/php-cs-fixer fix --dry-run -v
+              run: PHP_CS_FIXER_IGNORE_ENV=true vendor/bin/php-cs-fixer fix --dry-run -v
 
     check-licenses:
         runs-on: ubuntu-latest
@@ -49,7 +49,7 @@ jobs:
             -   uses: actions/checkout@master
             -   uses: shivammathur/setup-php@master
                 with:
-                    php-version: '8.1'
+                    php-version: '8.4'
             -   name: Install dependencies
                 run: composer update
             -   name: Run License Checker
