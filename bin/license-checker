@@ -14,7 +14,16 @@ use LicenseChecker\Composer\UsedLicensesRetriever;
 use LicenseChecker\Configuration\AllowedLicensesParser;
 use Symfony\Component\Console\Application;
 
-require __DIR__ . '/../vendor/autoload.php';
+$potentialAutoLoaderFiles = [
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../../autoload.php'
+];
+
+foreach ($potentialAutoLoaderFiles as $potentialAutoLoaderFile) {
+    if (file_exists($potentialAutoLoaderFile)) {
+        require $potentialAutoLoaderFile;
+    }
+}
 
 $application = new Application('License Checker', '2.0');
 
