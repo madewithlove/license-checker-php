@@ -21,18 +21,13 @@ $potentialAutoLoaderFiles = [
 
 foreach ($potentialAutoLoaderFiles as $potentialAutoLoaderFile) {
     if (file_exists($potentialAutoLoaderFile)) {
-        $autoLoader = require $potentialAutoLoaderFile;
-        break;
+        require $potentialAutoLoaderFile;
     }
 }
 
-if (!isset($autoLoader)) {
-    throw new RuntimeException('vendor/autoload.php could not be found. Did you run `composer install`?');
-}
+$application = new Application('License Checker', '2.0');
 
-$application = new Application('License Checker', '1.2.0');
-
-$allowedLicensesParser = new AllowedLicensesParser(getcwd());
+$allowedLicensesParser = new AllowedLicensesParser((string) getcwd());
 $usedLicensesParser = new UsedLicensesParser(new UsedLicensesRetriever());
 
 $checkLicenses = new CheckLicenses(

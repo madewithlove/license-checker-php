@@ -5,22 +5,19 @@ declare(strict_types=1);
 namespace LicenseChecker\Tests;
 
 use LicenseChecker\Dependency;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-class DependencyTest extends TestCase
+final class DependencyTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function itCanRenderNameWithLicense(): void
     {
         $dependency = new Dependency('foo', 'license');
         $this->assertEquals('foo [license]', $dependency->renderNameWithLicense());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itKnowsItsSubDependencies(): void
     {
         $expected = [
@@ -38,9 +35,7 @@ class DependencyTest extends TestCase
         $this->assertTrue($dependency->hasDependency('baz'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itIgnoresDuplicateSubDependencies(): void
     {
         $expected = [

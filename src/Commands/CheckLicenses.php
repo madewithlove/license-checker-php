@@ -17,9 +17,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Yaml\Exception\ParseException;
 
-class CheckLicenses extends Command
+final class CheckLicenses extends Command
 {
-    protected static $defaultName = 'check';
+    private const string NAME = 'check';
 
     public function __construct(
         private readonly UsedLicensesParser $usedLicensesParser,
@@ -27,7 +27,7 @@ class CheckLicenses extends Command
         private readonly DependencyTree $dependencyTree,
         private readonly TableRenderer $tableRenderer
     ) {
-        parent::__construct((string) self::$defaultName);
+        parent::__construct(self::NAME);
     }
 
     protected function configure(): void

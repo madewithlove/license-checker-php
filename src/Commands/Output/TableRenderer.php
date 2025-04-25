@@ -7,7 +7,7 @@ namespace LicenseChecker\Commands\Output;
 use LicenseChecker\Dependency;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class TableRenderer
+final class TableRenderer
 {
     /**
      * @param DependencyCheck[] $dependencyChecks
@@ -15,7 +15,7 @@ class TableRenderer
     public function renderDependencyChecks(array $dependencyChecks, SymfonyStyle $io): void
     {
         usort($dependencyChecks, function (DependencyCheck $dependencyCheck, DependencyCheck $other): int {
-            return $dependencyCheck->isAllowed() <=> $other->isAllowed();
+            return $dependencyCheck->isAllowed <=> $other->isAllowed;
         });
 
         $io->table(
@@ -30,7 +30,7 @@ class TableRenderer
     private function hasFailures(array $dependencyChecks): bool
     {
         foreach ($dependencyChecks as $dependencyCheck) {
-            if (!$dependencyCheck->isAllowed()) {
+            if (!$dependencyCheck->isAllowed) {
                 return true;
             }
         }
@@ -72,11 +72,11 @@ class TableRenderer
 
         $body = [];
         foreach ($dependencyChecks as $dependencyCheck) {
-            if ($dependencyCheck->isAllowed()) {
+            if ($dependencyCheck->isAllowed) {
                 $body[] = $this->renderAllowedLineWithEmptyFailureCause($dependencyCheck);
             } else {
                 $firstLine = true;
-                foreach ($dependencyCheck->getCausedBy() as $causeOfFailure) {
+                foreach ($dependencyCheck->causedBy as $causeOfFailure) {
                     if ($firstLine) {
                         $body[] = $this->renderFailedLineWithCauseOfFailure($dependencyCheck, $causeOfFailure);
                         $firstLine = false;
@@ -97,7 +97,7 @@ class TableRenderer
     {
         return array_map(function (DependencyCheck $dependencyCheck) {
             return [
-                $this->renderBoolean($dependencyCheck->isAllowed()),
+                $this->renderBoolean($dependencyCheck->isAllowed),
                 $dependencyCheck->renderNameWithLicense() ,
             ];
         }, $dependencyChecks);
@@ -109,7 +109,7 @@ class TableRenderer
     private function renderAllowedLineWithEmptyFailureCause(DependencyCheck $dependencyCheck): array
     {
         return [
-            $this->renderBoolean($dependencyCheck->isAllowed()),
+            $this->renderBoolean($dependencyCheck->isAllowed),
             $dependencyCheck->renderNameWithLicense(),
             '',
         ];
@@ -123,7 +123,7 @@ class TableRenderer
         Dependency $causeOfFailure
     ): array {
         return [
-            $this->renderBoolean($dependencyCheck->isAllowed()),
+            $this->renderBoolean($dependencyCheck->isAllowed),
             $dependencyCheck->renderNameWithLicense(),
             $causeOfFailure->renderNameWithLicense(),
         ];
