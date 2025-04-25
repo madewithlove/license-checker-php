@@ -8,6 +8,7 @@ use LicenseChecker\Composer\DependencyTree;
 use LicenseChecker\Composer\DependencyTreeRetriever;
 use LicenseChecker\Composer\UsedLicensesParser;
 use LicenseChecker\Dependency;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,9 +32,7 @@ final class DependencyTreeTest extends TestCase
         $this->dependencyTree = new DependencyTree($this->retriever, $this->parser);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itCanParseJsonFromComposer(): void
     {
         $this->retriever->method('getDependencyTree')->willReturn($this->getDependencyTree());

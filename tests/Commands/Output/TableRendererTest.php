@@ -7,6 +7,7 @@ namespace LicenseChecker\Tests\Commands\Output;
 use LicenseChecker\Commands\Output\DependencyCheck;
 use LicenseChecker\Commands\Output\TableRenderer;
 use LicenseChecker\Dependency;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -25,9 +26,7 @@ final class TableRendererTest extends TestCase
         $this->tableRenderer = new TableRenderer();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itWillRenderTwoColumnsOnSuccess(): void
     {
         $this->io->expects($this->once())->method('table')->with(
@@ -49,9 +48,7 @@ final class TableRendererTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itWillListCausingPackagesOnFailure(): void
     {
         $this->io->expects($this->once())->method('table')->with(
@@ -74,9 +71,7 @@ final class TableRendererTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itWillRenderFailingDependenciesFirst(): void
     {
         $this->io->expects($this->once())->method('table')->with(

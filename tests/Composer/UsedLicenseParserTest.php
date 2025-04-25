@@ -6,6 +6,7 @@ namespace LicenseChecker\Tests\Composer;
 
 use LicenseChecker\Composer\UsedLicensesParser;
 use LicenseChecker\Composer\UsedLicensesRetriever;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,9 +24,7 @@ final class UsedLicenseParserTest extends TestCase
         $this->usedLicensesParser = new UsedLicensesParser($this->licenseRetriever);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canParseLicensesFromJson(): void
     {
         $expected = [
@@ -42,9 +41,7 @@ final class UsedLicenseParserTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canCountDependenciesByLicense(): void
     {
         $expected = [
@@ -110,10 +107,7 @@ final class UsedLicenseParserTest extends TestCase
         return $jsonDecoded;
     }
 
-
-    /**
-     * @test
-     */
+    #[Test]
     public function canParseDependenciesWithoutLicense(): void
     {
         $expected = [];
@@ -126,9 +120,7 @@ final class UsedLicenseParserTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canGetPackagesWithLicenseWhenThereAreDependenciesWithoutLicenses(): void
     {
         $expected = [];

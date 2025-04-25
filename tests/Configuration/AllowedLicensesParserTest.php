@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace LicenseChecker\Tests\Configuration;
 
 use LicenseChecker\Configuration\AllowedLicensesParser;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 final class AllowedLicensesParserTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function canParseConfiguration(): void
     {
         $parser = new AllowedLicensesParser(__DIR__.'/data');
