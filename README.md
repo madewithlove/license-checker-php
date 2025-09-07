@@ -13,7 +13,7 @@ composer require madewithlove/license-checker
 ```
 
 ## Configuration
-To configure a list of allowed licenses, simply create an `.allowed-licences` file in the root of your project (where `composer.json` is located).
+To configure a list of allowed licenses, simply create an `.allowed-licenses` file in the root of your project (where `composer.json` is located).
 The file could look like this:
 ```
 # contents of .allowed-licenses
