@@ -55,3 +55,21 @@ Checking production and development dependencies against separate configuration 
 vendor/bin/license-checker check --no-dev --filename .allowed-licenses-production
 vendor/bin/license-checker check --filename .allowed-licenses-including-dev
 ```
+
+### JSON Output (New Feature)
+You can now export license information in JSON format, perfect for CI/CD pipelines, license audits, or integrations.
+
+```
+vendor/bin/license-checker check --format=json
+```
+
+```json
+{
+    "laravel/framework": "MIT",
+    "phpunit/phpunit": "BSD-3-Clause"
+}
+
+```
+
+By default, results are printed as human-readable text.
+Use --format=json for structured machine-readable output.

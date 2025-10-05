@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  php:
+    image: php:8.3-cli
+    user: root
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      bash -c "
+        apt-get update &&
+        apt-get install -y git unzip curl &&
+        useradd -m dev -u ${UID:-1000} &&
+        su dev -c '
+          curl -sS https://getcomposer.org/installer | php &&
+          php composer.phar install &&
+          php composer.phar dump-autoload &&
+          vendor/bin/phpunit
+        '
+      "
