@@ -56,8 +56,8 @@ vendor/bin/license-checker check --no-dev --filename .allowed-licenses-productio
 vendor/bin/license-checker check --filename .allowed-licenses-including-dev
 ```
 
-### JSON Output (New Feature)
-You can now export license information in JSON format, perfect for CI/CD pipelines, license audits, or integrations.
+### Output Formats (--format option)
+You can now choose how license information is displayed either as a human-readable table (text) or in machine-readable JSON format.
 
 ```
 vendor/bin/license-checker check --format=json
@@ -69,6 +69,16 @@ vendor/bin/license-checker check --format=json
     "phpunit/phpunit": "BSD-3-Clause"
 }
 
+```
+
+```
+vendor/bin/license-checker check --format=text
+```
+
+```
+✓  phpunit/phpunit [BSD-3-Clause]
+✓  symfony/console [MIT]
+✓  vimeo/psalm [MIT]
 ```
 
 By default, results are printed as human-readable text.

@@ -28,6 +28,7 @@ final class JsonOutputFormatterTest extends TestCase
     public function testThrowsExceptionWhenJsonEncodingFails(): void
     {
         $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Failed to encode JSON');
 
         $formatter = new JsonOutputFormatter();
         $invalid = ['stream' => fopen('php://temp', 'r')];

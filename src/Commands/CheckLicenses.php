@@ -16,6 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Yaml\Exception\ParseException;
+use LicenseChecker\Output\OutputFormatterFactory;
 
 final class CheckLicenses extends Command
 {
@@ -40,6 +41,7 @@ final class CheckLicenses extends Command
             InputOption::VALUE_OPTIONAL,
             'Optional filename to be used instead of the default'
         );
+        $this->addOption('format', null, InputOption::VALUE_OPTIONAL, 'Output format: text or json', 'text');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -79,8 +81,22 @@ final class CheckLicenses extends Command
             $dependencyChecks[] = $dependencyCheck;
         }
 
-        $this->tableRenderer->renderDependencyChecks($dependencyChecks, $io);
+        $format = is_string($input->getOption('format')) ? $input->getOption('format') : 'text';
 
-        return empty($notAllowedLicenses) ? 0 : 1;
+        if ($format === 'json') {
+            $licensesData = [];
+            foreach ($dependencyChecks as $check) {
+                $dep = $check->dependency;
+                $licensesData[$dep->getName()] = $dep->getLicense();
+            }
+
+            $formatter = OutputFormatterFactory::create('json');
+            $jsonOutput = $formatter->format($licensesData);
+            $output->writeln($jsonOutput);
+        } else {
+            $this->tableRenderer->renderDependencyChecks($dependencyChecks, $io);
+        }
+
+        return empty($notAllowedLicenses) ? Command::SUCCESS : Command::FAILURE;
     }
 }

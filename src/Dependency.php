@@ -52,4 +52,13 @@ final class Dependency
     {
         return in_array($dependency, $this->getDependencies(), true);
     }
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getLicense(): string
+    {
+        return $this->license;
+    }
 }
