@@ -17,6 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Yaml\Exception\ParseException;
 use LicenseChecker\Output\OutputFormatterFactory;
+use LicenseChecker\Output\OutputFormat;
 
 final class CheckLicenses extends Command
 {
@@ -81,21 +82,21 @@ final class CheckLicenses extends Command
             $dependencyChecks[] = $dependencyCheck;
         }
 
-        $format = is_string($input->getOption('format')) ? $input->getOption('format') : 'text';
 
-        if ($format === 'json') {
+        $format = OutputFormat::tryFromInput($input->getOption('format'));
+        $formatter = OutputFormatterFactory::create($format, $io, $this->tableRenderer);
+
+        if ($format === OutputFormat::JSON) {
             $licensesData = [];
             foreach ($dependencyChecks as $check) {
                 $dep = $check->dependency;
                 $licensesData[$dep->getName()] = $dep->getLicense();
             }
-
-            $formatter = OutputFormatterFactory::create('json');
-            $jsonOutput = $formatter->format($licensesData);
-            $output->writeln($jsonOutput);
+            $output->writeln($formatter->format($licensesData));
         } else {
-            $this->tableRenderer->renderDependencyChecks($dependencyChecks, $io);
+            $formatter->format($dependencyChecks);
         }
+
 
         return empty($notAllowedLicenses) ? Command::SUCCESS : Command::FAILURE;
     }
