@@ -9,17 +9,16 @@ enum OutputFormat: string
     case TEXT = 'text';
     case JSON = 'json';
 
-
-    public static function tryFromInput(?string $value): self
+    public static function tryFromInput(?string $input): self
     {
-        if ($value === null) {
-            return self::TEXT;
-        }
-
-        return match (strtolower($value)) {
-            'text' => self::TEXT,
+        return match ($input) {
             'json' => self::JSON,
             default => self::TEXT,
         };
+    }
+
+    public function isJson(): bool
+    {
+        return $this === self::JSON;
     }
 }

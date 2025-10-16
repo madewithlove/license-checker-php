@@ -10,23 +10,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class TextOutputFormatter implements OutputFormatterInterface
 {
     public function __construct(
-        private readonly ?SymfonyStyle $io = null,
-        private readonly ?TableRenderer $tableRenderer = null
-    ) {
-    }
+        private readonly SymfonyStyle $io,
+        private readonly TableRenderer $tableRenderer,
+    ) {}
 
-    public function format(array $licenses): string
+    public function format(array $dependencyChecks): void
     {
-        if ($this->io && $this->tableRenderer) {
-            $this->tableRenderer->renderDependencyChecks($licenses, $this->io);
-            return '';
-        }
-
-        $lines = [];
-        foreach ($licenses as $package => $license) {
-            $lines[] = sprintf('%s: %s', $package, $license);
-        }
-
-        return implode(PHP_EOL, $lines);
+        $this->tableRenderer->renderDependencyChecks($dependencyChecks, $this->io);
     }
 }

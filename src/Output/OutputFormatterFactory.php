@@ -12,21 +12,12 @@ final class OutputFormatterFactory
 {
     /**
     * Create formatter based on format string.
-    *
-    * @param string $format Format type (text|json)
-    * @param SymfonyStyle|null $io Symfony style (required for text format)
-    * @param object|null $tableRenderer Table renderer (required for text format)
-    * @return OutputFormatterInterface
     */
-    public static function create(
-        OutputFormat $format,
-        ?SymfonyStyle $io = null,
-        ?TableRenderer $tableRenderer = null
-    ): OutputFormatterInterface {
+    public static function create(OutputFormat $format, SymfonyStyle $io, TableRenderer $tableRenderer): object
+    {
         return match ($format) {
-            OutputFormat::JSON => new JsonOutputFormatter(),
+            OutputFormat::JSON => new JsonOutputFormatter($io),
             OutputFormat::TEXT => new TextOutputFormatter($io, $tableRenderer),
         };
     }
-
 }

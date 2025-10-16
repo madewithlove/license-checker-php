@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace LicenseChecker\Output;
 
-use RuntimeException;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * JSON output formatter for programmatic consumption.
- */
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
-    public function format(array $licenses): string
-    {
-        $json = json_encode($licenses, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    public function __construct(private readonly SymfonyStyle $io) {}
 
-        if ($json === false) {
-            throw new RuntimeException('Failed to encode JSON: ' . json_last_error_msg());
+    public function format(array $dependencyChecks): void
+    {
+        $licensesData = [];
+        foreach ($dependencyChecks as $check) {
+            $dep = $check->dependency;
+            $licensesData[$dep->getName()] = $dep->getLicense();
         }
 
-        return $json;
+        $this->io->writeln(json_encode($licensesData, JSON_PRETTY_PRINT));
     }
 }

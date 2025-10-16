@@ -14,5 +14,5 @@ interface OutputFormatterInterface
      *
      * @param array<string, mixed> $licenses
      */
-    public function format(array $licenses): string;
+    public function format(array $licenses): void;
 }

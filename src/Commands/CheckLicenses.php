@@ -42,7 +42,14 @@ final class CheckLicenses extends Command
             InputOption::VALUE_OPTIONAL,
             'Optional filename to be used instead of the default'
         );
-        $this->addOption('format', null, InputOption::VALUE_OPTIONAL, 'Output format: text or json', 'text');
+         $this->addOption(
+            'format',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Output format: text or json',
+            'text',
+            ['text', 'json']
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -86,17 +93,7 @@ final class CheckLicenses extends Command
         $format = OutputFormat::tryFromInput($input->getOption('format'));
         $formatter = OutputFormatterFactory::create($format, $io, $this->tableRenderer);
 
-        if ($format === OutputFormat::JSON) {
-            $licensesData = [];
-            foreach ($dependencyChecks as $check) {
-                $dep = $check->dependency;
-                $licensesData[$dep->getName()] = $dep->getLicense();
-            }
-            $output->writeln($formatter->format($licensesData));
-        } else {
-            $formatter->format($dependencyChecks);
-        }
-
+        $formatter->format($dependencyChecks);
 
         return empty($notAllowedLicenses) ? Command::SUCCESS : Command::FAILURE;
     }
