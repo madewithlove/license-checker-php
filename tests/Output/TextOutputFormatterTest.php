@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LicenseChecker\Tests\Output;
 
 use LicenseChecker\Commands\Output\DependencyCheck;
+use LicenseChecker\Commands\Output\TableRenderer;
 use LicenseChecker\Dependency;
 use LicenseChecker\Output\TextOutputFormatter;
 use LicenseChecker\Tests\Fakes\FakeTableRenderer;
@@ -22,7 +23,7 @@ final class TextOutputFormatterTest extends TestCase
     {
         $output = new BufferedOutput();
         $io = new SymfonyStyle(new ArrayInput([]), $output);
-        $tableRenderer = new FakeTableRenderer();
+        $tableRenderer = new TableRenderer();
 
         $formatter = new TextOutputFormatter($io, $tableRenderer);
         return [$formatter, $output];
@@ -34,13 +35,13 @@ final class TextOutputFormatterTest extends TestCase
 
         $formatter->format([
             new DependencyCheck(new Dependency('laravel/framework', 'MIT'), true),
-            new DependencyCheck(new Dependency('phpunit/phpunit', 'BSD-3-Clause'), false),
+            new DependencyCheck(new Dependency('phpunit/phpunit', 'BSD-3-Clause'), false, [new Dependency('phpunit/phpunit', 'BSD-3-Clause')]),
         ]);
 
         $text = $output->fetch();
 
-        $this->assertStringContainsString('laravel/framework: MIT', $text);
-        $this->assertStringContainsString('phpunit/phpunit: BSD-3-Clause', $text);
+        $this->assertStringContainsString('laravel/framework [MIT]', $text);
+        $this->assertStringContainsString('phpunit/phpunit [BSD-3-Clause]', $text);
         $this->assertFalse($this->isJsonString($text), 'Output must not be JSON');
     }
 
