@@ -15,27 +15,15 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     {
     }
 
-    /**
-     * @param DependencyCheck[] $dependencyChecks
-     */
     public function format(array $dependencyChecks): void
     {
-        /** @var array<string, string|resource|null> $licensesData */
         $licensesData = [];
 
         foreach ($dependencyChecks as $check) {
-            /** @var object{dependency?: object|null} $check */
-            $dep = $check->dependency ?? null;
-
-            if (is_object($dep) && method_exists($dep, 'getName') && method_exists($dep, 'getLicense')) {
-                /** @var string $name */
-                $name = $dep->getName();
-                /** @var string $license */
-                $license = $dep->getLicense();
-                $licensesData[$name] = $license;
-            } else {
-                $licensesData[] = $dep;
-            }
+            $licensesData[$check->dependency->getName()] = [
+                "license" => $check->dependency->getLicense(),
+                "is_allowed" => $check->isAllowed,
+            ];
         }
 
         try {

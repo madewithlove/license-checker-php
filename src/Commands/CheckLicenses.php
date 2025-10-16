@@ -95,7 +95,6 @@ final class CheckLicenses extends Command
         $format = OutputFormat::tryFromInput($formatOption);
 
         $formatter = OutputFormatterFactory::create($format, $io, $this->tableRenderer);
-
         $formatter->format($dependencyChecks);
 
         return empty($notAllowedLicenses) ? Command::SUCCESS : Command::FAILURE;

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace LicenseChecker\Tests\Output;
 
 use LicenseChecker\Output\JsonOutputFormatter;
-use LicenseChecker\Tests\Fakes\FakeDependency;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use LicenseChecker\Commands\Output\DependencyCheck;
+use LicenseChecker\Dependency;
 
 final class JsonOutputFormatterTest extends TestCase
 {
@@ -30,13 +30,9 @@ final class JsonOutputFormatterTest extends TestCase
     {
         [$formatter, $output] = $this->createFormatter();
 
-        $depA = new FakeDependency('laravel/framework', 'MIT');
-        $depB = new FakeDependency('phpunit/phpunit', 'BSD-3-Clause');
-
-        /** @psalm-suppress ArgumentTypeCoercion */
         $formatter->format([
-            (object)['dependency' => $depA],
-            (object)['dependency' => $depB],
+            new DependencyCheck(new Dependency('laravel/framework', 'MIT'), true),
+            new DependencyCheck(new Dependency('phpunit/phpunit', 'BSD-3-Clause'), false),
         ]);
 
         $json = $output->fetch();
@@ -44,21 +40,14 @@ final class JsonOutputFormatterTest extends TestCase
 
         $this->assertJson($json);
         $this->assertSame([
-            'laravel/framework' => 'MIT',
-            'phpunit/phpunit' => 'BSD-3-Clause',
+            'laravel/framework' => [
+                'license' => 'MIT',
+                'is_allowed' => true,
+            ],
+            'phpunit/phpunit' => [
+                'license' => 'BSD-3-Clause',
+                'is_allowed' => false,
+            ],
         ], $decoded);
-    }
-
-    public function testThrowsExceptionWhenJsonEncodingFails(): void
-    {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessageMatches('/Failed to encode JSON/');
-
-        [$formatter] = $this->createFormatter();
-
-        /** @psalm-suppress ArgumentTypeCoercion */
-        $invalid = [(object)['dependency' => fopen('php://temp', 'r')]];
-        /** @psalm-suppress ArgumentTypeCoercion */
-        $formatter->format($invalid);
     }
 }

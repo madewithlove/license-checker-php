@@ -53,13 +53,11 @@ final class Dependency
         return in_array($dependency, $this->getDependencies(), true);
     }
 
-    /** @psalm-suppress PossiblyUnusedMethod */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /** @psalm-suppress PossiblyUnusedMethod */
     public function getLicense(): string
     {
         return $this->license;
