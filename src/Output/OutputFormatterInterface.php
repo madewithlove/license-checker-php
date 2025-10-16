@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace LicenseChecker\Output;
 
+use LicenseChecker\Commands\Output\DependencyCheck;
+
 /**
  * Defines a contract for formatting license output.
  */
 interface OutputFormatterInterface
 {
-    /**
-     * Format the license list into a string for output.
-     *
-     * @param array<string, mixed> $licenses
+   /**
+     * @param DependencyCheck[] $dependencyChecks
      */
-    public function format(array $licenses): void;
+    public function format(array $dependencyChecks): void;
 }

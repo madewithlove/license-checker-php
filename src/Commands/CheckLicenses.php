@@ -90,7 +90,11 @@ final class CheckLicenses extends Command
         }
 
 
-        $format = OutputFormat::tryFromInput($input->getOption('format'));
+       /** @var string|null $formatOption */
+       $formatOption = $input->getOption('format');
+       $format = OutputFormat::tryFromInput($formatOption);
+
+        /** @var \LicenseChecker\Output\OutputFormatterInterface $formatter */
         $formatter = OutputFormatterFactory::create($format, $io, $this->tableRenderer);
 
         $formatter->format($dependencyChecks);

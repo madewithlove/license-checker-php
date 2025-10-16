@@ -16,9 +16,4 @@ enum OutputFormat: string
             default => self::TEXT,
         };
     }
-
-    public function isJson(): bool
-    {
-        return $this === self::JSON;
-    }
 }
