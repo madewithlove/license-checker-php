@@ -55,3 +55,31 @@ Checking production and development dependencies against separate configuration 
 vendor/bin/license-checker check --no-dev --filename .allowed-licenses-production
 vendor/bin/license-checker check --filename .allowed-licenses-including-dev
 ```
+
+### Output Formats (--format option)
+You can now choose how license information is displayed either as a human-readable table (text) or in machine-readable JSON format.
+
+```
+vendor/bin/license-checker check --format=json
+```
+
+```json
+{
+    "laravel/framework": "MIT",
+    "phpunit/phpunit": "BSD-3-Clause"
+}
+
+```
+
+```
+vendor/bin/license-checker check --format=text
+```
+
+```
+✓  phpunit/phpunit [BSD-3-Clause]
+✓  symfony/console [MIT]
+✓  vimeo/psalm [MIT]
+```
+
+By default, results are printed as human-readable text.
+Use --format=json for structured machine-readable output.

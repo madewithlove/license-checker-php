@@ -16,6 +16,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Yaml\Exception\ParseException;
+use LicenseChecker\Output\OutputFormatterFactory;
+use LicenseChecker\Output\OutputFormat;
 
 final class CheckLicenses extends Command
 {
@@ -39,6 +41,14 @@ final class CheckLicenses extends Command
             'f',
             InputOption::VALUE_OPTIONAL,
             'Optional filename to be used instead of the default'
+        );
+        $this->addOption(
+            'format',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Output format: text or json',
+            'text',
+            ['text', 'json']
         );
     }
 
@@ -79,8 +89,15 @@ final class CheckLicenses extends Command
             $dependencyChecks[] = $dependencyCheck;
         }
 
-        $this->tableRenderer->renderDependencyChecks($dependencyChecks, $io);
 
-        return empty($notAllowedLicenses) ? 0 : 1;
+        /** @var string|null $formatOption */
+        $formatOption = $input->getOption('format');
+        $format = OutputFormat::tryFromInput($formatOption);
+
+        $formatter = OutputFormatterFactory::create($format, $io, $this->tableRenderer);
+
+        $formatter->format($dependencyChecks);
+
+        return empty($notAllowedLicenses) ? Command::SUCCESS : Command::FAILURE;
     }
 }
