@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace LicenseChecker\Tests\Output;
 
+use LicenseChecker\Commands\Output\DependencyCheck;
+use LicenseChecker\Dependency;
 use LicenseChecker\Output\TextOutputFormatter;
 use LicenseChecker\Tests\Fakes\FakeTableRenderer;
-use LicenseChecker\Tests\Fakes\FakeDependency;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -31,13 +32,9 @@ final class TextOutputFormatterTest extends TestCase
     {
         [$formatter, $output] = $this->createFormatter();
 
-        $depA = new FakeDependency('laravel/framework', 'MIT');
-        $depB = new FakeDependency('phpunit/phpunit', 'BSD-3-Clause');
-
-        /** @psalm-suppress ArgumentTypeCoercion */
         $formatter->format([
-            (object)['dependency' => $depA],
-            (object)['dependency' => $depB],
+            new DependencyCheck(new Dependency('laravel/framework', 'MIT'), true),
+            new DependencyCheck(new Dependency('phpunit/phpunit', 'BSD-3-Clause'), false),
         ]);
 
         $text = $output->fetch();
