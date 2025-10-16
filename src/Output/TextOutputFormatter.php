@@ -13,7 +13,8 @@ final class TextOutputFormatter implements OutputFormatterInterface
     public function __construct(
         private readonly SymfonyStyle $io,
         private readonly TableRendererInterface $tableRenderer,
-    ) {}
+    ) {
+    }
 
     /**
      * @param DependencyCheck[] $dependencyChecks

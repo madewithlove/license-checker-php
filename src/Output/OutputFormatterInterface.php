@@ -11,8 +11,8 @@ use LicenseChecker\Commands\Output\DependencyCheck;
  */
 interface OutputFormatterInterface
 {
-   /**
-     * @param DependencyCheck[] $dependencyChecks
-     */
+    /**
+      * @param DependencyCheck[] $dependencyChecks
+      */
     public function format(array $dependencyChecks): void;
 }

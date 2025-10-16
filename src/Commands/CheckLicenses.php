@@ -42,7 +42,7 @@ final class CheckLicenses extends Command
             InputOption::VALUE_OPTIONAL,
             'Optional filename to be used instead of the default'
         );
-         $this->addOption(
+        $this->addOption(
             'format',
             null,
             InputOption::VALUE_OPTIONAL,
@@ -90,11 +90,10 @@ final class CheckLicenses extends Command
         }
 
 
-       /** @var string|null $formatOption */
-       $formatOption = $input->getOption('format');
-       $format = OutputFormat::tryFromInput($formatOption);
+        /** @var string|null $formatOption */
+        $formatOption = $input->getOption('format');
+        $format = OutputFormat::tryFromInput($formatOption);
 
-        /** @var \LicenseChecker\Output\OutputFormatterInterface $formatter */
         $formatter = OutputFormatterFactory::create($format, $io, $this->tableRenderer);
 
         $formatter->format($dependencyChecks);

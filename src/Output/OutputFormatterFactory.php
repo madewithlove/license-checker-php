@@ -7,13 +7,14 @@ namespace LicenseChecker\Output;
 use LicenseChecker\Commands\Output\TableRenderer;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use InvalidArgumentException;
+use LicenseChecker\Output\OutputFormatterInterface;
 
 final class OutputFormatterFactory
 {
     /**
     * Create formatter based on format string.
     */
-    public static function create(OutputFormat $format, SymfonyStyle $io, TableRenderer $tableRenderer): object
+    public static function create(OutputFormat $format, SymfonyStyle $io, TableRenderer $tableRenderer): OutputFormatterInterface
     {
         return match ($format) {
             OutputFormat::JSON => new JsonOutputFormatter($io),

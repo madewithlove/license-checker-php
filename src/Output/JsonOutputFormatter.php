@@ -11,7 +11,9 @@ use LicenseChecker\Commands\Output\DependencyCheck;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
-    public function __construct(private readonly SymfonyStyle $io) {}
+    public function __construct(private readonly SymfonyStyle $io)
+    {
+    }
 
     /**
      * @param DependencyCheck[] $dependencyChecks
