@@ -15,7 +15,11 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     {
     }
 
-    public function format(array $dependencyChecks): void
+    /**
+     * @param DependencyCheck[] $dependencyChecks
+     * @psalm-suppress PossiblyUnusedReturnValue
+     */
+    public function format(array $dependencyChecks): string
     {
         $licensesData = [];
 
@@ -33,5 +37,6 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         }
 
         $this->io->writeln($json);
+        return $json;
     }
 }

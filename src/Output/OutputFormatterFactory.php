@@ -21,6 +21,7 @@ final class OutputFormatterFactory
     ): OutputFormatterInterface {
         return match ($format) {
             OutputFormat::JSON => new JsonOutputFormatter($io),
+            OutputFormat::YAML => new YamlOutputFormatter($io),
             OutputFormat::TEXT => new TextOutputFormatter($io, $tableRenderer),
         };
     }

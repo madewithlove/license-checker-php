@@ -46,9 +46,15 @@ final class CheckLicenses extends Command
             'format',
             null,
             InputOption::VALUE_OPTIONAL,
-            'Output format: text or json',
+            'Output format: text or json or yaml',
             'text',
-            ['text', 'json']
+            ['text', 'json', 'yaml']
+        );
+        $this->addOption(
+            'output',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Path to write report file (./licences.yaml)',
         );
     }
 
@@ -95,7 +101,16 @@ final class CheckLicenses extends Command
         $format = OutputFormat::tryFromInput($formatOption);
 
         $formatter = OutputFormatterFactory::create($format, $io, $this->tableRenderer);
-        $formatter->format($dependencyChecks);
+        $result = $formatter->format($dependencyChecks);
+       
+        /** @var string|null $path */
+        $path = $input->getOption('output');
+        if (is_string($path) && $path !== '') {
+            file_put_contents($path, $result);
+            $io->success(sprintf('Report written to %s', $path));
+        } else {
+            $io->writeln($result);
+        }
 
         return empty($notAllowedLicenses) ? Command::SUCCESS : Command::FAILURE;
     }

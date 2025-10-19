@@ -57,7 +57,7 @@ vendor/bin/license-checker check --filename .allowed-licenses-including-dev
 ```
 
 ### Output Formats (--format option)
-You can now choose how license information is displayed either as a human-readable table (text) or in machine-readable JSON format.
+You can now choose how license information is displayed — either as a human-readable table (`text`), or in machine-readable formats (`json`, `yaml`).
 
 ```
 vendor/bin/license-checker check --format=json
@@ -81,5 +81,27 @@ vendor/bin/license-checker check --format=text
 ✓  vimeo/psalm [MIT]
 ```
 
+```
+vendor/bin/license-checker check --format=yaml
+```
+```yaml
+laravel/framework:
+    license: MIT
+    is_allowed: true
+phpunit/phpunit:
+    license: BSD-3-Clause
+    is_allowed: false
+
+```
 By default, results are printed as human-readable text.
 Use --format=json for structured machine-readable output.
+
+## Saving Output to File (--output option)
+
+You can now save reports directly to a file instead of printing them to the console.
+```
+vendor/bin/license-checker check --format=json --output=licenses.json
+vendor/bin/license-checker check --format=yaml --output=licenses.yaml
+vendor/bin/license-checker check --format=text --output=licenses.txt
+```
+If the `--output` option is omitted, the report will be printed to the console as before.
