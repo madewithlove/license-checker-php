@@ -26,6 +26,41 @@ final class TableRenderer implements TableRendererInterface
 
     /**
      * @param DependencyCheck[] $dependencyChecks
+     */ 
+    public function renderAsText(array $dependencyChecks): string
+    {
+        usort($dependencyChecks, static function (DependencyCheck $a, DependencyCheck $b): int {
+            return $a->isAllowed <=> $b->isAllowed;
+        });
+
+        $lines = [];
+        $headers = $this->getHeaders($dependencyChecks);
+        $lines[] = implode(' | ', array_map('strtoupper', $headers));
+        $lines[] = str_repeat('-', strlen($lines[0]));
+
+        foreach ($dependencyChecks as $dependencyCheck) {
+            $symbol = $dependencyCheck->isAllowed ? '✓' : '✗';
+            $row = [
+                $symbol,
+                $dependencyCheck->renderNameWithLicense(),
+            ];
+
+            if (!$dependencyCheck->isAllowed && !empty($dependencyCheck->causedBy)) {
+                $row[] = implode(', ', array_map(
+                    static fn ($d) => $d->renderNameWithLicense(),
+                    $dependencyCheck->causedBy
+                ));
+            }
+
+            $lines[] = implode(' | ', $row);
+        }
+
+        return implode(PHP_EOL, $lines) . PHP_EOL;
+    }
+
+
+    /**
+     * @param DependencyCheck[] $dependencyChecks
      */
     private function hasFailures(array $dependencyChecks): bool
     {
