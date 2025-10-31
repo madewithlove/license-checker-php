@@ -46,15 +46,15 @@ final class CheckLicenses extends Command
             'format',
             null,
             InputOption::VALUE_OPTIONAL,
-            'Output format: text or json or yaml',
+            'Output format: text or json',
             'text',
-            ['text', 'json', 'yaml']
+            ['text', 'json']
         );
         $this->addOption(
             'output',
             null,
             InputOption::VALUE_OPTIONAL,
-            'Path to write report file (./licences.yaml)',
+            'Path to write report file (./licences.json)',
         );
     }
 
