@@ -106,6 +106,11 @@ final class CheckLicenses extends Command
         /** @var string|null $path */
         $path = $input->getOption('output');
         if (is_string($path) && $path !== '') {
+            $dir = dirname($path);
+            if (!is_dir($dir)) {
+                $io->error(sprintf('Output directory "%s" does not exist.', $dir));
+                return Command::FAILURE;
+            }
             file_put_contents($path, $result);
             $io->success(sprintf('Report written to %s', $path));
         } else {
