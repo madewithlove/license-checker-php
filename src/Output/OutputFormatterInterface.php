@@ -12,7 +12,7 @@ use LicenseChecker\Commands\Output\DependencyCheck;
 interface OutputFormatterInterface
 {
     /**
-      * @param DependencyCheck[] $dependencyChecks
-      */
-    public function format(array $dependencyChecks): void;
+     * @param DependencyCheck[] $dependencyChecks
+     */
+    public function format(array $dependencyChecks): string;
 }

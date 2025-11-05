@@ -18,9 +18,13 @@ final class TextOutputFormatter implements OutputFormatterInterface
 
     /**
      * @param DependencyCheck[] $dependencyChecks
+     * @psalm-suppress PossiblyUnusedReturnValue
      */
-    public function format(array $dependencyChecks): void
+    public function format(array $dependencyChecks): string
     {
         $this->tableRenderer->renderDependencyChecks($dependencyChecks, $this->io);
+
+        return $this->tableRenderer->renderAsText($dependencyChecks);
     }
+
 }

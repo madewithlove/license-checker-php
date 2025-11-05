@@ -50,6 +50,12 @@ final class CheckLicenses extends Command
             'text',
             ['text', 'json']
         );
+        $this->addOption(
+            'output',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Path to write report file (./licences.json)',
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -95,7 +101,21 @@ final class CheckLicenses extends Command
         $format = OutputFormat::tryFromInput($formatOption);
 
         $formatter = OutputFormatterFactory::create($format, $io, $this->tableRenderer);
-        $formatter->format($dependencyChecks);
+        $result = $formatter->format($dependencyChecks);
+       
+        /** @var string|null $path */
+        $path = $input->getOption('output');
+        if (is_string($path) && $path !== '') {
+            $dir = dirname($path);
+            if (!is_dir($dir)) {
+                $io->error(sprintf('Output directory "%s" does not exist.', $dir));
+                return Command::FAILURE;
+            }
+            file_put_contents($path, $result);
+            $io->success(sprintf('Report written to %s', $path));
+        } else {
+            $io->writeln($result);
+        }
 
         return empty($notAllowedLicenses) ? Command::SUCCESS : Command::FAILURE;
     }
