@@ -22,28 +22,30 @@ final class TextOutputFormatterTest extends TestCase
     private function createFormatter(): array
     {
         $output = new BufferedOutput();
-        $io = new SymfonyStyle(new ArrayInput([]), $output);
         $tableRenderer = new TableRenderer();
 
-        $formatter = new TextOutputFormatter($io, $tableRenderer);
+        $formatter = new TextOutputFormatter($tableRenderer);
         return [$formatter, $output];
     }
 
     public function testFormatsLicensesAsText(): void
     {
-        [$formatter, $output] = $this->createFormatter();
+        [$formatter] = $this->createFormatter();
 
-        $formatter->format([
+        $text = $formatter->format([
             new DependencyCheck(new Dependency('laravel/framework', 'MIT'), true),
-            new DependencyCheck(new Dependency('phpunit/phpunit', 'BSD-3-Clause'), false, [new Dependency('phpunit/phpunit', 'BSD-3-Clause')]),
+            new DependencyCheck(
+                new Dependency('phpunit/phpunit', 'BSD-3-Clause'),
+                false,
+                [new Dependency('phpunit/phpunit', 'BSD-3-Clause')]
+            ),
         ]);
-
-        $text = $output->fetch();
 
         $this->assertStringContainsString('laravel/framework [MIT]', $text);
         $this->assertStringContainsString('phpunit/phpunit [BSD-3-Clause]', $text);
         $this->assertFalse($this->isJsonString($text), 'Output must not be JSON');
     }
+
 
     private function isJsonString(string $string): bool
     {

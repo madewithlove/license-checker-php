@@ -100,7 +100,7 @@ final class CheckLicenses extends Command
         $formatOption = $input->getOption('format');
         $format = OutputFormat::tryFromInput($formatOption);
 
-        $formatter = OutputFormatterFactory::create($format, $io, $this->tableRenderer);
+        $formatter = OutputFormatterFactory::create($format, $this->tableRenderer);
         $result = $formatter->format($dependencyChecks);
        
         /** @var string|null $path */

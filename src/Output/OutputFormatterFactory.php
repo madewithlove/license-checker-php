@@ -16,12 +16,11 @@ final class OutputFormatterFactory
     */
     public static function create(
         OutputFormat $format,
-        SymfonyStyle $io,
         TableRendererInterface $tableRenderer
     ): OutputFormatterInterface {
         return match ($format) {
-            OutputFormat::JSON => new JsonOutputFormatter($io),
-            OutputFormat::TEXT => new TextOutputFormatter($io, $tableRenderer),
+            OutputFormat::JSON => new JsonOutputFormatter(),
+            OutputFormat::TEXT => new TextOutputFormatter($tableRenderer),
         };
     }
 }

@@ -15,27 +15,24 @@ use LicenseChecker\Dependency;
 final class JsonOutputFormatterTest extends TestCase
 {
     /**
-     * @return array{0: \LicenseChecker\Output\JsonOutputFormatter, 1: \Symfony\Component\Console\Output\BufferedOutput}
+     * @return array{0: \LicenseChecker\Output\JsonOutputFormatter}
      */
     private function createFormatter(): array
     {
-        $output = new BufferedOutput();
-        $io = new SymfonyStyle(new ArrayInput([]), $output);
-        $formatter = new JsonOutputFormatter($io);
+        $formatter = new JsonOutputFormatter();
 
-        return [$formatter, $output];
+        return [$formatter];
     }
 
     public function testFormatsLicensesAsJson(): void
     {
-        [$formatter, $output] = $this->createFormatter();
+        [$formatter] = $this->createFormatter();
 
-        $formatter->format([
+        $json = $formatter->format([
             new DependencyCheck(new Dependency('laravel/framework', 'MIT'), true),
             new DependencyCheck(new Dependency('phpunit/phpunit', 'BSD-3-Clause'), false),
         ]);
 
-        $json = $output->fetch();
         $decoded = json_decode($json, true);
 
         $this->assertJson($json);
@@ -50,4 +47,5 @@ final class JsonOutputFormatterTest extends TestCase
             ],
         ], $decoded);
     }
+
 }
