@@ -19,7 +19,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php: [ '8.3', '8.4' ]
+                php: [ '8.3', '8.4', '8.5' ]
                 prefer-lowest: [ '', '--prefer-lowest' ]
         steps:
             - uses: actions/checkout@master
