@@ -1,4 +1,4 @@
-name: Continious Integration
+name: Continuous Integration
 on: push
 
 jobs:
@@ -6,10 +6,10 @@ jobs:
         name: Psalm
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@master
-            - uses: shivammathur/setup-php@master
+            - uses: actions/checkout@v4
+            - uses: shivammathur/setup-php@v2
               with:
-                  php-version: '8.4'
+                  php-version: '8.3'
             - name: Install dependencies
               run: composer update
             - name: Run Psalm
@@ -22,8 +22,8 @@ jobs:
                 php: [ '8.3', '8.4', '8.5' ]
                 prefer-lowest: [ '', '--prefer-lowest' ]
         steps:
-            - uses: actions/checkout@master
-            - uses: shivammathur/setup-php@master
+            - uses: actions/checkout@v4
+            - uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
             - name: Install dependencies
@@ -34,23 +34,23 @@ jobs:
     coding_standards:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@master
-            - uses: shivammathur/setup-php@master
+            - uses: actions/checkout@v4
+            - uses: shivammathur/setup-php@v2
               with:
-                  php-version: '8.4'
+                  php-version: '8.3'
             - name: Install dependencies
               run: composer update
             - name: Run PHP-CS-Fixer
-              run: PHP_CS_FIXER_IGNORE_ENV=true vendor/bin/php-cs-fixer fix --dry-run -v
+              run: vendor/bin/php-cs-fixer fix --dry-run -v
 
     check-licenses:
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@master
-            -   uses: shivammathur/setup-php@master
-                with:
-                    php-version: '8.4'
-            -   name: Install dependencies
-                run: composer update
-            -   name: Run License Checker
-                run: bin/license-checker check --quiet
+            - uses: actions/checkout@v4
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.3'
+            - name: Install dependencies
+              run: composer update
+            - name: Run License Checker
+              run: bin/license-checker check --quiet
