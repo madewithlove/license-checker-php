@@ -8,7 +8,10 @@ use LicenseChecker\Commands\Output\DependencyCheck;
 use LicenseChecker\Commands\Output\TableRenderer;
 use LicenseChecker\Composer\DependencyTree;
 use LicenseChecker\Composer\UsedLicensesParser;
-use LicenseChecker\Configuration\AllowedLicensesParser;
+use LicenseChecker\Configuration\InvalidConfiguration;
+use LicenseChecker\Configuration\LicenseConfigurationParser;
+use LicenseChecker\Output\OutputFormat;
+use LicenseChecker\Output\OutputFormatterFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,8 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Yaml\Exception\ParseException;
-use LicenseChecker\Output\OutputFormatterFactory;
-use LicenseChecker\Output\OutputFormat;
 
 final class CheckLicenses extends Command
 {
@@ -25,9 +26,9 @@ final class CheckLicenses extends Command
 
     public function __construct(
         private readonly UsedLicensesParser $usedLicensesParser,
-        private readonly AllowedLicensesParser $allowedLicensesParser,
+        private readonly LicenseConfigurationParser $configParser,
         private readonly DependencyTree $dependencyTree,
-        private readonly TableRenderer $tableRenderer
+        private readonly TableRenderer $tableRenderer,
     ) {
         parent::__construct(self::NAME);
     }
@@ -66,13 +67,13 @@ final class CheckLicenses extends Command
         try {
             /** @var string|null $fileName */
             $fileName = is_string($input->getOption('filename')) ? $input->getOption('filename') : null;
-            $allowedLicenses = $this->allowedLicensesParser->getAllowedLicenses($fileName);
-        } catch (ParseException $e) {
+            $config = $this->configParser->parse($fileName);
+        } catch (ParseException | InvalidConfiguration $e) {
             $output->writeln($e->getMessage());
             return 1;
         }
 
-        $notAllowedLicenses = array_diff($usedLicenses, $allowedLicenses);
+        $notAllowedLicenses = $config->findViolations($usedLicenses);
         $dependencies = $this->dependencyTree->getDependencies((bool)$input->getOption('no-dev'));
 
         $dependencyChecks = [];

@@ -12,7 +12,7 @@ class UsedLicensesParser
     }
 
     /**
-     * @return string[]
+     * @return list<string>
      */
     public function parseLicenses(bool $noDev): array
     {
