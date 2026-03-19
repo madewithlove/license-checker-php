@@ -1,6 +1,5 @@
 composer.phar
 /vendor/
 composer.lock
-.phpunit.result.cache
+.phpunit.cache/
 .php-cs-fixer.cache
-.phpunit.cache/test-results

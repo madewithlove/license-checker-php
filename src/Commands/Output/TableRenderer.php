@@ -62,7 +62,7 @@ final class TableRenderer implements TableRendererInterface
 
     /**
      * @param DependencyCheck[] $dependencyChecks
-     * @return array[]
+     * @return list<array<string>>
      */
     private function getBody(array $dependencyChecks): array
     {
@@ -91,16 +91,16 @@ final class TableRenderer implements TableRendererInterface
 
     /**
      * @param DependencyCheck[] $dependencyChecks
-     * @return array[]
+     * @return list<array<string>>
      */
     private function renderAllOkay(array $dependencyChecks): array
     {
-        return array_map(function (DependencyCheck $dependencyCheck) {
+        return array_values(array_map(function (DependencyCheck $dependencyCheck) {
             return [
                 $this->renderBoolean($dependencyCheck->isAllowed),
-                $dependencyCheck->renderNameWithLicense() ,
+                $dependencyCheck->renderNameWithLicense(),
             ];
-        }, $dependencyChecks);
+        }, $dependencyChecks));
     }
 
     /**

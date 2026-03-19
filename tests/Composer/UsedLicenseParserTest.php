@@ -7,20 +7,17 @@ namespace LicenseChecker\Tests\Composer;
 use LicenseChecker\Composer\UsedLicensesParser;
 use LicenseChecker\Composer\UsedLicensesRetriever;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 final class UsedLicenseParserTest extends TestCase
 {
-    /**
-     * @var MockObject & UsedLicensesRetriever
-     */
-    private MockObject $licenseRetriever;
+    private Stub&UsedLicensesRetriever $licenseRetriever;
     private UsedLicensesParser $usedLicensesParser;
 
     protected function setUp(): void
     {
-        $this->licenseRetriever = $this->createMock(UsedLicensesRetriever::class);
+        $this->licenseRetriever = $this->createStub(UsedLicensesRetriever::class);
         $this->usedLicensesParser = new UsedLicensesParser($this->licenseRetriever);
     }
 
