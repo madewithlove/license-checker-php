@@ -4,26 +4,29 @@ declare(strict_types=1);
 
 namespace LicenseChecker\Commands;
 
-use LicenseChecker\Configuration\AllowedLicensesParser;
+use LicenseChecker\Configuration\InvalidConfiguration;
+use LicenseChecker\Configuration\LicenseConfigMode;
+use LicenseChecker\Configuration\LicenseConfigurationParser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Exception\ParseException;
 
-final class ListAllowedLicenses extends Command
+final class ListConfiguredLicenses extends Command
 {
-    private const string NAME = 'allowed';
+    private const string NAME = 'list-config';
 
     public function __construct(
-        private readonly AllowedLicensesParser $allowedLicensesParser
+        private readonly LicenseConfigurationParser $configParser,
     ) {
         parent::__construct(self::NAME);
     }
 
     protected function configure(): void
     {
-        $this->setDescription('List used licenses of composer dependencies');
+        $this->setDescription('List configured licenses (allowed or denied)');
         $this->addOption(
             'filename',
             'f',
@@ -34,17 +37,26 @@ final class ListAllowedLicenses extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $io = new SymfonyStyle($input, $output);
+
         try {
             /** @var string|null $fileName */
             $fileName = is_string($input->getOption('filename')) ? $input->getOption('filename') : null;
-            $allowedLicenses = $this->allowedLicensesParser->getAllowedLicenses($fileName);
-        } catch (ParseException $e) {
+            $config = $this->configParser->parse($fileName);
+        } catch (ParseException | InvalidConfiguration $e) {
             $output->writeln($e->getMessage());
             return 1;
         }
 
-        foreach ($allowedLicenses as $allowedLicense) {
-            $output->writeln($allowedLicense);
+        $header = match ($config->mode) {
+            LicenseConfigMode::Allowed => 'Allowed licenses:',
+            LicenseConfigMode::Denied => 'Denied licenses:',
+        };
+
+        $io->section($header);
+
+        foreach ($config->licenses as $license) {
+            $output->writeln($license);
         }
 
         return 0;
