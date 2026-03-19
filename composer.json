@@ -12,7 +12,7 @@
     "minimum-stability": "stable",
     "bin": ["bin/license-checker"],
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "symfony/console": "^6.0 || ^7.0 || ^8.0",
         "symfony/process": "^6.0 || ^7.0 || ^8.0",
         "symfony/yaml": "^6.0 || ^7.0 || ^8.0"
