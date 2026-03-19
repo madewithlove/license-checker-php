@@ -9,26 +9,19 @@ use LicenseChecker\Composer\DependencyTreeRetriever;
 use LicenseChecker\Composer\UsedLicensesParser;
 use LicenseChecker\Dependency;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 final class DependencyTreeTest extends TestCase
 {
-    /**
-     * @var MockObject & DependencyTreeRetriever
-     */
-    private MockObject $retriever;
-
-    /**
-     * @var MockObject & UsedLicensesParser
-     */
-    private MockObject $parser;
+    private Stub&DependencyTreeRetriever $retriever;
+    private Stub&UsedLicensesParser $parser;
     private DependencyTree $dependencyTree;
 
     protected function setUp(): void
     {
-        $this->retriever = $this->createMock(DependencyTreeRetriever::class);
-        $this->parser = $this->createMock(UsedLicensesParser::class);
+        $this->retriever = $this->createStub(DependencyTreeRetriever::class);
+        $this->parser = $this->createStub(UsedLicensesParser::class);
         $this->dependencyTree = new DependencyTree($this->retriever, $this->parser);
     }
 
