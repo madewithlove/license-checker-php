@@ -4,14 +4,15 @@
 use LicenseChecker\Commands\CheckLicenses;
 use LicenseChecker\Commands\CountUsedLicenses;
 use LicenseChecker\Commands\GenerateConfig;
-use LicenseChecker\Commands\ListAllowedLicenses;
+use LicenseChecker\Commands\ListConfiguredLicenses;
 use LicenseChecker\Commands\ListUsedLicenses;
+use LicenseChecker\Commands\MigrateConfig;
 use LicenseChecker\Commands\Output\TableRenderer;
 use LicenseChecker\Composer\DependencyTree;
 use LicenseChecker\Composer\DependencyTreeRetriever;
 use LicenseChecker\Composer\UsedLicensesParser;
 use LicenseChecker\Composer\UsedLicensesRetriever;
-use LicenseChecker\Configuration\AllowedLicensesParser;
+use LicenseChecker\Configuration\LicenseConfigurationParser;
 use Symfony\Component\Console\Application;
 
 $potentialAutoLoaderFiles = [
@@ -25,14 +26,15 @@ foreach ($potentialAutoLoaderFiles as $potentialAutoLoaderFile) {
     }
 }
 
-$application = new Application('License Checker', '2.0');
+$application = new Application('License Checker', '3.0');
 
-$allowedLicensesParser = new AllowedLicensesParser((string) getcwd());
+$workingDirectory = (string) getcwd();
+$configParser = new LicenseConfigurationParser($workingDirectory);
 $usedLicensesParser = new UsedLicensesParser(new UsedLicensesRetriever());
 
 $checkLicenses = new CheckLicenses(
     $usedLicensesParser,
-    $allowedLicensesParser,
+    $configParser,
     new DependencyTree(
         new DependencyTreeRetriever(),
         $usedLicensesParser
@@ -42,8 +44,9 @@ $checkLicenses = new CheckLicenses(
 
 $application->addCommand($checkLicenses);
 $application->addCommand(new ListUsedLicenses($usedLicensesParser));
-$application->addCommand(new ListAllowedLicenses($allowedLicensesParser));
-$application->addCommand(new GenerateConfig($allowedLicensesParser, $usedLicensesParser));
+$application->addCommand(new ListConfiguredLicenses($configParser));
+$application->addCommand(new GenerateConfig($configParser, $usedLicensesParser));
 $application->addCommand(new CountUsedLicenses($usedLicensesParser));
+$application->addCommand(new MigrateConfig($configParser, $workingDirectory));
 
 $application->run();

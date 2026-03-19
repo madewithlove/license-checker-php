@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace LicenseChecker\Commands;
 
 use LicenseChecker\Composer\UsedLicensesParser;
-use LicenseChecker\Configuration\AllowedLicensesParser;
 use LicenseChecker\Configuration\ConfigurationExists;
+use LicenseChecker\Configuration\LicenseConfiguration;
+use LicenseChecker\Configuration\LicenseConfigurationParser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -19,15 +20,15 @@ final class GenerateConfig extends Command
     private const string NAME = 'generate-config';
 
     public function __construct(
-        private readonly AllowedLicensesParser $allowedLicensesParser,
-        private readonly UsedLicensesParser $usedLicensesParser
+        private readonly LicenseConfigurationParser $configParser,
+        private readonly UsedLicensesParser $usedLicensesParser,
     ) {
         parent::__construct(self::NAME);
     }
 
     protected function configure(): void
     {
-        $this->setDescription('Generates allowed licenses config based on used licenses');
+        $this->setDescription('Generates license configuration based on used licenses');
         $this->addOption('no-dev', null, InputOption::VALUE_NONE, 'Do not include dev dependencies');
         $this->addOption(
             'filename',
@@ -42,20 +43,18 @@ final class GenerateConfig extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
-            $usedLicenses = $this->usedLicensesParser->parseLicenses((bool)$input->getOption('no-dev'));
+            $usedLicenses = $this->usedLicensesParser->parseLicenses((bool) $input->getOption('no-dev'));
         } catch (ProcessFailedException $e) {
             $io->error($e->getMessage());
             return 1;
         }
 
-        sort($usedLicenses);
-
         try {
             /** @var string|null $fileName */
             $fileName = is_string($input->getOption('filename')) ? $input->getOption('filename') : null;
-            $this->allowedLicensesParser->writeConfiguration($usedLicenses, $fileName);
+            $this->configParser->writeConfiguration(LicenseConfiguration::allowed($usedLicenses), $fileName);
             $io->success('Configuration file successfully written');
-        } catch (ConfigurationExists $e) {
+        } catch (ConfigurationExists) {
             $io->error('The configuration file already exists. Please remove it before generating a new one.');
             return 1;
         }

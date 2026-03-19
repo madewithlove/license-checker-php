@@ -1,0 +1,4 @@
+allowed:
+  - MIT
+denied:
+  - GPL-3.0
