@@ -40,10 +40,10 @@ $checkLicenses = new CheckLicenses(
     new TableRenderer()
 );
 
-$application->add($checkLicenses);
-$application->add(new ListUsedLicenses($usedLicensesParser));
-$application->add(new ListAllowedLicenses($allowedLicensesParser));
-$application->add(new GenerateConfig($allowedLicensesParser, $usedLicensesParser));
-$application->add(new CountUsedLicenses($usedLicensesParser));
+$application->addCommand($checkLicenses);
+$application->addCommand(new ListUsedLicenses($usedLicensesParser));
+$application->addCommand(new ListAllowedLicenses($allowedLicensesParser));
+$application->addCommand(new GenerateConfig($allowedLicensesParser, $usedLicensesParser));
+$application->addCommand(new CountUsedLicenses($usedLicensesParser));
 
 $application->run();
