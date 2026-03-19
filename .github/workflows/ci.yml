@@ -2,8 +2,8 @@ name: Continuous Integration
 on: push
 
 jobs:
-    psalm:
-        name: Psalm
+    phpstan:
+        name: PHPStan
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -12,8 +12,8 @@ jobs:
                   php-version: '8.4'
             - name: Install dependencies
               run: composer update
-            - name: Run Psalm
-              run: vendor/bin/psalm
+            - name: Run PHPStan
+              run: vendor/bin/phpstan analyse
 
     phpunit:
         runs-on: ubuntu-latest

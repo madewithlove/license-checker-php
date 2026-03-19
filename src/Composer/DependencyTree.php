@@ -20,13 +20,12 @@ final readonly class DependencyTree
     public function getDependencies(bool $noDev): array
     {
         $dependencies = [];
-        /** @var array{installed:list<array{name:string,requires?:array}>} $decodedJson */
+        /** @var array{installed:list<array{name:string,requires?:list<array{name:string,requires?:list<mixed>}>}>} $decodedJson */
         $decodedJson = json_decode($this->retriever->getDependencyTree($noDev), true);
         foreach ($decodedJson['installed'] as $package) {
             $license = $this->parser->getLicenseForPackage($package['name'], $noDev) ?? '';
             $dependency = new Dependency($package['name'], $license);
             if (isset($package['requires'])) {
-                /** @psalm-suppress ArgumentTypeCoercion */
                 foreach ($this->getSubDependencies($package['requires']) as $subDependency) {
                     $dependency->addDependency($subDependency);
                 }
@@ -38,7 +37,7 @@ final readonly class DependencyTree
     }
 
     /**
-     * @param list<array{name:string,requires?:array}> $subTree
+     * @param list<array{name:string,requires?:list<mixed>}> $subTree
      * @return string[]
      */
     private function getSubDependencies(array $subTree): array
@@ -52,8 +51,9 @@ final readonly class DependencyTree
         foreach ($subTree as $subTreeItem) {
             $subDependencies[] = $subTreeItem['name'];
             if (isset($subTreeItem['requires'])) {
-                /** @psalm-suppress ArgumentTypeCoercion */
-                $subDependencies = array_merge($subDependencies, $this->getSubDependencies($subTreeItem['requires']));
+                /** @var list<array{name:string,requires?:list<mixed>}> $requires */
+                $requires = $subTreeItem['requires'];
+                $subDependencies = array_merge($subDependencies, $this->getSubDependencies($requires));
             }
         }
 
