@@ -26,6 +26,35 @@ final class SarifOutputFormatterTest extends TestCase
         return [$formatter, $output];
     }
 
+    /**
+     * @return array<mixed>
+     */
+    private function decodeOutput(BufferedOutput $output): array
+    {
+        $json = $output->fetch();
+        $this->assertJson($json);
+        $decoded = json_decode($json, true);
+        $this->assertIsArray($decoded);
+
+        return $decoded;
+    }
+
+    /**
+     * @param array<mixed> $sarif
+     * @return array<mixed>
+     */
+    private function getResults(array $sarif): array
+    {
+        $runs = $sarif['runs'];
+        $this->assertIsArray($runs);
+        $run = $runs[0];
+        $this->assertIsArray($run);
+        $results = $run['results'];
+        $this->assertIsArray($results);
+
+        return $results;
+    }
+
     public function testOutputsValidSarifStructure(): void
     {
         [$formatter, $output] = $this->createFormatter();
@@ -34,14 +63,20 @@ final class SarifOutputFormatterTest extends TestCase
             new DependencyCheck(new Dependency('laravel/framework', 'MIT'), true),
         ]);
 
-        $json = $output->fetch();
-        $decoded = json_decode($json, true);
+        $sarif = $this->decodeOutput($output);
+        $this->assertSame('2.1.0', $sarif['version']);
 
-        $this->assertJson($json);
-        $this->assertSame('2.1.0', $decoded['version']);
-        $this->assertArrayHasKey('runs', $decoded);
-        $this->assertCount(1, $decoded['runs']);
-        $this->assertSame('license-checker', $decoded['runs'][0]['tool']['driver']['name']);
+        $runs = $sarif['runs'];
+        $this->assertIsArray($runs);
+        $this->assertCount(1, $runs);
+
+        $run = $runs[0];
+        $this->assertIsArray($run);
+        $tool = $run['tool'];
+        $this->assertIsArray($tool);
+        $driver = $tool['driver'];
+        $this->assertIsArray($driver);
+        $this->assertSame('license-checker', $driver['name']);
     }
 
     public function testProducesNoResultsWhenAllAllowed(): void
@@ -53,10 +88,7 @@ final class SarifOutputFormatterTest extends TestCase
             new DependencyCheck(new Dependency('symfony/console', 'MIT'), true),
         ]);
 
-        $json = $output->fetch();
-        $decoded = json_decode($json, true);
-
-        $this->assertSame([], $decoded['runs'][0]['results']);
+        $this->assertSame([], $this->getResults($this->decodeOutput($output)));
     }
 
     public function testProducesResultForDirectLicenseViolation(): void
@@ -71,16 +103,21 @@ final class SarifOutputFormatterTest extends TestCase
             ),
         ]);
 
-        $json = $output->fetch();
-        $decoded = json_decode($json, true);
-        $results = $decoded['runs'][0]['results'];
-
+        $results = $this->getResults($this->decodeOutput($output));
         $this->assertCount(1, $results);
-        $this->assertSame('license-not-allowed', $results[0]['ruleId']);
-        $this->assertSame('error', $results[0]['level']);
-        $this->assertStringContainsString('"bad/package"', $results[0]['message']['text']);
-        $this->assertStringContainsString('GPL-3.0', $results[0]['message']['text']);
-        $this->assertStringNotContainsString('requires', $results[0]['message']['text']);
+
+        $result = $results[0];
+        $this->assertIsArray($result);
+        $this->assertSame('license-not-allowed', $result['ruleId']);
+        $this->assertSame('error', $result['level']);
+
+        $message = $result['message'];
+        $this->assertIsArray($message);
+        $text = $message['text'];
+        $this->assertIsString($text);
+        $this->assertStringContainsString('"bad/package"', $text);
+        $this->assertStringContainsString('GPL-3.0', $text);
+        $this->assertStringNotContainsString('requires', $text);
     }
 
     public function testProducesResultForSubDependencyViolation(): void
@@ -95,19 +132,39 @@ final class SarifOutputFormatterTest extends TestCase
             ),
         ]);
 
-        $json = $output->fetch();
-        $decoded = json_decode($json, true);
-        $results = $decoded['runs'][0]['results'];
-
+        $results = $this->getResults($this->decodeOutput($output));
         $this->assertCount(1, $results);
-        $this->assertStringContainsString('"my/package"', $results[0]['message']['text']);
-        $this->assertStringContainsString('"bad/subdep"', $results[0]['message']['text']);
-        $this->assertStringContainsString('GPL-3.0', $results[0]['message']['text']);
-        $this->assertStringContainsString('requires', $results[0]['message']['text']);
-        $this->assertSame('composer.json', $results[0]['locations'][0]['physicalLocation']['artifactLocation']['uri']);
-        $this->assertSame('%SRCROOT%', $results[0]['locations'][0]['physicalLocation']['artifactLocation']['uriBaseId']);
-        $this->assertSame('my/package', $results[0]['locations'][0]['logicalLocations'][0]['name']);
-        $this->assertSame('package', $results[0]['locations'][0]['logicalLocations'][0]['kind']);
+
+        $result = $results[0];
+        $this->assertIsArray($result);
+
+        $message = $result['message'];
+        $this->assertIsArray($message);
+        $text = $message['text'];
+        $this->assertIsString($text);
+        $this->assertStringContainsString('"my/package"', $text);
+        $this->assertStringContainsString('"bad/subdep"', $text);
+        $this->assertStringContainsString('GPL-3.0', $text);
+        $this->assertStringContainsString('requires', $text);
+
+        $locations = $result['locations'];
+        $this->assertIsArray($locations);
+        $location = $locations[0];
+        $this->assertIsArray($location);
+
+        $physicalLocation = $location['physicalLocation'];
+        $this->assertIsArray($physicalLocation);
+        $artifactLocation = $physicalLocation['artifactLocation'];
+        $this->assertIsArray($artifactLocation);
+        $this->assertSame('composer.json', $artifactLocation['uri']);
+        $this->assertSame('%SRCROOT%', $artifactLocation['uriBaseId']);
+
+        $logicalLocations = $location['logicalLocations'];
+        $this->assertIsArray($logicalLocations);
+        $logicalLocation = $logicalLocations[0];
+        $this->assertIsArray($logicalLocation);
+        $this->assertSame('my/package', $logicalLocation['name']);
+        $this->assertSame('package', $logicalLocation['kind']);
     }
 
     public function testProducesOneResultPerViolatingDependency(): void
@@ -125,10 +182,7 @@ final class SarifOutputFormatterTest extends TestCase
             ),
         ]);
 
-        $json = $output->fetch();
-        $decoded = json_decode($json, true);
-
-        $this->assertCount(2, $decoded['runs'][0]['results']);
+        $this->assertCount(2, $this->getResults($this->decodeOutput($output)));
     }
 
     public function testLocationsAlwaysPointToRootDependency(): void
@@ -143,11 +197,25 @@ final class SarifOutputFormatterTest extends TestCase
             ),
         ]);
 
-        $json = $output->fetch();
-        $decoded = json_decode($json, true);
-        $result = $decoded['runs'][0]['results'][0];
+        $results = $this->getResults($this->decodeOutput($output));
+        $result = $results[0];
+        $this->assertIsArray($result);
 
-        $this->assertSame('my/root', $result['locations'][0]['logicalLocations'][0]['name']);
-        $this->assertSame('composer.json', $result['locations'][0]['physicalLocation']['artifactLocation']['uri']);
+        $locations = $result['locations'];
+        $this->assertIsArray($locations);
+        $location = $locations[0];
+        $this->assertIsArray($location);
+
+        $logicalLocations = $location['logicalLocations'];
+        $this->assertIsArray($logicalLocations);
+        $logicalLocation = $logicalLocations[0];
+        $this->assertIsArray($logicalLocation);
+        $this->assertSame('my/root', $logicalLocation['name']);
+
+        $physicalLocation = $location['physicalLocation'];
+        $this->assertIsArray($physicalLocation);
+        $artifactLocation = $physicalLocation['artifactLocation'];
+        $this->assertIsArray($artifactLocation);
+        $this->assertSame('composer.json', $artifactLocation['uri']);
     }
 }
