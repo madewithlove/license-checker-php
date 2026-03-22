@@ -55,8 +55,7 @@ jobs:
             - name: Install dependencies
               run: composer update
             - name: Run License Checker
-              run: bin/license-checker check --quiet
-            - name: Generate SARIF report
+              id: license-check
               run: bin/license-checker check --format=sarif > license-results.sarif
               continue-on-error: true
             - name: Upload SARIF results
@@ -64,3 +63,6 @@ jobs:
               with:
                   sarif_file: license-results.sarif
                   category: license-checker
+            - name: Fail if license violations found
+              if: steps.license-check.outcome == 'failure'
+              run: exit 1
