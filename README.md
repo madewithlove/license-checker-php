@@ -144,17 +144,22 @@ jobs:
         run: composer install --no-interaction --prefer-dist
 
       - name: Check licenses
+        id: license-check
         run: vendor/bin/license-checker check --format=sarif > license-results.sarif
-        continue-on-error: true  # upload results even when violations are found
+        continue-on-error: true
 
       - name: Upload SARIF results
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: license-results.sarif
           category: license-checker
+
+      - name: Fail if license violations found
+        if: steps.license-check.outcome == 'failure'
+        run: exit 1
 ```
 
-> **Note:** `continue-on-error: true` on the check step ensures the SARIF upload always runs, even when license violations are detected (exit code 1). GitHub will then surface the violations as code scanning alerts on the pull request.
+> **Note:** `continue-on-error: true` ensures the SARIF upload always runs even when violations are found. The final step then checks the original outcome and fails the build, so violations still block the pipeline.
 
 ### SARIF output example
 
