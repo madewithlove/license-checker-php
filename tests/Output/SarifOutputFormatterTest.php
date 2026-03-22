@@ -27,56 +27,63 @@ final class SarifOutputFormatterTest extends TestCase
     }
 
     /**
+     * @param array<mixed> $results
      * @return array<mixed>
      */
-    private function decodeOutput(BufferedOutput $output): array
+    private function expectedSarif(array $results): array
     {
-        $json = $output->fetch();
-        $this->assertJson($json);
-        $decoded = json_decode($json, true);
-        $this->assertIsArray($decoded);
-
-        return $decoded;
+        return [
+            '$schema' => 'https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json',
+            'version' => '2.1.0',
+            'runs' => [
+                [
+                    'tool' => [
+                        'driver' => [
+                            'name' => 'license-checker',
+                            'informationUri' => 'https://github.com/madewithlove/license-checker-php',
+                            'rules' => [
+                                [
+                                    'id' => 'license-not-allowed',
+                                    'name' => 'LicenseNotAllowed',
+                                    'shortDescription' => [
+                                        'text' => 'Dependency uses a license that is not allowed',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'results' => $results,
+                ],
+            ],
+        ];
     }
 
     /**
-     * @param array<mixed> $sarif
      * @return array<mixed>
      */
-    private function getResults(array $sarif): array
+    private function expectedResult(string $message, string $rootPackage): array
     {
-        $runs = $sarif['runs'];
-        $this->assertIsArray($runs);
-        $run = $runs[0];
-        $this->assertIsArray($run);
-        $results = $run['results'];
-        $this->assertIsArray($results);
-
-        return $results;
-    }
-
-    public function testOutputsValidSarifStructure(): void
-    {
-        [$formatter, $output] = $this->createFormatter();
-
-        $formatter->format([
-            new DependencyCheck(new Dependency('laravel/framework', 'MIT'), true),
-        ]);
-
-        $sarif = $this->decodeOutput($output);
-        $this->assertSame('2.1.0', $sarif['version']);
-
-        $runs = $sarif['runs'];
-        $this->assertIsArray($runs);
-        $this->assertCount(1, $runs);
-
-        $run = $runs[0];
-        $this->assertIsArray($run);
-        $tool = $run['tool'];
-        $this->assertIsArray($tool);
-        $driver = $tool['driver'];
-        $this->assertIsArray($driver);
-        $this->assertSame('license-checker', $driver['name']);
+        return [
+            'ruleId' => 'license-not-allowed',
+            'level' => 'error',
+            'message' => ['text' => $message],
+            'locations' => [
+                [
+                    'physicalLocation' => [
+                        'artifactLocation' => [
+                            'uri' => 'composer.json',
+                            'uriBaseId' => '%SRCROOT%',
+                        ],
+                    ],
+                    'logicalLocations' => [
+                        [
+                            'name' => $rootPackage,
+                            'kind' => 'package',
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     public function testProducesNoResultsWhenAllAllowed(): void
@@ -88,7 +95,7 @@ final class SarifOutputFormatterTest extends TestCase
             new DependencyCheck(new Dependency('symfony/console', 'MIT'), true),
         ]);
 
-        $this->assertSame([], $this->getResults($this->decodeOutput($output)));
+        $this->assertSame($this->expectedSarif([]), json_decode($output->fetch(), true));
     }
 
     public function testProducesResultForDirectLicenseViolation(): void
@@ -103,21 +110,12 @@ final class SarifOutputFormatterTest extends TestCase
             ),
         ]);
 
-        $results = $this->getResults($this->decodeOutput($output));
-        $this->assertCount(1, $results);
-
-        $result = $results[0];
-        $this->assertIsArray($result);
-        $this->assertSame('license-not-allowed', $result['ruleId']);
-        $this->assertSame('error', $result['level']);
-
-        $message = $result['message'];
-        $this->assertIsArray($message);
-        $text = $message['text'];
-        $this->assertIsString($text);
-        $this->assertStringContainsString('"bad/package"', $text);
-        $this->assertStringContainsString('GPL-3.0', $text);
-        $this->assertStringNotContainsString('requires', $text);
+        $this->assertSame(
+            $this->expectedSarif([
+                $this->expectedResult('"bad/package" uses the disallowed license "GPL-3.0"', 'bad/package'),
+            ]),
+            json_decode($output->fetch(), true),
+        );
     }
 
     public function testProducesResultForSubDependencyViolation(): void
@@ -132,39 +130,12 @@ final class SarifOutputFormatterTest extends TestCase
             ),
         ]);
 
-        $results = $this->getResults($this->decodeOutput($output));
-        $this->assertCount(1, $results);
-
-        $result = $results[0];
-        $this->assertIsArray($result);
-
-        $message = $result['message'];
-        $this->assertIsArray($message);
-        $text = $message['text'];
-        $this->assertIsString($text);
-        $this->assertStringContainsString('"my/package"', $text);
-        $this->assertStringContainsString('"bad/subdep"', $text);
-        $this->assertStringContainsString('GPL-3.0', $text);
-        $this->assertStringContainsString('requires', $text);
-
-        $locations = $result['locations'];
-        $this->assertIsArray($locations);
-        $location = $locations[0];
-        $this->assertIsArray($location);
-
-        $physicalLocation = $location['physicalLocation'];
-        $this->assertIsArray($physicalLocation);
-        $artifactLocation = $physicalLocation['artifactLocation'];
-        $this->assertIsArray($artifactLocation);
-        $this->assertSame('composer.json', $artifactLocation['uri']);
-        $this->assertSame('%SRCROOT%', $artifactLocation['uriBaseId']);
-
-        $logicalLocations = $location['logicalLocations'];
-        $this->assertIsArray($logicalLocations);
-        $logicalLocation = $logicalLocations[0];
-        $this->assertIsArray($logicalLocation);
-        $this->assertSame('my/package', $logicalLocation['name']);
-        $this->assertSame('package', $logicalLocation['kind']);
+        $this->assertSame(
+            $this->expectedSarif([
+                $this->expectedResult('"my/package" requires "bad/subdep" which uses the disallowed license "GPL-3.0"', 'my/package'),
+            ]),
+            json_decode($output->fetch(), true),
+        );
     }
 
     public function testProducesOneResultPerViolatingDependency(): void
@@ -182,40 +153,12 @@ final class SarifOutputFormatterTest extends TestCase
             ),
         ]);
 
-        $this->assertCount(2, $this->getResults($this->decodeOutput($output)));
-    }
-
-    public function testLocationsAlwaysPointToRootDependency(): void
-    {
-        [$formatter, $output] = $this->createFormatter();
-
-        $formatter->format([
-            new DependencyCheck(
-                new Dependency('my/root', 'MIT'),
-                false,
-                [new Dependency('transitive/dep', 'GPL-3.0')],
-            ),
-        ]);
-
-        $results = $this->getResults($this->decodeOutput($output));
-        $result = $results[0];
-        $this->assertIsArray($result);
-
-        $locations = $result['locations'];
-        $this->assertIsArray($locations);
-        $location = $locations[0];
-        $this->assertIsArray($location);
-
-        $logicalLocations = $location['logicalLocations'];
-        $this->assertIsArray($logicalLocations);
-        $logicalLocation = $logicalLocations[0];
-        $this->assertIsArray($logicalLocation);
-        $this->assertSame('my/root', $logicalLocation['name']);
-
-        $physicalLocation = $location['physicalLocation'];
-        $this->assertIsArray($physicalLocation);
-        $artifactLocation = $physicalLocation['artifactLocation'];
-        $this->assertIsArray($artifactLocation);
-        $this->assertSame('composer.json', $artifactLocation['uri']);
+        $this->assertSame(
+            $this->expectedSarif([
+                $this->expectedResult('"my/package" requires "bad/subdep1" which uses the disallowed license "GPL-3.0"', 'my/package'),
+                $this->expectedResult('"my/package" requires "bad/subdep2" which uses the disallowed license "AGPL-3.0"', 'my/package'),
+            ]),
+            json_decode($output->fetch(), true),
+        );
     }
 }
