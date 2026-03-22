@@ -45,6 +45,8 @@ jobs:
 
     check-licenses:
         runs-on: ubuntu-latest
+        permissions:
+            security-events: write
         steps:
             - uses: actions/checkout@v4
             - uses: shivammathur/setup-php@v2
@@ -54,3 +56,11 @@ jobs:
               run: composer update
             - name: Run License Checker
               run: bin/license-checker check --quiet
+            - name: Generate SARIF report
+              run: bin/license-checker check --format=sarif > license-results.sarif
+              continue-on-error: true
+            - name: Upload SARIF results
+              uses: github/codeql-action/upload-sarif@v3
+              with:
+                  sarif_file: license-results.sarif
+                  category: license-checker
