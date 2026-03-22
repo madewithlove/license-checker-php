@@ -47,9 +47,9 @@ final class CheckLicenses extends Command
             'format',
             null,
             InputOption::VALUE_OPTIONAL,
-            'Output format: text or json',
+            'Output format: text, json, or sarif',
             'text',
-            ['text', 'json']
+            ['text', 'json', 'sarif']
         );
     }
 

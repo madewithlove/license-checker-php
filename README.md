@@ -86,7 +86,7 @@ vendor/bin/license-checker check --filename .license-checker-including-dev.yml
 ```
 
 ### Output Formats (--format option)
-You can choose how license information is displayed — either as a human-readable table (text) or in machine-readable JSON format.
+You can choose how license information is displayed — as a human-readable table (`text`), machine-readable JSON (`json`), or SARIF for GitHub Actions code scanning (`sarif`).
 
 ```
 vendor/bin/license-checker check --format=json
@@ -116,6 +116,83 @@ vendor/bin/license-checker check --format=text
 
 By default, results are printed as human-readable text.
 Use `--format=json` for structured machine-readable output.
+Use `--format=sarif` to generate a SARIF report for GitHub Actions integration (see below).
+
+## GitHub Actions integration
+
+The `--format=sarif` option outputs results in [SARIF 2.1.0](https://sarifweb.azurewebsites.net/) format, which GitHub can display as [code scanning alerts](https://docs.github.com/en/code-security/code-scanning/integrating-with-code-scanning/uploading-a-sarif-file-to-github) directly on pull requests.
+
+Each root dependency that requires a disallowed license — either directly or through a transitive dependency — appears as a separate annotation pointing to your `composer.json`.
+
+### Example workflow
+
+```yaml
+# .github/workflows/license-check.yml
+name: License check
+
+on: [push, pull_request]
+
+jobs:
+  license-check:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write  # required to upload SARIF results
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Check licenses
+        run: vendor/bin/license-checker check --format=sarif > license-results.sarif
+        continue-on-error: true  # upload results even when violations are found
+
+      - name: Upload SARIF results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: license-results.sarif
+          category: license-checker
+```
+
+> **Note:** `continue-on-error: true` on the check step ensures the SARIF upload always runs, even when license violations are detected (exit code 1). GitHub will then surface the violations as code scanning alerts on the pull request.
+
+### SARIF output example
+
+```json
+{
+    "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+    "version": "2.1.0",
+    "runs": [
+        {
+            "tool": {
+                "driver": {
+                    "name": "license-checker",
+                    "rules": [{ "id": "license-not-allowed" }]
+                }
+            },
+            "results": [
+                {
+                    "ruleId": "license-not-allowed",
+                    "level": "error",
+                    "message": {
+                        "text": "\"my/package\" requires \"bad/subdep\" which uses the disallowed license \"GPL-3.0\""
+                    },
+                    "locations": [
+                        {
+                            "physicalLocation": {
+                                "artifactLocation": { "uri": "composer.json" }
+                            },
+                            "logicalLocations": [
+                                { "name": "my/package", "kind": "package" }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
 
 ## Migrating from 2.x
 
