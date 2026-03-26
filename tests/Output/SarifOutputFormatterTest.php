@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LicenseChecker\Tests\Output;
 
 use LicenseChecker\Commands\Output\DependencyCheck;
+use LicenseChecker\Composer\ComposerJsonLineMapper;
 use LicenseChecker\Dependency;
 use LicenseChecker\Output\SarifOutputFormatter;
 use PHPUnit\Framework\TestCase;
@@ -17,11 +18,12 @@ final class SarifOutputFormatterTest extends TestCase
     /**
      * @return array{0: SarifOutputFormatter, 1: BufferedOutput}
      */
-    private function createFormatter(): array
+    private function createFormatter(?ComposerJsonLineMapper $lineMapper = null): array
     {
         $output = new BufferedOutput();
         $io = new SymfonyStyle(new ArrayInput([]), $output);
-        $formatter = new SarifOutputFormatter($io);
+        $lineMapper ??= new ComposerJsonLineMapper(__DIR__ . '/nonexistent');
+        $formatter = new SarifOutputFormatter($io, $lineMapper);
 
         return [$formatter, $output];
     }
@@ -61,20 +63,28 @@ final class SarifOutputFormatterTest extends TestCase
     /**
      * @return array<mixed>
      */
-    private function expectedResult(string $message, string $rootPackage): array
+    private function expectedResult(string $message, string $rootPackage, ?int $lineNumber = null): array
     {
+        $physicalLocation = [
+            'artifactLocation' => [
+                'uri' => 'composer.json',
+                'uriBaseId' => '%SRCROOT%',
+            ],
+        ];
+
+        if ($lineNumber !== null) {
+            $physicalLocation['region'] = [
+                'startLine' => $lineNumber,
+            ];
+        }
+
         return [
             'ruleId' => 'license-not-allowed',
             'level' => 'error',
             'message' => ['text' => $message],
             'locations' => [
                 [
-                    'physicalLocation' => [
-                        'artifactLocation' => [
-                            'uri' => 'composer.json',
-                            'uriBaseId' => '%SRCROOT%',
-                        ],
-                    ],
+                    'physicalLocation' => $physicalLocation,
                     'logicalLocations' => [
                         [
                             'name' => $rootPackage,
@@ -157,6 +167,27 @@ final class SarifOutputFormatterTest extends TestCase
             $this->expectedSarif([
                 $this->expectedResult('"my/package" requires "bad/subdep1" which uses the disallowed license "GPL-3.0"', 'my/package'),
                 $this->expectedResult('"my/package" requires "bad/subdep2" which uses the disallowed license "AGPL-3.0"', 'my/package'),
+            ]),
+            json_decode($output->fetch(), true),
+        );
+    }
+
+    public function testIncludesLineNumberWhenPackageFoundInComposerJson(): void
+    {
+        $lineMapper = new ComposerJsonLineMapper(__DIR__ . '/../Fixtures');
+        [$formatter, $output] = $this->createFormatter($lineMapper);
+
+        $formatter->format([
+            new DependencyCheck(
+                new Dependency('bad/package', 'GPL-3.0'),
+                false,
+                [new Dependency('bad/package', 'GPL-3.0')],
+            ),
+        ]);
+
+        $this->assertSame(
+            $this->expectedSarif([
+                $this->expectedResult('"bad/package" uses the disallowed license "GPL-3.0"', 'bad/package', 3),
             ]),
             json_decode($output->fetch(), true),
         );

@@ -6,14 +6,17 @@ namespace LicenseChecker\Output;
 
 use JsonException;
 use LicenseChecker\Commands\Output\DependencyCheck;
+use LicenseChecker\Composer\ComposerJsonLineMapper;
 use LicenseChecker\Dependency;
 use RuntimeException;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class SarifOutputFormatter implements OutputFormatterInterface
 {
-    public function __construct(private readonly SymfonyStyle $io)
-    {
+    public function __construct(
+        private readonly SymfonyStyle $io,
+        private readonly ComposerJsonLineMapper $lineMapper,
+    ) {
     }
 
     public function format(array $dependencyChecks): void
@@ -84,6 +87,21 @@ final class SarifOutputFormatter implements OutputFormatterInterface
                 $violatingDependency->getLicense(),
             );
 
+        $physicalLocation = [
+            'artifactLocation' => [
+                'uri' => 'composer.json',
+                'uriBaseId' => '%SRCROOT%',
+            ],
+        ];
+
+        $lineNumber = $this->lineMapper->getLineNumber($rootDependency->getName());
+
+        if ($lineNumber !== null) {
+            $physicalLocation['region'] = [
+                'startLine' => $lineNumber,
+            ];
+        }
+
         return [
             'ruleId' => 'license-not-allowed',
             'level' => 'error',
@@ -92,12 +110,7 @@ final class SarifOutputFormatter implements OutputFormatterInterface
             ],
             'locations' => [
                 [
-                    'physicalLocation' => [
-                        'artifactLocation' => [
-                            'uri' => 'composer.json',
-                            'uriBaseId' => '%SRCROOT%',
-                        ],
-                    ],
+                    'physicalLocation' => $physicalLocation,
                     'logicalLocations' => [
                         [
                             'name' => $rootDependency->getName(),

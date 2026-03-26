@@ -1,0 +1,6 @@
+{
+    "require": {
+        "bad/package": "^1.0",
+        "my/package": "^2.0"
+    }
+}

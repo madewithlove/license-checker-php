@@ -6,6 +6,7 @@ namespace LicenseChecker\Commands;
 
 use LicenseChecker\Commands\Output\DependencyCheck;
 use LicenseChecker\Commands\Output\TableRenderer;
+use LicenseChecker\Composer\ComposerJsonLineMapper;
 use LicenseChecker\Composer\DependencyTree;
 use LicenseChecker\Composer\UsedLicensesParser;
 use LicenseChecker\Configuration\InvalidConfiguration;
@@ -29,6 +30,7 @@ final class CheckLicenses extends Command
         private readonly LicenseConfigurationParser $configParser,
         private readonly DependencyTree $dependencyTree,
         private readonly TableRenderer $tableRenderer,
+        private readonly ComposerJsonLineMapper $lineMapper,
     ) {
         parent::__construct(self::NAME);
     }
@@ -95,7 +97,7 @@ final class CheckLicenses extends Command
         $formatOption = $input->getOption('format');
         $format = OutputFormat::tryFromInput($formatOption);
 
-        $formatter = OutputFormatterFactory::create($format, $io, $this->tableRenderer);
+        $formatter = OutputFormatterFactory::create($format, $io, $this->tableRenderer, $this->lineMapper);
         $formatter->format($dependencyChecks);
 
         return empty($notAllowedLicenses) ? Command::SUCCESS : Command::FAILURE;
