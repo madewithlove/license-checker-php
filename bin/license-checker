@@ -10,6 +10,7 @@ use LicenseChecker\Commands\MigrateConfig;
 use LicenseChecker\Commands\Output\TableRenderer;
 use LicenseChecker\Composer\DependencyTree;
 use LicenseChecker\Composer\DependencyTreeRetriever;
+use LicenseChecker\Composer\ComposerJsonLineMapper;
 use LicenseChecker\Composer\UsedLicensesParser;
 use LicenseChecker\Composer\UsedLicensesRetriever;
 use LicenseChecker\Configuration\LicenseConfigurationParser;
@@ -39,7 +40,8 @@ $checkLicenses = new CheckLicenses(
         new DependencyTreeRetriever(),
         $usedLicensesParser
     ),
-    new TableRenderer()
+    new TableRenderer(),
+    new ComposerJsonLineMapper($workingDirectory)
 );
 
 $application->addCommand($checkLicenses);

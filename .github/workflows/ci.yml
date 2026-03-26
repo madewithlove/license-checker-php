@@ -45,6 +45,8 @@ jobs:
 
     check-licenses:
         runs-on: ubuntu-latest
+        permissions:
+            security-events: write
         steps:
             - uses: actions/checkout@v4
             - uses: shivammathur/setup-php@v2
@@ -53,4 +55,14 @@ jobs:
             - name: Install dependencies
               run: composer update
             - name: Run License Checker
-              run: bin/license-checker check --quiet
+              id: license-check
+              run: bin/license-checker check --format=sarif > license-results.sarif
+              continue-on-error: true
+            - name: Upload SARIF results
+              uses: github/codeql-action/upload-sarif@v3
+              with:
+                  sarif_file: license-results.sarif
+                  category: license-checker
+            - name: Fail if license violations found
+              if: steps.license-check.outcome == 'failure'
+              run: exit 1
