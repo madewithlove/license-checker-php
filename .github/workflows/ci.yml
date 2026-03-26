@@ -6,7 +6,7 @@ jobs:
         name: PHPStan
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - uses: shivammathur/setup-php@v2
               with:
                   php-version: '8.5'
@@ -22,7 +22,7 @@ jobs:
                 php: [ '8.4', '8.5' ]
                 prefer-lowest: [ '', '--prefer-lowest' ]
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
@@ -34,7 +34,7 @@ jobs:
     coding_standards:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - uses: shivammathur/setup-php@v2
               with:
                   php-version: '8.5'
@@ -48,7 +48,7 @@ jobs:
         permissions:
             security-events: write
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
             - uses: shivammathur/setup-php@v2
               with:
                   php-version: '8.5'
@@ -59,7 +59,7 @@ jobs:
               run: bin/license-checker check --format=sarif > license-results.sarif
               continue-on-error: true
             - name: Upload SARIF results
-              uses: github/codeql-action/upload-sarif@v3
+              uses: github/codeql-action/upload-sarif@v4
               with:
                   sarif_file: license-results.sarif
                   category: license-checker
