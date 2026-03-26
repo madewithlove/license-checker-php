@@ -6,7 +6,7 @@ jobs:
         name: PHPStan
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@v6
             - uses: shivammathur/setup-php@v2
               with:
                   php-version: '8.5'
@@ -22,7 +22,7 @@ jobs:
                 php: [ '8.4', '8.5' ]
                 prefer-lowest: [ '', '--prefer-lowest' ]
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@v6
             - uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
@@ -34,7 +34,7 @@ jobs:
     coding_standards:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@v6
             - uses: shivammathur/setup-php@v2
               with:
                   php-version: '8.5'
@@ -48,7 +48,7 @@ jobs:
         permissions:
             security-events: write
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@v6
             - uses: shivammathur/setup-php@v2
               with:
                   php-version: '8.5'
