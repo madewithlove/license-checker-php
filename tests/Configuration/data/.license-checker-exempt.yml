@@ -1,0 +1,5 @@
+allowed:
+  - MIT
+exempt:
+  - livewire/flux-pro
+  - acme/internal

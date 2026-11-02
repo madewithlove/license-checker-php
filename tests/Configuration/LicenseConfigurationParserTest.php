@@ -37,6 +37,37 @@ final class LicenseConfigurationParserTest extends TestCase
     }
 
     #[Test]
+    public function itParsesExemptPackages(): void
+    {
+        $parser = new LicenseConfigurationParser(__DIR__ . '/data');
+
+        $config = $parser->parse('.license-checker-exempt.yml');
+
+        $this->assertEquals(['acme/internal', 'livewire/flux-pro'], $config->exemptPackages);
+    }
+
+    #[Test]
+    public function itDefaultsToNoExemptPackages(): void
+    {
+        $parser = new LicenseConfigurationParser(__DIR__ . '/data');
+
+        $config = $parser->parse('.license-checker-allowed.yml');
+
+        $this->assertEmpty($config->exemptPackages);
+    }
+
+    #[Test]
+    public function itThrowsWhenExemptIsNotAList(): void
+    {
+        $parser = new LicenseConfigurationParser(__DIR__ . '/data');
+
+        $this->expectException(InvalidConfiguration::class);
+        $this->expectExceptionMessage('"exempt" key must be a list of package names');
+
+        $parser->parse('.license-checker-exempt-invalid.yml');
+    }
+
+    #[Test]
     public function itThrowsWhenBothKeysArePresent(): void
     {
         $parser = new LicenseConfigurationParser(__DIR__ . '/data');
@@ -110,6 +141,26 @@ final class LicenseConfigurationParserTest extends TestCase
             $parsedBack = $parser->parse('test-config.yml');
             $this->assertSame(LicenseConfigMode::Denied, $parsedBack->mode);
             $this->assertEquals(['GPL-3.0'], $parsedBack->licenses);
+        } finally {
+            array_map('unlink', glob($dir . '/*') ?: []);
+            rmdir($dir);
+        }
+    }
+
+    #[Test]
+    public function itWritesExemptPackages(): void
+    {
+        $dir = sys_get_temp_dir() . '/license-checker-test-' . uniqid();
+        mkdir($dir);
+
+        try {
+            $parser = new LicenseConfigurationParser($dir);
+            $config = LicenseConfiguration::allowed(['MIT'], ['livewire/flux-pro']);
+
+            $parser->writeConfiguration($config, 'test-config.yml');
+
+            $parsedBack = $parser->parse('test-config.yml');
+            $this->assertEquals(['livewire/flux-pro'], $parsedBack->exemptPackages);
         } finally {
             array_map('unlink', glob($dir . '/*') ?: []);
             rmdir($dir);

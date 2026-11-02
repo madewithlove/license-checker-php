@@ -88,4 +88,13 @@ final class LicenseConfigurationTest extends TestCase
         $this->assertSame(LicenseConfigMode::Allowed, $allowed->mode);
         $this->assertSame(LicenseConfigMode::Denied, $denied->mode);
     }
+
+    #[Test]
+    public function listedPackagesAreExempt(): void
+    {
+        $config = LicenseConfiguration::allowed(['MIT'], ['livewire/flux-pro']);
+
+        $this->assertTrue($config->isExempt('livewire/flux-pro'));
+        $this->assertFalse($config->isExempt('livewire/livewire'));
+    }
 }

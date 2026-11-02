@@ -59,6 +59,14 @@ final class ListConfiguredLicenses extends Command
             $output->writeln($license);
         }
 
+        if (!empty($config->exemptPackages)) {
+            $io->section('Exempt packages:');
+
+            foreach ($config->exemptPackages as $package) {
+                $output->writeln($package);
+            }
+        }
+
         return 0;
     }
 }

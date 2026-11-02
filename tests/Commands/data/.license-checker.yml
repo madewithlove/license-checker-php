@@ -1,0 +1,4 @@
+allowed:
+  - MIT
+exempt:
+  - livewire/flux-pro
