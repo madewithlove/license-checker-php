@@ -75,17 +75,26 @@ final class CheckLicenses extends Command
             return 1;
         }
 
-        $notAllowedLicenses = $config->findViolations($usedLicenses);
+        $violatingPackagesByLicense = [];
+        foreach ($config->findViolations($usedLicenses) as $notAllowedLicense) {
+            $packagesUsingThisLicense = array_filter(
+                $this->usedLicensesParser->getPackagesWithLicense($notAllowedLicense, (bool)$input->getOption('no-dev')),
+                fn (string $package): bool => !$config->isExempt($package),
+            );
+            if (!empty($packagesUsingThisLicense)) {
+                $violatingPackagesByLicense[$notAllowedLicense] = $packagesUsingThisLicense;
+            }
+        }
+
         $dependencies = $this->dependencyTree->getDependencies((bool)$input->getOption('no-dev'));
 
         $dependencyChecks = [];
         foreach ($dependencies as $dependency) {
             $dependencyCheck = new DependencyCheck($dependency);
-            foreach ($notAllowedLicenses as $notAllowedLicense) {
-                $packagesUsingThisLicense = $this->usedLicensesParser->getPackagesWithLicense($notAllowedLicense, (bool)$input->getOption('no-dev'));
+            foreach ($violatingPackagesByLicense as $notAllowedLicense => $packagesUsingThisLicense) {
                 foreach ($packagesUsingThisLicense as $packageUsingThisLicense) {
                     if ($dependency->hasDependency($packageUsingThisLicense) || $dependency->is($packageUsingThisLicense)) {
-                        $dependencyCheck = $dependencyCheck->addFailedDependency($packageUsingThisLicense, $notAllowedLicense);
+                        $dependencyCheck = $dependencyCheck->addFailedDependency($packageUsingThisLicense, (string)$notAllowedLicense);
                     }
                 }
             }
@@ -100,6 +109,6 @@ final class CheckLicenses extends Command
         $formatter = OutputFormatterFactory::create($format, $io, $this->tableRenderer, $this->lineMapper);
         $formatter->format($dependencyChecks);
 
-        return empty($notAllowedLicenses) ? Command::SUCCESS : Command::FAILURE;
+        return empty($violatingPackagesByLicense) ? Command::SUCCESS : Command::FAILURE;
     }
 }

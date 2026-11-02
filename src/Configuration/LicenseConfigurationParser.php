@@ -42,7 +42,12 @@ final class LicenseConfigurationParser
             throw new ConfigurationExists();
         }
 
-        $yaml = Yaml::dump([$config->mode->value => $config->licenses]);
+        $data = [$config->mode->value => $config->licenses];
+        if (!empty($config->exemptPackages)) {
+            $data['exempt'] = $config->exemptPackages;
+        }
+
+        $yaml = Yaml::dump($data);
         file_put_contents($this->getConfigurationFilePath($fileName), $yaml);
     }
 
@@ -66,17 +71,41 @@ final class LicenseConfigurationParser
             );
         }
 
+        $exemptPackages = $this->parseExemptPackages($data);
+
         if ($hasAllowed) {
             /** @var list<string> $licenses */
             $licenses = $data['allowed'];
 
-            return LicenseConfiguration::allowed($licenses);
+            return LicenseConfiguration::allowed($licenses, $exemptPackages);
         }
 
         /** @var list<string> $licenses */
         $licenses = $data['denied'];
 
-        return LicenseConfiguration::denied($licenses);
+        return LicenseConfiguration::denied($licenses, $exemptPackages);
+    }
+
+    /**
+     * @param array<mixed> $data
+     * @return list<string>
+     */
+    private function parseExemptPackages(array $data): array
+    {
+        $exempt = $data['exempt'] ?? [];
+
+        if (!is_array($exempt) || !array_is_list($exempt)) {
+            throw new InvalidConfiguration('The "exempt" key must be a list of package names.');
+        }
+
+        foreach ($exempt as $package) {
+            if (!is_string($package)) {
+                throw new InvalidConfiguration('The "exempt" key must be a list of package names.');
+            }
+        }
+
+        /** @var list<string> $exempt */
+        return $exempt;
     }
 
     private function configurationExists(string $fileName): bool

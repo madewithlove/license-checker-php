@@ -45,6 +45,21 @@ denied:
 
 > **Note:** `allowed` and `denied` are mutually exclusive — you must use one or the other, not both.
 
+### Exempting packages
+Sometimes a single package needs a license you don't want to allow everywhere, for example a commercial package
+with a proprietary license. List it under `exempt` to skip it during the check, in either mode:
+```yaml
+# .license-checker.yml
+allowed:
+  - MIT
+  - BSD-3-Clause
+exempt:
+  - livewire/flux-pro
+```
+
+Only the listed packages are exempt: their own dependencies are still checked, and other packages using the same
+license still fail the check.
+
 It's possible to use a custom configuration file by passing the `--filename` (or `-f`) option to the CLI commands.
 
 ## Usage
